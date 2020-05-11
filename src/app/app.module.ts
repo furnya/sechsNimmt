@@ -38,11 +38,19 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CardComponent } from './card/card.component';
+import { RowComponent } from './row/row.component';
+import { BoardComponent } from './board/board.component';
+import { HandComponent } from './hand/hand.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CardComponent,
+    RowComponent,
+    BoardComponent,
+    HandComponent
   ],
   imports: [
     BrowserModule,

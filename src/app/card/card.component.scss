@@ -1,0 +1,20 @@
+.outline {
+    width: 70px;
+    height: 100px;
+    margin: 5px 10px;
+    cursor: pointer;
+}
+
+.digits {
+    height: 90px;
+    padding: 45px 0; 
+}
+
+.digits > p {
+    font-size: xx-large;
+    text-align: center;
+}
+
+.selected {
+    background-color: red;
+}
