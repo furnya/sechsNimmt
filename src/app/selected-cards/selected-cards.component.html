@@ -1,0 +1,11 @@
+<div class="selectedCardsContainer">
+    <div
+    cdkDropList
+    #selectedCardDropList="cdkDropList"
+    id="selectedCardDropList"
+    [cdkDropListData]="selectedCards"
+    [cdkDropListConnectedTo]="['rowDropSpot_0','rowDropSpot_1','rowDropSpot_2','rowDropSpot_3','rowDropSpot_4']"
+    (cdkDropListDropped)="drop($event)">
+    <app-card *ngFor="let card of selectedCards" cdkDrag [id]="card"></app-card>
+  </div>
+</div>

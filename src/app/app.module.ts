@@ -42,6 +42,8 @@ import { CardComponent } from './card/card.component';
 import { RowComponent } from './row/row.component';
 import { BoardComponent } from './board/board.component';
 import { HandComponent } from './hand/hand.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { SelectedCardsComponent } from './selected-cards/selected-cards.component';
 
 
 @NgModule({
@@ -50,7 +52,8 @@ import { HandComponent } from './hand/hand.component';
     CardComponent,
     RowComponent,
     BoardComponent,
-    HandComponent
+    HandComponent,
+    SelectedCardsComponent
   ],
   imports: [
     BrowserModule,
@@ -94,6 +97,7 @@ import { HandComponent } from './hand/hand.component';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

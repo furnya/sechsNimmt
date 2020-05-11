@@ -1,3 +1,26 @@
 <div class="cardRow">
-    <app-card *ngFor="let i of cards" [id]="i"></app-card>
+  <div class="selectContainer">
+    <button
+      mat-stroked-button
+      class="selectButton"
+      color="primary"
+      *ngIf="canBeSelected"
+    >
+      Reihe wählen
+    </button>
+  </div>
+  <app-card *ngFor="let i of cards" [id]="i"></app-card>
+  <div
+    cdkDropList
+    #rowDropSpot="cdkDropList"
+    [id]="'rowDropSpot_' + rowIndex"
+    [cdkDropListData]="dropList"
+    cdkDropListConnectedTo="selectedCardDropList"
+    (cdkDropListDropped)="drop($event)"
+    cdkDropListOrientation="horizontal"
+    class="dropList"
+    *ngIf="cards.length < 5"
+  >
+    <app-card *ngFor="let card of dropList" cdkDrag [id]="card"></app-card>
+  </div>
 </div>

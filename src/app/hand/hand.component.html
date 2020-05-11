@@ -2,4 +2,5 @@
     <div class="cardRow">
         <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" (cardSelected)="onCardSelected($event)"></app-card>
     </div>
+    <button mat-stroked-button class="confirmButton" color="primary">Auswahl bestätigen</button>
 </div>
