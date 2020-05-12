@@ -38,12 +38,15 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CardComponent } from './card/card.component';
-import { RowComponent } from './row/row.component';
-import { BoardComponent } from './board/board.component';
-import { HandComponent } from './hand/hand.component';
+import { CardComponent } from './game/card/card.component';
+import { RowComponent } from './game/row/row.component';
+import { BoardComponent } from './game/board/board.component';
+import { HandComponent } from './game/hand/hand.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import { SelectedCardsComponent } from './selected-cards/selected-cards.component';
+import { SelectedCardsComponent } from './game/selected-cards/selected-cards.component';
+import { GameComponent } from './game/game.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -53,9 +56,14 @@ import { SelectedCardsComponent } from './selected-cards/selected-cards.componen
     RowComponent,
     BoardComponent,
     HandComponent,
-    SelectedCardsComponent
+    SelectedCardsComponent,
+    GameComponent,
+    WelcomeComponent
   ],
   imports: [
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     MatAutocompleteModule,

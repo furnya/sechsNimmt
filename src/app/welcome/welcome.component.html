@@ -1,0 +1,100 @@
+<div class="welcomeScreenContainer">
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" opened class="joinAndCreateContainer">
+      <div class="joinGameContainer">
+        <form #joinGameForm="ngForm" (ngSubmit)="onJoinGame(joinGameForm)">
+          <mat-form-field appearance="fill">
+            <mat-label>Dein Name</mat-label>
+            <input
+              type="text"
+              matInput
+              id="playerName"
+              name="playerName"
+              required
+              ngModel
+            />
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input
+              type="text"
+              placeholder="Spiel-ID"
+              matInput
+              id="joinGameId"
+              name="joinGameId"
+              [matAutocomplete]="auto"
+              required
+              ngModel
+              #joinGameIdFormControl="ngModel"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <br />
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="joinGameForm.invalid"
+          >
+            Spiel beitreten
+          </button>
+        </form>
+      </div>
+      <div class="createGameContainer">
+        <form
+          #createGameForm="ngForm"
+          (ngSubmit)="onCreateGame(createGameForm)"
+        >
+          <mat-form-field appearance="fill">
+            <mat-label>Dein Name</mat-label>
+            <input
+              type="text"
+              matInput
+              id="playerName"
+              name="playerName"
+              required
+              ngModel
+            />
+          </mat-form-field>
+          <br />
+          <mat-form-field appearance="fill">
+            <mat-label>Deine Spiel-ID</mat-label>
+            <input
+              type="text"
+              matInput
+              id="createGameId"
+              name="createGameId"
+              required
+              ngModel
+            />
+          </mat-form-field>
+          <br />
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="createGameForm.invalid"
+          >
+            Spiel erstellen
+          </button>
+        </form>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar>Dein Spiel</mat-toolbar>
+      <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let player of players">{{
+          player + (player === currentPlayer ? " (Du)" : "")
+        }}</mat-list-item>
+      </mat-list>
+      <button mat-raised-button color="primary">Spiel starten</button>
+      <button mat-raised-button color="warn">Spiel verlassen</button>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

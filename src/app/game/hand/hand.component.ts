@@ -16,7 +16,8 @@ export class HandComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get(
-        'https://europe-west1-sechsnimmt-33e6e.cloudfunctions.net/helloWorld'
+        // 'https://europe-west1-sechsnimmt-33e6e.cloudfunctions.net/helloWorld'
+        'https://sechsnimmt-33e6e.firebaseio.com/card.json'
       ).subscribe((data: string) => {
       console.log(data);
       this.selectedCard = +data;
