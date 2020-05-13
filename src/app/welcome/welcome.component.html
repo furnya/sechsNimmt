@@ -21,12 +21,12 @@
               matInput
               id="joinGameId"
               name="joinGameId"
-              [matAutocomplete]="auto"
               required
+              [matAutocomplete]="auto"
               ngModel
               #joinGameIdFormControl="ngModel"
-            />
-            <mat-autocomplete #auto="matAutocomplete">
+              />
+              <mat-autocomplete #auto="matAutocomplete">
               <mat-option
                 *ngFor="let option of filteredOptions | async"
                 [value]="option"
@@ -87,14 +87,14 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <mat-toolbar>Dein Spiel</mat-toolbar>
+      <mat-toolbar>Dein Spiel {{ currentGameId }}</mat-toolbar>
       <mat-list role="list">
-        <mat-list-item role="listitem" *ngFor="let player of players">{{
-          player + (player === currentPlayer ? " (Du)" : "")
+        <mat-list-item role="listitem" *ngFor="let player of players" [ngClass]="{'isCurrentPlayer': isCurrentPlayer(player)}">{{
+          player.name + ( isCurrentPlayer(player) ? ' (Du)' : '') + ( player.isHost ? ' [Host]' : '' )
         }}</mat-list-item>
       </mat-list>
-      <button mat-raised-button color="primary">Spiel starten</button>
-      <button mat-raised-button color="warn">Spiel verlassen</button>
+      <button mat-raised-button color="primary" (click)="onStartGame()" [disabled]="!(currentGameId && currentPlayer && currentPlayer.isHost)">Spiel starten</button>
+      <button mat-raised-button color="warn" (click)="onLeaveGame()" [disabled]="!currentGameId">Spiel verlassen</button>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

@@ -47,6 +47,9 @@ import { SelectedCardsComponent } from './game/selected-cards/selected-cards.com
 import { GameComponent } from './game/game.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { ENVIRONMENT } from './config/global-config';
 
 
 @NgModule({
@@ -105,7 +108,9 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    AngularFireModule.initializeApp(ENVIRONMENT.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

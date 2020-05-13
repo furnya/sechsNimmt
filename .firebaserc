@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "sechsnimmt-33e6e"
+  },
+  "targets": {
+    "sechsnimmt-33e6e": {
+      "hosting": {
+        "sechsNimmt": [
+          "sechsnimmt-33e6e"
+        ]
+      }
+    }
   }
 }
