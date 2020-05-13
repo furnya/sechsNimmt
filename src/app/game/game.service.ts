@@ -16,6 +16,7 @@ export class GameService {
   gameId: string = null;
   gameKey: string = null;
   gameKeySub: Subscription;
+  playerIndex = -1;
 
   get player() {
     return this._player;
@@ -43,7 +44,14 @@ export class GameService {
       .subscribe((gameState: GameState) => {
         this.gameState = gameState;
         this.gameStateChanged.next(this.gameState);
+        this.setPlayerIndex();
       });
+  }
+
+  setPlayerIndex() {
+    this.playerIndex = this.gameState.playerStates.findIndex(ps => {
+      return ps.player.name === this.player.name;
+    });
   }
 
   setGameKey() {
@@ -152,5 +160,17 @@ export class GameService {
       return [];
     }
     return this.gameState.boardRows[rowIndex];
+  }
+
+  selectCard(card: number) {
+    this.gameState.playerStates[this.playerIndex].hand.splice(this.gameState.playerStates[this.playerIndex].hand.indexOf(card), 1);
+    this.gameState.playerStates[this.playerIndex].selectedCard = card;
+    this.db.object(
+      GLOBAL_CONFIG.gamePath +
+        '/' +
+        this.gameKey +
+        '/' +
+        GLOBAL_CONFIG.gameStatePath
+    ).update(this.gameState);
   }
 }

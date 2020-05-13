@@ -6,4 +6,8 @@ export interface GlobalConfig {
     gameStatePath: string;
     suffix: string;
     cardAmount: number;
+    playerStatesPath: string;
+    handPath: string;
+    minusPointsPath: string;
+    selectedCardPath: string;
 }

@@ -21,5 +21,9 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   playerPath: 'players',
   suffix: '.json',
   cardAmount: 104,
-  gameStatePath: 'gameState'
+  gameStatePath: 'gameState',
+  playerStatesPath: 'playerStates',
+  handPath: 'hand',
+  minusPointsPath: 'minusPoints',
+  selectedCardPath: 'selectedCard'
 };

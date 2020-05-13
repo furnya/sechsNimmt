@@ -8,9 +8,9 @@ import { GameService } from '../../game.service';
 })
 export class HandComponent implements OnInit {
 
-  cards = [];
+  cards: number[] = [];
 
-  selectedCard = 2;
+  selectedCard = 0;
 
   constructor(private gameService: GameService) { }
 
@@ -22,6 +22,13 @@ export class HandComponent implements OnInit {
 
   onCardSelected(id: number) {
     this.selectedCard = id;
+  }
+
+  onConfirmSelection() {
+    if (this.selectedCard === 0) {
+      return;
+    }
+    this.gameService.selectCard(this.selectedCard);
   }
 
 }
