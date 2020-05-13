@@ -162,9 +162,8 @@ export class GameService {
     return this.gameState.boardRows[rowIndex];
   }
 
-  selectCard(card: number) {
-    this.gameState.playerStates[this.playerIndex].hand.splice(this.gameState.playerStates[this.playerIndex].hand.indexOf(card), 1);
-    this.gameState.playerStates[this.playerIndex].selectedCard = card;
+  pushGameStateToDB() {
+    console.log('pushing');
     this.db.object(
       GLOBAL_CONFIG.gamePath +
         '/' +
@@ -172,5 +171,17 @@ export class GameService {
         '/' +
         GLOBAL_CONFIG.gameStatePath
     ).update(this.gameState);
+  }
+
+  selectCard(card: number) {
+    this.gameState.playerStates[this.playerIndex].hand.splice(this.gameState.playerStates[this.playerIndex].hand.indexOf(card), 1);
+    this.gameState.playerStates[this.playerIndex].selectedCard = card;
+    this.pushGameStateToDB();
+  }
+
+  putCardInRow(card: number, rowIndex: number) {
+    this.gameState.playerStates[this.playerIndex].selectedCard = 0;
+    this.gameState.boardRows[rowIndex].push(card);
+    this.pushGameStateToDB();
   }
 }

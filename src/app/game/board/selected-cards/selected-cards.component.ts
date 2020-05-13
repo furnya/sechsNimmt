@@ -44,4 +44,8 @@ export class SelectedCardsComponent implements OnInit {
     }
   }
 
+  isCurrentPlayer(name: string): boolean {
+    return name === this.gameService.player?.name;
+  }
+
 }

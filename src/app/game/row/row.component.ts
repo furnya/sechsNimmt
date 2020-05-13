@@ -35,7 +35,8 @@ export class RowComponent implements OnInit {
         event.currentIndex
       );
     } else {
-      this.cards.push(+event.previousContainer.data[event.previousIndex]);
+      console.log('dropped');
+      const card = +event.previousContainer.data[event.previousIndex];
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -43,7 +44,7 @@ export class RowComponent implements OnInit {
         event.currentIndex
       );
       this.dropList = [];
-
+      this.gameService.putCardInRow(card, this.rowIndex);
     }
   }
 }

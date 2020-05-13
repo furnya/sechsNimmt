@@ -7,7 +7,7 @@
     [cdkDropListConnectedTo]="['rowDropSpot_0','rowDropSpot_1','rowDropSpot_2','rowDropSpot_3','rowDropSpot_4']"
     (cdkDropListDropped)="drop($event)">
     <div *ngFor="let card of selectedCards; index as i">
-      <app-card cdkDrag [id]="card"></app-card>
+      <app-card cdkDrag [id]="card" [cdkDragDisabled]="!isCurrentPlayer(playerNames[i])"></app-card>
       <p>{{ playerNames[i] }}</p>
     </div>
   </div>
