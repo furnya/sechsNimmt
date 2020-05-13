@@ -4,6 +4,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-row',
@@ -12,15 +13,19 @@ import {
 })
 export class RowComponent implements OnInit {
   @Input() rowIndex: number;
-  @Input() cards: number[];
+  cards: number[] = [];
   canBeSelected = false;
   dropList: number[] = [];
 
-  constructor() {}
+  constructor(private gameService: GameService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.canBeSelected = this.rowIndex < 3;
+    this.gameService.gameStateChanged.subscribe(() => {
+      this.cards = this.gameService.getRowCards(this.rowIndex);
+    });
   }
+
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {

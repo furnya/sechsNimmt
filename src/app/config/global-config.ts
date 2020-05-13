@@ -16,6 +16,10 @@ export const ENVIRONMENT = {
 
 export const GLOBAL_CONFIG: GlobalConfig = {
   baseUrl: 'https://sechsnimmt-33e6e.firebaseio.com/',
+  queuePath: 'queue',
   gamePath: 'games',
+  playerPath: 'players',
   suffix: '.json',
+  cardAmount: 104,
+  gameStatePath: 'gameState'
 };

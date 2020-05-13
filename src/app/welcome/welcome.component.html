@@ -87,14 +87,14 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <mat-toolbar>Dein Spiel {{ currentGameId }}</mat-toolbar>
+      <mat-toolbar>Dein Spiel {{ joinedGame?.game.id }}</mat-toolbar>
       <mat-list role="list">
-        <mat-list-item role="listitem" *ngFor="let player of players" [ngClass]="{'isCurrentPlayer': isCurrentPlayer(player)}">{{
+        <mat-list-item role="listitem" *ngFor="let player of joinedGame?.game.players" [ngClass]="{'isCurrentPlayer': isCurrentPlayer(player)}">{{
           player.name + ( isCurrentPlayer(player) ? ' (Du)' : '') + ( player.isHost ? ' [Host]' : '' )
         }}</mat-list-item>
       </mat-list>
-      <button mat-raised-button color="primary" (click)="onStartGame()" [disabled]="!(currentGameId && currentPlayer && currentPlayer.isHost)">Spiel starten</button>
-      <button mat-raised-button color="warn" (click)="onLeaveGame()" [disabled]="!currentGameId">Spiel verlassen</button>
+      <button mat-raised-button color="primary" (click)="onStartGame()" [disabled]="!(joinedGame?.player.isHost)">Spiel starten</button>
+      <button mat-raised-button color="warn" (click)="onLeaveGame()" [disabled]="!joinedGame">Spiel verlassen</button>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

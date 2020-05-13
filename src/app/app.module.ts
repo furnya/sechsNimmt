@@ -41,15 +41,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { CardComponent } from './game/card/card.component';
 import { RowComponent } from './game/row/row.component';
 import { BoardComponent } from './game/board/board.component';
-import { HandComponent } from './game/hand/hand.component';
+import { HandComponent } from './game/board/hand/hand.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import { SelectedCardsComponent } from './game/selected-cards/selected-cards.component';
+import { SelectedCardsComponent } from './game/board/selected-cards/selected-cards.component';
 import { GameComponent } from './game/game.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ENVIRONMENT } from './config/global-config';
+import { NotFoundComponent } from './error-handling/not-found/not-found.component';
+import { MainBoardComponent } from './game/board/main-board/main-board.component';
 
 
 @NgModule({
@@ -61,7 +63,9 @@ import { ENVIRONMENT } from './config/global-config';
     HandComponent,
     SelectedCardsComponent,
     GameComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    NotFoundComponent,
+    MainBoardComponent
   ],
   imports: [
     AppRoutingModule,

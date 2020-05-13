@@ -4,64 +4,135 @@ import { GLOBAL_CONFIG } from '../config/global-config';
 import { Observable, Subject } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map, take, tap } from 'rxjs/operators';
-import { QueuedGame, Player } from '../models/queuedGame.model';
+import { Game, Player, JoinedGame } from '../models/game';
+import { GameService } from '../game/game.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameCreationService {
+  queuedGames: Game[] = [];
+  queuedGamesChanged: Subject<string[]> = new Subject<string[]>();
+  joinedGame: JoinedGame = null;
+  joinedGameChanged: Subject<JoinedGame> = new Subject<JoinedGame>();
 
-  queuedGames: QueuedGame[] = [];
-  queuedGamesChanged: Subject<QueuedGame[]> = new Subject<QueuedGame[]>();
-
-
-  constructor(private http: HttpClient, private db: AngularFireDatabase) {
-    this.getGamesObservable().subscribe(games => {
+  constructor(
+    private http: HttpClient,
+    private db: AngularFireDatabase,
+    private gameService: GameService
+  ) {
+    this.getQueueObservable().subscribe((games) => {
       this.queuedGames = [];
       if (!games) {
-        this.queuedGamesChanged.next(this.queuedGames);
+        this.queuedGamesChanged.next([]);
         return;
       }
-      Object.keys(games).forEach(key => {
+      Object.keys(games).forEach((key) => {
         const players: Player[] = [];
         if (games[key].players) {
-          Object.keys(games[key].players).forEach(playerKey => {
+          Object.keys(games[key].players).forEach((playerKey) => {
             players.push({
               name: games[key].players[playerKey].name,
               isHost: games[key].players[playerKey].isHost,
-              dbKey: playerKey
+              dbKey: playerKey,
             });
           });
         }
         this.queuedGames.push({
           dbKey: key,
           id: games[key].id,
-          players
+          started: games[key].started,
+          players,
         });
       });
-      this.queuedGamesChanged.next(JSON.parse(JSON.stringify(this.queuedGames)));
+      this.queuedGamesChanged.next(this.getGameIds(this.queuedGames));
+      if (this.joinedGame) {
+        const game = this.getGame(this.joinedGame.game.id);
+        this.joinedGame = {
+          game,
+          player: this.getPlayerFromGame(this.joinedGame.player.name, game),
+        };
+        this.joinedGameChanged.next(this.joinedGame);
+        this.gameService.player = this.joinedGame.player;
+      }
     });
   }
 
-  getGamesObservable(): Observable<any> {
-    return this.db.object(GLOBAL_CONFIG.gamePath).valueChanges();
+  private getGameIds(games: Game[]) {
+    const gameIds: string[] = [];
+    games.forEach((game: Game) => {
+      gameIds.push(game.id);
+    });
+    return gameIds;
   }
 
-  createGame(gameId: string, hostPlayerName: string): Observable<any> {
-    this.db.list(GLOBAL_CONFIG.gamePath).push({
+  private getGame(gameId: string) {
+    let game: Game = null;
+    this.queuedGames.forEach((g) => {
+      if (g.id === gameId) {
+        game = g;
+      }
+    });
+    return game;
+  }
+
+  getPlayerFromGame(playerName: string, game: Game) {
+    let player: Player = null;
+    if (!game) {
+      return player;
+    }
+    game.players.forEach((p) => {
+      if (p.name === playerName) {
+        player = p;
+      }
+    });
+    return player;
+  }
+
+  getPlayer(playerName: string) {
+    return this.getPlayerFromGame(playerName, this.joinedGame?.game);
+  }
+
+  private getGamePlayers(gameId: string): Player[] {
+    let players: Player[] = [];
+    this.queuedGames.forEach((game) => {
+      if (game.id === gameId) {
+        players = game.players;
+      }
+    });
+    return players;
+  }
+
+  private getGameKey(gameId: string): string {
+    let gameKey: string;
+    this.queuedGames.forEach((game) => {
+      if (game.id === gameId) {
+        gameKey = game.dbKey;
+      }
+    });
+    return gameKey;
+  }
+
+  getQueueObservable(): Observable<any> {
+    return this.db.object(GLOBAL_CONFIG.queuePath).valueChanges();
+  }
+
+  createGame(gameId: string, hostPlayerName: string) {
+    this.db.list(GLOBAL_CONFIG.queuePath).push({
       id: gameId,
       players: [],
+      started: false,
     });
-    return this.db
-      .list(GLOBAL_CONFIG.gamePath)
+    this.db
+      .list(GLOBAL_CONFIG.queuePath)
       .snapshotChanges()
       .pipe(
         take(1),
-        map(changes => {
-          let key: string;
-          changes.forEach(change => {
+        map((changes) => {
+          let key: string = null;
+          changes.forEach((change) => {
             const value: {
-              id?: string
+              id?: string;
             } = change.payload.val();
             if (value && value.id && value.id === gameId) {
               key = change.payload.key;
@@ -73,18 +144,61 @@ export class GameCreationService {
           if (!changeKey) {
             return;
           }
-          this.db.list(GLOBAL_CONFIG.gamePath + '/' + changeKey + '/players').push({
-            name: hostPlayerName,
-            isHost: true,
-          });
+          this.db
+            .list(GLOBAL_CONFIG.queuePath + '/' + changeKey + '/players')
+            .push({
+              name: hostPlayerName,
+              isHost: true,
+            })
+            .then(() => {
+              const game = this.getGame(gameId);
+              this.joinedGame = {
+                game,
+                player: this.getPlayerFromGame(hostPlayerName, game),
+              };
+              this.joinedGameChanged.next(this.joinedGame);
+              this.gameService.player = this.joinedGame.player;
+            });
         })
-      );
+      )
+      .subscribe();
   }
 
-  joinGame(gameKey: string, playerName: string) {
-    this.db.list(GLOBAL_CONFIG.gamePath + '/' + gameKey + '/players').push({
-      name: playerName,
-      isHost: false,
-    });
+  joinGame(gameId: string, playerName: string): string {
+    const gameKey = this.getGameKey(gameId);
+    if (!gameKey) {
+      return 'Ein Spiel mit dieser ID existiert nicht!';
+    }
+    this.db
+      .list(GLOBAL_CONFIG.queuePath + '/' + gameKey + '/players')
+      .push({
+        name: playerName,
+        isHost: false,
+      })
+      .then(() => {
+        const game = this.getGame(gameId);
+        this.joinedGame = {
+          game,
+          player: this.getPlayerFromGame(playerName, game),
+        };
+        this.joinedGameChanged.next(this.joinedGame);
+        this.gameService.player = this.joinedGame.player;
+      });
+    return null;
+  }
+
+  leaveGame() {
+    this.joinedGame = null;
+    this.joinedGameChanged.next(null);
+    this.gameService.player = null;
+  }
+
+  startGame() {
+    if (!this.joinedGame) {
+      return;
+    }
+    this.db
+      .object(GLOBAL_CONFIG.queuePath + '/' + this.joinedGame.game.dbKey)
+      .update({ started: true });
   }
 }

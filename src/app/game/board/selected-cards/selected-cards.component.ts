@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { GameService } from '../../game.service';
 
 @Component({
   selector: 'app-selected-cards',
@@ -8,11 +9,22 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class SelectedCardsComponent implements OnInit {
 
+  playerNames: string[] = [];
   selectedCards: number[] = [1, 3, 5];
 
-  constructor() { }
+  constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
+    this.gameService.gameStateChanged.subscribe(() => {
+      this.selectedCards = [];
+      this.playerNames = [];
+      this.gameService.gameState.playerStates.forEach(ps => {
+        if (ps.selectedCard !== 0) {
+          this.selectedCards.push(ps.selectedCard);
+          this.playerNames.push(ps.player.name);
+        }
+      });
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {
