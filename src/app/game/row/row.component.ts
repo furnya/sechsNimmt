@@ -47,4 +47,8 @@ export class RowComponent implements OnInit {
       this.gameService.putCardInRow(card, this.rowIndex);
     }
   }
+
+  onTakeRow() {
+    this.gameService.takeRow(this.rowIndex);
+  }
 }

@@ -10,7 +10,7 @@ import { GameService } from '../../game.service';
 export class SelectedCardsComponent implements OnInit {
 
   playerNames: string[] = [];
-  selectedCards: number[] = [1, 3, 5];
+  selectedCards: number[] = [];
 
   constructor(private gameService: GameService) { }
 

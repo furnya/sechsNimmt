@@ -184,4 +184,10 @@ export class GameService {
     this.gameState.boardRows[rowIndex].push(card);
     this.pushGameStateToDB();
   }
+
+  takeRow(rowIndex: number) {
+    this.gameState.boardRows[rowIndex] = [this.gameState.playerStates[this.playerIndex].selectedCard];
+    this.gameState.playerStates[this.playerIndex].selectedCard = 0;
+    this.pushGameStateToDB();
+  }
 }
