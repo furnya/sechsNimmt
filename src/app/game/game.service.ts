@@ -247,6 +247,8 @@ export class GameService {
   calculateMinusPoints(card: number): number {
     if (card === 55) {
       return 7;
+    } else if (card === -1) {
+      return -1;
     } else if (card % 11 === 0) {
       return 5;
     } else if (card % 10 === 0) {

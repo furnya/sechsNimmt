@@ -9,6 +9,7 @@ import { GameService } from '../game.service';
 export class CardComponent implements OnInit {
   @Input() id: number;
   @Input() isSelected: boolean;
+  @Input() isSmallestCard = false;
   @Output() cardSelected: EventEmitter<number> = new EventEmitter<number>();
   bullAmount = 1;
 
