@@ -5,6 +5,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { GameService } from '../game.service';
+import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 
 @Component({
   selector: 'app-row',
@@ -44,7 +45,7 @@ export class RowComponent implements OnInit {
         event.currentIndex
       );
     } else {
-      if (this.cards.length >= 5) {
+      if (this.cards.length >= GLOBAL_CONFIG.maxCardsInRow) {
         this.onTakeRow();
         return;
       }

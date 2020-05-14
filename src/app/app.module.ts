@@ -53,7 +53,10 @@ import { ENVIRONMENT } from './config/global-config';
 import { NotFoundComponent } from './error-handling/not-found/not-found.component';
 import { MainBoardComponent } from './game/board/main-board/main-board.component';
 import { FinishedDialogComponent } from './game/board/finished-dialog/finished-dialog.component';
-
+import { CreateAndJoinComponent } from './welcome/create-and-join/create-and-join.component';
+import { LobbyComponent } from './welcome/lobby/lobby.component';
+import { EnterNameDialogComponent } from './welcome/enter-name-dialog/enter-name-dialog.component';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [
@@ -67,7 +70,10 @@ import { FinishedDialogComponent } from './game/board/finished-dialog/finished-d
     WelcomeComponent,
     NotFoundComponent,
     MainBoardComponent,
-    FinishedDialogComponent
+    FinishedDialogComponent,
+    CreateAndJoinComponent,
+    LobbyComponent,
+    EnterNameDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -116,10 +122,11 @@ import { FinishedDialogComponent } from './game/board/finished-dialog/finished-d
     ReactiveFormsModule,
     DragDropModule,
     AngularFireModule.initializeApp(ENVIRONMENT.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    ClipboardModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [FinishedDialogComponent]
+  entryComponents: [FinishedDialogComponent, EnterNameDialogComponent]
 })
 export class AppModule { }

@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Spiel {{ data.gameId }} beitreten?</h1>
+<form #enterNameForm="ngForm" (ngSubmit)="confirm()">
+  <div mat-dialog-content>
+    <p>Gib deinen Namen ein:</p>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput #nameField name="playername" [(ngModel)]="playerName" cdkFocusInitial/>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="playerName">
+      Beitreten
+    </button>
+    <button mat-button type="submit">Zurück zur Startseite</button>
+  </div>
+</form>

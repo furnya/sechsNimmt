@@ -15,4 +15,5 @@ export interface GlobalConfig {
     urlJoinPath: string;
     rounds: number;
     rows: number;
+    maxCardsInRow: number;
 }

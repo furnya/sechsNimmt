@@ -5,6 +5,7 @@ import { map, take, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
 import { Game, JoinedGame, Player } from '../models/game';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class GameCreationService {
 
   constructor(
     private db: AngularFireDatabase,
-    private gameService: GameService
+    private gameService: GameService,
+    private router: Router
   ) {
     this.getQueueObservable().subscribe((games) => {
       this.queuedGames = [];
@@ -156,13 +158,30 @@ export class GameCreationService {
               };
               this.joinedGameChanged.next(this.joinedGame);
               this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
+              this.router.navigate(['/' + GLOBAL_CONFIG.urlJoinPath, gameId]);
             });
         })
       )
       .subscribe();
   }
 
-  joinGame(gameId: string, playerName: string): string {
+  joinGameIfAlreadyIn(gameId: string, playerName: string) {
+    this.joinedGame = {
+      game: {
+        id: gameId,
+        dbKey: null,
+        players: [],
+        started: false
+      },
+      player: {
+        name: playerName,
+        dbKey: null,
+        isHost: false
+      }
+    };
+  }
+
+  joinGameFromForm(gameId: string, playerName: string, navigate: boolean): string {
     const gameKey = this.getGameKey(gameId);
     if (!gameKey) {
       return 'Ein Spiel mit dieser ID existiert nicht!';
@@ -181,6 +200,9 @@ export class GameCreationService {
         };
         this.joinedGameChanged.next(this.joinedGame);
         this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
+        if (navigate) {
+          this.router.navigate(['/' + GLOBAL_CONFIG.urlJoinPath, gameId]);
+        }
       });
     return null;
   }

@@ -15,7 +15,7 @@ export const ENVIRONMENT = {
 };
 
 export const GLOBAL_CONFIG: GlobalConfig = {
-  baseUrl: 'https://sechsnimmt-33e6e.firebaseio.com/',
+  baseUrl: 'https://www.sechsnimmt.de',
   dbQueuePath: 'queue',
   dbGamePath: 'games',
   dbPlayerPath: 'players',
@@ -29,6 +29,7 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   urlGamePath: 'game',
   urlWelcomePath: 'welcome',
   urlJoinPath: 'join',
-  rounds: 1,
-  rows: 5
+  rounds: 3,
+  rows: 5,
+  maxCardsInRow: 5
 };

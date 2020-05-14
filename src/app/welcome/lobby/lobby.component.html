@@ -1,0 +1,40 @@
+<div class="lobbyContainer">
+  <mat-toolbar>Dein Spiel {{ joinedGame?.game.id }}</mat-toolbar>
+  <mat-list role="list">
+    <mat-list-item
+      role="listitem"
+      *ngFor="let player of joinedGame?.game.players"
+      [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }"
+      >{{
+        player.name +
+          (isCurrentPlayer(player) ? " (Du)" : "") +
+          (player.isHost ? " [Host]" : "")
+      }}</mat-list-item
+    >
+  </mat-list>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onStartGame()"
+    [disabled]="!joinedGame?.player.isHost"
+  >
+    Spiel starten
+  </button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onLeaveGame()"
+    [disabled]="!joinedGame"
+  >
+    Spiel verlassen
+  </button>
+  <mat-toolbar>
+    Spieler einladen:
+    <mat-form-field class="inviteLinkField">
+      <input matInput onClick="this.select();" [value]="inviteLink" readonly>
+    </mat-form-field>
+    <button mat-fab color="primary" [cdkCopyToClipboard]="inviteLink">
+      <mat-icon svgIcon="copy-to-clipboard"></mat-icon>
+    </button>
+  </mat-toolbar>
+</div>

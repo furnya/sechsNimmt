@@ -1,0 +1,20 @@
+.joinAndCreateContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.joinGameContainer {
+    width: 100%;
+    position: relative;
+    top: 20%;
+    // -ms-transform: translateY(-50%);
+    // transform: translateY(-50%);
+}
+
+.createGameContainer {
+    width: 100%;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

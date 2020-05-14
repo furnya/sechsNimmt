@@ -1,4 +1,4 @@
-<div class="welcomeScreenContainer">
+<!-- <div class="welcomeScreenContainer">
   <mat-sidenav-container>
     <mat-sidenav mode="side" opened class="joinAndCreateContainer">
       <div class="joinGameContainer">
@@ -97,4 +97,7 @@
       <button mat-raised-button color="warn" (click)="onLeaveGame()" [disabled]="!joinedGame">Spiel verlassen</button>
     </mat-sidenav-content>
   </mat-sidenav-container>
+</div> -->
+<div class="welcomeScreenContainer">
+  <router-outlet></router-outlet>
 </div>
