@@ -1,34 +1,34 @@
-import * as functions from 'firebase-functions';
-const https = require('https');
-const options = {
-  hostname: 'sechsnimmt-33e6e.firebaseio.com',
-  port: 443,
-  path: '/card.json',
-  method: 'GET',
-};
+// import * as functions from 'firebase-functions';
+// const https = require('https');
+// const options = {
+//   hostname: 'sechsnimmt-33e6e.firebaseio.com',
+//   port: 443,
+//   path: '/card.json',
+//   method: 'GET',
+// };
 
-function getPromise() {
-  return new Promise((resolve, reject) => {
-    https
-      .request(options, (res: any) => {
-        let chunks_of_data: any[] = [];
+// function getPromise() {
+//   return new Promise((resolve, reject) => {
+//     https
+//       .request(options, (res: any) => {
+//         let chunks_of_data: any[] = [];
 
-        res.on('data', (fragments: any) => {
-          chunks_of_data.push(fragments);
-        });
+//         res.on('data', (fragments: any) => {
+//           chunks_of_data.push(fragments);
+//         });
 
-        res.on('end', () => {
-          let response_body = Buffer.concat(chunks_of_data);
-          resolve(response_body.toString());
-        });
+//         res.on('end', () => {
+//           let response_body = Buffer.concat(chunks_of_data);
+//           resolve(response_body.toString());
+//         });
 
-        res.on('error', (error: any) => {
-          reject(error);
-        });
-      })
-      .end();
-  });
-}
+//         res.on('error', (error: any) => {
+//           reject(error);
+//         });
+//       })
+//       .end();
+//   });
+// }
 
 // export const helloWorld = functions
 //   .region('europe-west1')
