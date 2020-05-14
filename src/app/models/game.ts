@@ -20,6 +20,8 @@ export interface GameState {
   boardRows: number[][];
   playerStates: PlayerState[];
   choosingCards: boolean;
+  round: number;
+  finished: boolean;
 }
 
 export interface PlayerState {

@@ -4,6 +4,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { take, map } from 'rxjs/operators';
 import { Subscription, Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -24,32 +25,42 @@ export class GameService {
 
   set player(player: Player) {
     this._player = player;
-    localStorage.setItem('player', JSON.stringify(player));
   }
 
-  constructor(private db: AngularFireDatabase) {}
+  setPlayerLocalStorage(player: Player, gameId: string) {
+    this.player = player;
+    localStorage.setItem('player_' + gameId, JSON.stringify(player));
+  }
+
+  deletePlayerLocalStorage(gameId: string) {
+    this.player = null;
+    localStorage.removeItem('player_' + gameId);
+  }
+
+  constructor(private db: AngularFireDatabase, private router: Router) {}
 
   subscribeToGameStateChanges() {
-    this.player = JSON.parse(localStorage.getItem('player'));
+    this.player = JSON.parse(localStorage.getItem('player_' + this.gameId));
     this.db
       .object(
-        GLOBAL_CONFIG.gamePath +
+        GLOBAL_CONFIG.dbGamePath +
           '/' +
           this.gameKey +
           '/' +
-          GLOBAL_CONFIG.gameStatePath
+          GLOBAL_CONFIG.dbGameStatePath
       )
       .valueChanges()
       .subscribe((gameState: GameState) => {
         this.gameState = gameState;
-        this.gameStateChanged.next(this.gameState);
-        this.setPlayerIndex();
-        this.checkDisableSelecting();
+        if (this.setPlayerIndex()) {
+          this.gameStateChanged.next(this.gameState);
+          this.checkDisableSelecting();
+        }
       });
   }
 
   checkDisableSelecting() {
-    if (this.player?.isHost) {
+    if (this.player?.isHost && !this.gameState?.finished) {
       if (this.gameState?.choosingCards) {
         let t = false;
         this.gameState.playerStates.forEach((ps) => {
@@ -73,20 +84,30 @@ export class GameService {
           return;
         }
         this.gameState.choosingCards = true;
+        this.gameState.round++;
+        if (this.gameState.round === GLOBAL_CONFIG.rounds + 1) {
+          this.gameState.finished = true;
+          this.gameState.choosingCards = false;
+        }
         this.pushGameStateToDB();
       }
     }
   }
 
-  setPlayerIndex() {
-    this.playerIndex = this.gameState.playerStates.findIndex((ps) => {
-      return ps.player.name === this.player.name;
+  setPlayerIndex(): boolean {
+    this.playerIndex = this.gameState?.playerStates.findIndex((ps) => {
+      return ps.player.name === this.player?.name;
     });
+    if (this.playerIndex === -1) {
+      this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
+      return false;
+    }
+    return true;
   }
 
   setGameKey() {
     this.gameKeySub = this.db
-      .list(GLOBAL_CONFIG.gamePath)
+      .list(GLOBAL_CONFIG.dbGamePath)
       .snapshotChanges()
       .pipe(
         map((changes) => {
@@ -115,9 +136,9 @@ export class GameService {
   startGame(gameId: string) {
     this.gameId = gameId;
     this.setGameKey();
-    if (this.player && this.player.isHost) {
+    if (!this.gameState && this.player && this.player.isHost) {
       this.db
-        .object(GLOBAL_CONFIG.queuePath)
+        .object(GLOBAL_CONFIG.dbQueuePath)
         .valueChanges()
         .pipe(take(1))
         .subscribe((games) => {
@@ -136,7 +157,7 @@ export class GameService {
             playerArray.push(players[key]);
           });
           const gameState = this.distributeCards(playerArray);
-          this.db.list(GLOBAL_CONFIG.gamePath).push({
+          this.db.list(GLOBAL_CONFIG.dbGamePath).push({
             id: gameId,
             players,
             gameState,
@@ -157,7 +178,7 @@ export class GameService {
         selectedCard: 0,
         player: null,
       });
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < GLOBAL_CONFIG.rounds; j++) {
         const index = Math.floor(Math.random() * cards.length);
         playerStates[i].hand.push(cards[index]);
         cards.splice(index, 1);
@@ -165,7 +186,7 @@ export class GameService {
       playerStates[i].player = players[i];
     }
     const boardRows: number[][] = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < GLOBAL_CONFIG.rows; i++) {
       boardRows.push([]);
       const index = Math.floor(Math.random() * cards.length);
       boardRows[i].push(cards[index]);
@@ -175,6 +196,8 @@ export class GameService {
       boardRows,
       playerStates,
       choosingCards: true,
+      round: 1,
+      finished: false,
     };
   }
 
@@ -197,11 +220,11 @@ export class GameService {
   pushGameStateToDB() {
     this.db
       .object(
-        GLOBAL_CONFIG.gamePath +
+        GLOBAL_CONFIG.dbGamePath +
           '/' +
           this.gameKey +
           '/' +
-          GLOBAL_CONFIG.gameStatePath
+          GLOBAL_CONFIG.dbGameStatePath
       )
       .update(this.gameState);
   }
@@ -257,9 +280,13 @@ export class GameService {
     return this.gameState?.choosingCards;
   }
 
+  isFinished(): boolean {
+    return this.gameState?.finished;
+  }
+
   isYourTurn(): boolean {
     return (
-      this.gameState?.playerStates[this.playerIndex].selectedCard ===
+      this.gameState?.playerStates[this.playerIndex]?.selectedCard ===
       this.getSmallestSelectedCard()
     );
   }

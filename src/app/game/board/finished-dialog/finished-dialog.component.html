@@ -1,0 +1,15 @@
+<mat-toolbar>Spiel beendet. {{ winnerMessage }}</mat-toolbar>
+<table mat-table [dataSource]="data.playerStates">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Spieler</th>
+    <td mat-cell *matCellDef="let element">{{ element.player.name }}</td>
+  </ng-container>
+  <ng-container matColumnDef="minusPoints">
+    <th mat-header-cell *matHeaderCellDef>Minuspunkte</th>
+    <td mat-cell *matCellDef="let element">{{ element.minusPoints }}</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="['name', 'minusPoints']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></tr>
+</table>
+<!-- <button mat-raised-button color="primary" (click)="onReturnToHome()">Zur Startseite zurückkehren</button> -->
+<button mat-raised-button color="primary" matDialogClose (click)="onReturnToHome()">Zur Startseite zurückkehren</button>

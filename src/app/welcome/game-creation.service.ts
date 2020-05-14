@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { GLOBAL_CONFIG } from '../config/global-config';
-import { Observable, Subject } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Observable, Subject } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
-import { Game, Player, JoinedGame } from '../models/game';
+import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
+import { Game, JoinedGame, Player } from '../models/game';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,6 @@ export class GameCreationService {
   joinedGameChanged: Subject<JoinedGame> = new Subject<JoinedGame>();
 
   constructor(
-    private http: HttpClient,
     private db: AngularFireDatabase,
     private gameService: GameService
   ) {
@@ -53,7 +51,7 @@ export class GameCreationService {
           player: this.getPlayerFromGame(this.joinedGame.player.name, game),
         };
         this.joinedGameChanged.next(this.joinedGame);
-        this.gameService.player = this.joinedGame.player;
+        this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
       }
     });
   }
@@ -114,17 +112,17 @@ export class GameCreationService {
   }
 
   getQueueObservable(): Observable<any> {
-    return this.db.object(GLOBAL_CONFIG.queuePath).valueChanges();
+    return this.db.object(GLOBAL_CONFIG.dbQueuePath).valueChanges();
   }
 
   createGame(gameId: string, hostPlayerName: string) {
-    this.db.list(GLOBAL_CONFIG.queuePath).push({
+    this.db.list(GLOBAL_CONFIG.dbQueuePath).push({
       id: gameId,
       players: [],
       started: false,
     });
     this.db
-      .list(GLOBAL_CONFIG.queuePath)
+      .list(GLOBAL_CONFIG.dbQueuePath)
       .snapshotChanges()
       .pipe(
         take(1),
@@ -145,7 +143,7 @@ export class GameCreationService {
             return;
           }
           this.db
-            .list(GLOBAL_CONFIG.queuePath + '/' + changeKey + '/players')
+            .list(GLOBAL_CONFIG.dbQueuePath + '/' + changeKey + '/' + GLOBAL_CONFIG.dbPlayerPath)
             .push({
               name: hostPlayerName,
               isHost: true,
@@ -157,7 +155,7 @@ export class GameCreationService {
                 player: this.getPlayerFromGame(hostPlayerName, game),
               };
               this.joinedGameChanged.next(this.joinedGame);
-              this.gameService.player = this.joinedGame.player;
+              this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
             });
         })
       )
@@ -170,7 +168,7 @@ export class GameCreationService {
       return 'Ein Spiel mit dieser ID existiert nicht!';
     }
     this.db
-      .list(GLOBAL_CONFIG.queuePath + '/' + gameKey + '/players')
+      .list(GLOBAL_CONFIG.dbQueuePath + '/' + gameKey + '/' + GLOBAL_CONFIG.dbPlayerPath)
       .push({
         name: playerName,
         isHost: false,
@@ -182,15 +180,16 @@ export class GameCreationService {
           player: this.getPlayerFromGame(playerName, game),
         };
         this.joinedGameChanged.next(this.joinedGame);
-        this.gameService.player = this.joinedGame.player;
+        this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
       });
     return null;
   }
 
   leaveGame() {
+    this.gameService.deletePlayerLocalStorage(this.joinedGame?.game.id);
+    this.gameService.gameState = null;
     this.joinedGame = null;
     this.joinedGameChanged.next(null);
-    this.gameService.player = null;
   }
 
   startGame() {
@@ -198,7 +197,7 @@ export class GameCreationService {
       return;
     }
     this.db
-      .object(GLOBAL_CONFIG.queuePath + '/' + this.joinedGame.game.dbKey)
+      .object(GLOBAL_CONFIG.dbQueuePath + '/' + this.joinedGame.game.dbKey)
       .update({ started: true });
   }
 }

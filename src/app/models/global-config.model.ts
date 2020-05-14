@@ -1,13 +1,18 @@
 export interface GlobalConfig {
     baseUrl: string;
-    queuePath: string;
-    playerPath: string;
-    gamePath: string;
-    gameStatePath: string;
+    dbQueuePath: string;
+    dbPlayerPath: string;
+    dbGamePath: string;
+    dbGameStatePath: string;
     suffix: string;
     cardAmount: number;
-    playerStatesPath: string;
-    handPath: string;
-    minusPointsPath: string;
-    selectedCardPath: string;
+    dbPlayerStatesPath: string;
+    dbHandPath: string;
+    dbMinusPointsPath: string;
+    dbSelectedCardPath: string;
+    urlWelcomePath: string;
+    urlGamePath: string;
+    urlJoinPath: string;
+    rounds: number;
+    rows: number;
 }

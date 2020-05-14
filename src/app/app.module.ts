@@ -52,6 +52,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ENVIRONMENT } from './config/global-config';
 import { NotFoundComponent } from './error-handling/not-found/not-found.component';
 import { MainBoardComponent } from './game/board/main-board/main-board.component';
+import { FinishedDialogComponent } from './game/board/finished-dialog/finished-dialog.component';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MainBoardComponent } from './game/board/main-board/main-board.component
     GameComponent,
     WelcomeComponent,
     NotFoundComponent,
-    MainBoardComponent
+    MainBoardComponent,
+    FinishedDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -117,6 +119,7 @@ import { MainBoardComponent } from './game/board/main-board/main-board.component
     AngularFireDatabaseModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [FinishedDialogComponent]
 })
 export class AppModule { }

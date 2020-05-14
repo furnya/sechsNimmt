@@ -15,6 +15,7 @@ import { GameCreationService } from './game-creation.service';
 import { Game, Player, JoinedGame } from '../models/game';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { GLOBAL_CONFIG } from '../config/global-config';
 
 @Component({
   selector: 'app-welcome',
@@ -40,6 +41,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.gameCreationService.leaveGame();
     this.queuedGamesSubscription = this.gameCreationService.queuedGamesChanged.subscribe(
       (gameIds) => {
         this.setGameIds(gameIds);
@@ -61,6 +63,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ref.detectChanges();
   }
 
+  ngOnDestroy() {
+    this.queuedGamesSubscription.unsubscribe();
+    this.joinedGameSubscription.unsubscribe();
+  }
+
   setGameIds(gameIds: string[]) {
     this.queuedGameIds = [];
     gameIds.forEach((gameId: string) => {
@@ -68,11 +75,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.queuedGameIds.push(gameId);
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.queuedGamesSubscription.unsubscribe();
-    this.joinedGameSubscription.unsubscribe();
   }
 
   private getFilteredOptions(): Observable<string[]> {
@@ -141,7 +143,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   navigateToGame(gameId: string) {
-    this.router.navigate(['/game', gameId]);
+    this.router.navigate([GLOBAL_CONFIG.urlGamePath, gameId]);
   }
 
   onStartGame() {

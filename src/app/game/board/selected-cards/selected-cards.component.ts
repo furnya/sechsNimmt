@@ -18,7 +18,7 @@ export class SelectedCardsComponent implements OnInit {
     this.gameService.gameStateChanged.subscribe(() => {
       this.selectedCards = [];
       this.playerNames = [];
-      this.gameService.gameState.playerStates.forEach(ps => {
+      this.gameService.gameState?.playerStates.forEach(ps => {
         if (ps.selectedCard !== 0) {
           this.selectedCards.push(ps.selectedCard);
           this.playerNames.push(ps.player.name);
