@@ -27,8 +27,7 @@ export class GameService {
     localStorage.setItem('player', JSON.stringify(player));
   }
 
-  constructor(private db: AngularFireDatabase) {
-  }
+  constructor(private db: AngularFireDatabase) {}
 
   subscribeToGameStateChanges() {
     this.player = JSON.parse(localStorage.getItem('player'));
@@ -45,11 +44,42 @@ export class GameService {
         this.gameState = gameState;
         this.gameStateChanged.next(this.gameState);
         this.setPlayerIndex();
+        this.checkDisableSelecting();
       });
   }
 
+  checkDisableSelecting() {
+    if (this.player?.isHost) {
+      if (this.gameState?.choosingCards) {
+        let t = false;
+        this.gameState.playerStates.forEach((ps) => {
+          if (ps.selectedCard === 0) {
+            t = true;
+          }
+        });
+        if (t) {
+          return;
+        }
+        this.gameState.choosingCards = false;
+        this.pushGameStateToDB();
+      } else {
+        let t = true;
+        this.gameState.playerStates.forEach((ps) => {
+          if (ps.selectedCard !== 0) {
+            t = false;
+          }
+        });
+        if (!t) {
+          return;
+        }
+        this.gameState.choosingCards = true;
+        this.pushGameStateToDB();
+      }
+    }
+  }
+
   setPlayerIndex() {
-    this.playerIndex = this.gameState.playerStates.findIndex(ps => {
+    this.playerIndex = this.gameState.playerStates.findIndex((ps) => {
       return ps.player.name === this.player.name;
     });
   }
@@ -105,10 +135,11 @@ export class GameService {
           Object.keys(players).forEach((key) => {
             playerArray.push(players[key]);
           });
+          const gameState = this.distributeCards(playerArray);
           this.db.list(GLOBAL_CONFIG.gamePath).push({
             id: gameId,
             players,
-            gameState: this.distributeCards(playerArray),
+            gameState,
           });
         });
     }
@@ -143,6 +174,7 @@ export class GameService {
     return {
       boardRows,
       playerStates,
+      choosingCards: true,
     };
   }
 
@@ -150,7 +182,7 @@ export class GameService {
     if (!(this.gameState && this.player)) {
       return [];
     }
-    return this.gameState.playerStates.find(s => {
+    return this.gameState.playerStates.find((s) => {
       return s.player.name === this.player.name;
     }).hand;
   }
@@ -163,18 +195,22 @@ export class GameService {
   }
 
   pushGameStateToDB() {
-    console.log('pushing');
-    this.db.object(
-      GLOBAL_CONFIG.gamePath +
-        '/' +
-        this.gameKey +
-        '/' +
-        GLOBAL_CONFIG.gameStatePath
-    ).update(this.gameState);
+    this.db
+      .object(
+        GLOBAL_CONFIG.gamePath +
+          '/' +
+          this.gameKey +
+          '/' +
+          GLOBAL_CONFIG.gameStatePath
+      )
+      .update(this.gameState);
   }
 
   selectCard(card: number) {
-    this.gameState.playerStates[this.playerIndex].hand.splice(this.gameState.playerStates[this.playerIndex].hand.indexOf(card), 1);
+    this.gameState.playerStates[this.playerIndex].hand.splice(
+      this.gameState.playerStates[this.playerIndex].hand.indexOf(card),
+      1
+    );
     this.gameState.playerStates[this.playerIndex].selectedCard = card;
     this.pushGameStateToDB();
   }
@@ -185,9 +221,91 @@ export class GameService {
     this.pushGameStateToDB();
   }
 
+  calculateMinusPoints(card: number): number {
+    if (card === 55) {
+      return 7;
+    } else if (card % 11 === 0) {
+      return 5;
+    } else if (card % 10 === 0) {
+      return 3;
+    } else if (card % 5 === 0) {
+      return 2;
+    } else {
+      return 1;
+    }
+  }
+
+  getMinusPoints() {
+    return this.gameState?.playerStates[this.playerIndex].minusPoints;
+  }
+
   takeRow(rowIndex: number) {
-    this.gameState.boardRows[rowIndex] = [this.gameState.playerStates[this.playerIndex].selectedCard];
+    this.gameState.playerStates[
+      this.playerIndex
+    ].minusPoints += this.gameState.boardRows[rowIndex].reduce(
+      (pv, cv) => pv + this.calculateMinusPoints(cv),
+      0
+    );
+    this.gameState.boardRows[rowIndex] = [
+      this.gameState.playerStates[this.playerIndex].selectedCard,
+    ];
     this.gameState.playerStates[this.playerIndex].selectedCard = 0;
     this.pushGameStateToDB();
+  }
+
+  isChoosingCards(): boolean {
+    return this.gameState?.choosingCards;
+  }
+
+  isYourTurn(): boolean {
+    return (
+      this.gameState?.playerStates[this.playerIndex].selectedCard ===
+      this.getSmallestSelectedCard()
+    );
+  }
+
+  canSelect(): boolean {
+    return (
+      this.gameState?.playerStates[this.playerIndex].selectedCard === 0 &&
+      this.gameState.choosingCards === true
+    );
+  }
+
+  getSmallestSelectedCard(): number {
+    let card = 105;
+    this.gameState?.playerStates.forEach((ps) => {
+      if (ps.selectedCard !== 0 && ps.selectedCard < card) {
+        card = ps.selectedCard;
+      }
+    });
+    return card;
+  }
+
+  getHightlightedRowIndex() {
+    const smallestCard = this.getSmallestSelectedCard();
+    let index = -1;
+    if (smallestCard === 105) {
+      return index;
+    }
+    this.gameState?.boardRows.forEach((row, i) => {
+      if (index === -1) {
+        if (row[row.length - 1] < smallestCard) {
+          index = i;
+        }
+      } else {
+        if (row[row.length - 1] < smallestCard) {
+          if (
+            smallestCard -
+              this.gameState.boardRows[index][
+                this.gameState.boardRows[index].length - 1
+              ] >
+            smallestCard - row[row.length - 1]
+          ) {
+            index = i;
+          }
+        }
+      }
+    });
+    return index;
   }
 }

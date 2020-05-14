@@ -4,8 +4,9 @@
       mat-stroked-button
       class="selectButton"
       color="primary"
-      *ngIf="canBeSelected"
+      *ngIf="canBeSelected()"
       (click)="onTakeRow()"
+      [disabled]="!isYourTurn()"
     >
       Reihe wählen
     </button>
@@ -20,7 +21,7 @@
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="horizontal"
     class="dropList"
-    *ngIf="cards.length < 5"
+    *ngIf="canDrop()"
   >
     <app-card *ngFor="let card of dropList" cdkDrag [id]="card"></app-card>
   </div>

@@ -1,6 +1,7 @@
 <div class="hand">
+    <button mat-stroked-button class="confirmButton" color="primary" (click)="onConfirmSelection()" [disabled]="selectedCard === 0 || !canSelect()">Auswahl bestätigen</button>
     <div class="cardRow">
         <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" (cardSelected)="onCardSelected($event)"></app-card>
     </div>
-    <button mat-stroked-button class="confirmButton" color="primary" (click)="onConfirmSelection()" [disabled]="selectedCard === 0">Auswahl bestätigen</button>
+    <p>Minuspunkte: {{ minusPoints }}</p>
 </div>

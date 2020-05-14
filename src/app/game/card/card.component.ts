@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-card',
@@ -8,21 +9,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class CardComponent implements OnInit {
   @Input() id: number;
   @Input() isSelected: boolean;
-  @Output() cardSelected: EventEmitter<number> = new EventEmitter<number>(); 
+  @Output() cardSelected: EventEmitter<number> = new EventEmitter<number>();
   bullAmount = 1;
 
-  constructor() {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    if (this.id === 55) {
-      this.bullAmount = 7;
-    } else if (this.id % 11 === 0) {
-      this.bullAmount = 5;
-    } else if (this.id % 10 === 0) {
-      this.bullAmount = 3;
-    } else if (this.id % 5 === 0) {
-      this.bullAmount = 2;
-    }
+    this.bullAmount = this.gameService.calculateMinusPoints(this.id);
   }
 
   onCardSelected() {

@@ -19,6 +19,7 @@ export interface Player {
 export interface GameState {
   boardRows: number[][];
   playerStates: PlayerState[];
+  choosingCards: boolean;
 }
 
 export interface PlayerState {

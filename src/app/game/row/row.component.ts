@@ -14,18 +14,27 @@ import { GameService } from '../game.service';
 export class RowComponent implements OnInit {
   @Input() rowIndex: number;
   cards: number[] = [];
-  canBeSelected = false;
   dropList: number[] = [];
 
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
-    this.canBeSelected = this.rowIndex < 3;
     this.gameService.gameStateChanged.subscribe(() => {
       this.cards = this.gameService.getRowCards(this.rowIndex);
     });
   }
 
+  canBeSelected(): boolean {
+    return this.gameService.getHightlightedRowIndex() === -1 && !this.gameService.isChoosingCards();
+  }
+
+  isYourTurn(): boolean {
+    return this.gameService.isYourTurn();
+  }
+
+  canDrop(): boolean {
+    return this.gameService.getHightlightedRowIndex() === this.rowIndex && !this.gameService.isChoosingCards();
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -35,7 +44,10 @@ export class RowComponent implements OnInit {
         event.currentIndex
       );
     } else {
-      console.log('dropped');
+      if (this.cards.length >= 5) {
+        this.onTakeRow();
+        return;
+      }
       const card = +event.previousContainer.data[event.previousIndex];
       transferArrayItem(
         event.previousContainer.data,

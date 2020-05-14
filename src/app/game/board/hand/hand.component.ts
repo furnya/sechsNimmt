@@ -9,7 +9,6 @@ import { GameService } from '../../game.service';
 export class HandComponent implements OnInit {
 
   cards: number[] = [];
-
   selectedCard = 0;
 
   constructor(private gameService: GameService) { }
@@ -29,6 +28,15 @@ export class HandComponent implements OnInit {
       return;
     }
     this.gameService.selectCard(this.selectedCard);
+    this.selectedCard = 0;
+  }
+
+  canSelect() {
+    return this.gameService.canSelect();
+  }
+
+  get minusPoints() {
+    return this.gameService.getMinusPoints();
   }
 
 }

@@ -48,4 +48,12 @@ export class SelectedCardsComponent implements OnInit {
     return name === this.gameService.player?.name;
   }
 
+  isSmallestCard(card: number): boolean {
+    return card === Math.min(...this.selectedCards);
+  }
+
+  canPlay(): boolean {
+    return !this.gameService.isChoosingCards();
+  }
+
 }

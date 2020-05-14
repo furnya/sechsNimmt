@@ -30,14 +30,14 @@ function getPromise() {
   });
 }
 
-export const helloWorld = functions
-  .region('europe-west1')
-  .https.onRequest(async (request, response) => {
-    try {
-      let http_promise = getPromise();
-      let body = await http_promise;
-      response.set('Content-Type', 'application/json').set('Access-Control-Allow-Origin', '*').send(body);
-    } catch (error) {
-      console.log(error);
-    }
-});
+// export const helloWorld = functions
+//   .region('europe-west1')
+//   .https.onRequest(async (request, response) => {
+//     try {
+//       let http_promise = getPromise();
+//       let body = await http_promise;
+//       response.set('Content-Type', 'application/json').set('Access-Control-Allow-Origin', '*').send(body);
+//     } catch (error) {
+//       console.log(error);
+//     }
+// });

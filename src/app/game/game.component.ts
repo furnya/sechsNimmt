@@ -13,8 +13,4 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onGameStarted(id: string) {
-    console.log(id);
-  }
-
 }
