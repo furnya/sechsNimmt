@@ -8,9 +8,9 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="playerName">
+    <button mat-button [mat-dialog-close]="playerName" type="submit">
       Beitreten
     </button>
-    <button mat-button type="submit">Zurück zur Startseite</button>
+    <button mat-button (click)="onReturnToHome()">Zurück zur Startseite</button>
   </div>
 </form>

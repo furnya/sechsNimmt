@@ -13,10 +13,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.scss']
+  styleUrls: ['./lobby.component.scss'],
 })
 export class LobbyComponent implements OnInit, OnDestroy {
-
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
   queuedGameIds: string[] = [];
   filteredOptions: Observable<string[]>;
@@ -31,11 +30,13 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private enterNameDialog: MatDialog,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer 
+    private sanitizer: DomSanitizer
   ) {
     this.iconRegistry.addSvgIcon(
       'copy-to-clipboard',
-      this.sanitizer.bypassSecurityTrustResourceUrl('../../../assets/icons/content-copy.svg')
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '../../../assets/icons/content-copy.svg'
+      )
     );
   }
 
@@ -48,13 +49,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
       } else {
         this.joinedGame = this.gameCreationService.joinedGame;
       }
-    } else {
-      const dialogRef = this.enterNameDialog.open(EnterNameDialogComponent, {
-        data: {gameId}
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        this.gameCreationService.joinGameFromForm(gameId, result, false);
-      });
     }
     this.joinedGameSubscription = this.gameCreationService.joinedGameChanged.subscribe(
       (joinedGame: JoinedGame) => {
@@ -64,9 +58,27 @@ export class LobbyComponent implements OnInit, OnDestroy {
         }
       }
     );
-    this.inviteLink = window.location.toString();
+    this.gameCreationService.gameExists(gameId).subscribe((game) => {
+      if (!game.exists || game.started) {
+        this.gameCreationService.joinedGame = null;
+        this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
+        return;
+      }
+      if (!player) {
+        const dialogRef = this.enterNameDialog.open(EnterNameDialogComponent, {
+          data: { gameId },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result){
+            this.gameCreationService.joinGameFromForm(gameId, result, false);
+          } else {
+            this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
+          }
+        });
+      }
+      this.inviteLink = window.location.toString();
+    });
   }
-
 
   ngOnDestroy() {
     this.joinedGameSubscription.unsubscribe();
@@ -93,5 +105,4 @@ export class LobbyComponent implements OnInit, OnDestroy {
   onLeaveGame() {
     this.gameCreationService.leaveGame();
   }
-
 }

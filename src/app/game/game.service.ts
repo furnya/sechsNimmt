@@ -130,6 +130,9 @@ export class GameService {
           this.gameKeySub.unsubscribe();
           this.subscribeToGameStateChanges();
         }
+        // else if (!this.player) {
+        //   this.router.navigate(['/' + GLOBAL_CONFIG.urlNotFoundPath]);
+        // }
       });
   }
 

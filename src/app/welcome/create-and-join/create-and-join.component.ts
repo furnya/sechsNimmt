@@ -28,6 +28,7 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit(): void {
     this.gameCreationService.leaveGame();
+    this.setGameIds(this.gameCreationService.queuedGames?.map(game => game.id));
     this.queuedGamesSubscription = this.gameCreationService.queuedGamesChanged.subscribe(
       (gameIds) => {
         this.setGameIds(gameIds);

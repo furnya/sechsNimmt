@@ -29,7 +29,8 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   urlGamePath: 'game',
   urlWelcomePath: 'welcome',
   urlJoinPath: 'join',
-  rounds: 3,
+  rounds: 10,
   rows: 5,
-  maxCardsInRow: 5
+  maxCardsInRow: 5,
+  urlNotFoundPath: 'not-found'
 };

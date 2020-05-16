@@ -16,4 +16,5 @@ export interface GlobalConfig {
     rounds: number;
     rows: number;
     maxCardsInRow: number;
+    urlNotFoundPath: string;
 }

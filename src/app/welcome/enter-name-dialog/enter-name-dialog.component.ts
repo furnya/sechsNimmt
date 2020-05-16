@@ -24,14 +24,12 @@ export class EnterNameDialogComponent implements OnInit, AfterViewInit {
   }
 
   onReturnToHome(): void {
-    this.dialogRef.close();
-    this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
+    this.dialogRef.close(null);
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    // this.nameField.nativeElement.focus();
   }
 }

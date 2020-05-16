@@ -53,7 +53,10 @@ export class GameCreationService {
           player: this.getPlayerFromGame(this.joinedGame.player.name, game),
         };
         this.joinedGameChanged.next(this.joinedGame);
-        this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
+        this.gameService.setPlayerLocalStorage(
+          this.joinedGame.player,
+          this.joinedGame.game.id
+        );
       }
     });
   }
@@ -61,7 +64,9 @@ export class GameCreationService {
   private getGameIds(games: Game[]) {
     const gameIds: string[] = [];
     games.forEach((game: Game) => {
-      gameIds.push(game.id);
+      if (!game.started) {
+        gameIds.push(game.id);
+      }
     });
     return gameIds;
   }
@@ -145,7 +150,13 @@ export class GameCreationService {
             return;
           }
           this.db
-            .list(GLOBAL_CONFIG.dbQueuePath + '/' + changeKey + '/' + GLOBAL_CONFIG.dbPlayerPath)
+            .list(
+              GLOBAL_CONFIG.dbQueuePath +
+                '/' +
+                changeKey +
+                '/' +
+                GLOBAL_CONFIG.dbPlayerPath
+            )
             .push({
               name: hostPlayerName,
               isHost: true,
@@ -157,7 +168,10 @@ export class GameCreationService {
                 player: this.getPlayerFromGame(hostPlayerName, game),
               };
               this.joinedGameChanged.next(this.joinedGame);
-              this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
+              this.gameService.setPlayerLocalStorage(
+                this.joinedGame.player,
+                this.joinedGame.game.id
+              );
               this.router.navigate(['/' + GLOBAL_CONFIG.urlJoinPath, gameId]);
             });
         })
@@ -171,23 +185,33 @@ export class GameCreationService {
         id: gameId,
         dbKey: null,
         players: [],
-        started: false
+        started: false,
       },
       player: {
         name: playerName,
         dbKey: null,
-        isHost: false
-      }
+        isHost: false,
+      },
     };
   }
 
-  joinGameFromForm(gameId: string, playerName: string, navigate: boolean): string {
+  joinGameFromForm(
+    gameId: string,
+    playerName: string,
+    navigate: boolean
+  ): string {
     const gameKey = this.getGameKey(gameId);
     if (!gameKey) {
       return 'Ein Spiel mit dieser ID existiert nicht!';
     }
     this.db
-      .list(GLOBAL_CONFIG.dbQueuePath + '/' + gameKey + '/' + GLOBAL_CONFIG.dbPlayerPath)
+      .list(
+        GLOBAL_CONFIG.dbQueuePath +
+          '/' +
+          gameKey +
+          '/' +
+          GLOBAL_CONFIG.dbPlayerPath
+      )
       .push({
         name: playerName,
         isHost: false,
@@ -199,7 +223,10 @@ export class GameCreationService {
           player: this.getPlayerFromGame(playerName, game),
         };
         this.joinedGameChanged.next(this.joinedGame);
-        this.gameService.setPlayerLocalStorage(this.joinedGame.player, this.joinedGame.game.id);
+        this.gameService.setPlayerLocalStorage(
+          this.joinedGame.player,
+          this.joinedGame.game.id
+        );
         if (navigate) {
           this.router.navigate(['/' + GLOBAL_CONFIG.urlJoinPath, gameId]);
         }
@@ -221,5 +248,23 @@ export class GameCreationService {
     this.db
       .object(GLOBAL_CONFIG.dbQueuePath + '/' + this.joinedGame.game.dbKey)
       .update({ started: true });
+  }
+
+  gameExists(gameId: string): Observable<{
+    exists: boolean,
+    started: boolean
+  }> {
+    return this.getQueueObservable().pipe(
+      take(1),
+      map((games) => {
+        const gameKey = Object.keys(games).find(key => {
+          return games[key].id === gameId;
+        });
+        return {
+          exists: !!gameKey,
+          started: gameKey ? games[gameKey].started : false
+        };
+      })
+    );
   }
 }

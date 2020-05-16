@@ -13,7 +13,7 @@ const appRoutes: Routes = [
   {
     path: '',
     redirectTo: '/' + GLOBAL_CONFIG.urlWelcomePath,
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
   {
     path: GLOBAL_CONFIG.urlWelcomePath,
@@ -22,7 +22,7 @@ const appRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: CreateAndJoinComponent,
+        component: CreateAndJoinComponent
       }
     ]
   },
@@ -33,11 +33,11 @@ const appRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: NotFoundComponent,
+        redirectTo: '/' + GLOBAL_CONFIG.urlNotFoundPath
       },
       {
         path: ':id',
-        component: BoardComponent,
+        component: BoardComponent
       },
     ],
   },
@@ -48,13 +48,17 @@ const appRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: CreateAndJoinComponent,
+        component: CreateAndJoinComponent
       },
       {
         path: ':gameId',
-        component: LobbyComponent,
+        component: LobbyComponent
       },
     ],
+  },
+  {
+    path: GLOBAL_CONFIG.urlNotFoundPath,
+    component: NotFoundComponent
   },
   {
     path: '**',
