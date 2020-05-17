@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { GameCreationService } from '../game-creation.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { startWith, map } from 'rxjs/operators';
-import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { Subscription } from 'rxjs';
+import { RoomCreationService } from '../room-creation.service';
 
 @Component({
   selector: 'app-create-and-join',
@@ -15,24 +13,24 @@ import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
-  queuedGameIds: string[] = [];
+  queuedRoomIds: string[] = [];
   // filteredOptions: Observable<string[]>;
   filteredOptions: string[];
-  queuedGamesSubscription: Subscription;
+  queuedRoomsSubscription: Subscription;
 
   constructor(
-    private gameCreationService: GameCreationService,
+    private roomCreationService: RoomCreationService,
     private errorSnackBar: MatSnackBar,
     private ref: ChangeDetectorRef,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.gameCreationService.leaveGame();
-    this.setGameIds(this.gameCreationService.queuedGameIds);
-    this.queuedGamesSubscription = this.gameCreationService.queuedGamesChanged.subscribe(
-      (gameIds) => {
-        this.setGameIds(gameIds);
+    this.roomCreationService.leaveRoom();
+    this.setRoomIds(this.roomCreationService.queuedRoomIds);
+    this.queuedRoomsSubscription = this.roomCreationService.queuedRoomsChanged.subscribe(
+      (roomIds) => {
+        this.setRoomIds(roomIds);
         this.filteredOptions = this.getFilteredOptions();
       }
     );
@@ -44,11 +42,11 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy() {
-    this.queuedGamesSubscription.unsubscribe();
+    this.queuedRoomsSubscription.unsubscribe();
   }
 
   private getFilteredOptions(): string[] {
-    return this.queuedGameIds;
+    return this.queuedRoomIds;
   }
   // private getFilteredOptions(): Observable<string[]> {
   //   return this.joinGameIdFormControl.valueChanges.pipe(
@@ -64,18 +62,18 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
   //   });
   // }
 
-  setGameIds(gameIds: string[]) {
-    this.queuedGameIds = [];
-    gameIds.forEach((gameId: string) => {
-      if (gameId) {
-        this.queuedGameIds.push(gameId);
+  setRoomIds(roomIds: string[]) {
+    this.queuedRoomIds = [];
+    roomIds.forEach((roomId: string) => {
+      if (roomId) {
+        this.queuedRoomIds.push(roomId);
       }
     });
   }
 
-  onJoinGame(joinGameForm: NgForm) {
-    const gameId = joinGameForm.value.joinGameId;
-    if (!this.queuedGameIds.includes(gameId)) {
+  onJoinRoom(joinRoomForm: NgForm) {
+    const roomId = joinRoomForm.value.joinGameId;
+    if (!this.queuedRoomIds.includes(roomId)) {
       this.errorSnackBar.open(
         'Ein Spiel mit dieser ID existiert nicht!',
         null,
@@ -85,9 +83,9 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
       );
       return;
     }
-    const error = this.gameCreationService.joinGameFromForm(
-      gameId,
-      joinGameForm.value.playerName,
+    const error = this.roomCreationService.joinRoomFromForm(
+      roomId,
+      joinRoomForm.value.playerName,
       true
     );
     if (error) {
@@ -96,12 +94,12 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
       });
       return;
     }
-    joinGameForm.reset();
+    joinRoomForm.reset();
   }
 
-  onCreateGame(createGameForm: NgForm) {
-    const gameId = createGameForm.value.createGameId;
-    if (this.queuedGameIds.includes(gameId)) {
+  onCreateRoom(createRoomForm: NgForm) {
+    const roomId = createRoomForm.value.createGameId;
+    if (this.queuedRoomIds.includes(roomId)) {
       this.errorSnackBar.open(
         'Ein Spiel mit dieser ID existiert schon!',
         null,
@@ -111,12 +109,12 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
       );
       return;
     }
-    this.gameCreationService
-      .createGame(
-        gameId,
-        createGameForm.value.playerName
+    this.roomCreationService
+      .createRoom(
+        roomId,
+        createRoomForm.value.playerName
       );
-    createGameForm.reset();
+    createRoomForm.reset();
   }
 
 }

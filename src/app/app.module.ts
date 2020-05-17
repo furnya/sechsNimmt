@@ -57,6 +57,7 @@ import { CreateAndJoinComponent } from './welcome/create-and-join/create-and-joi
 import { LobbyComponent } from './welcome/lobby/lobby.component';
 import { EnterNameDialogComponent } from './welcome/enter-name-dialog/enter-name-dialog.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { MinusPointsComponent } from './game/board/minus-points/minus-points.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     FinishedDialogComponent,
     CreateAndJoinComponent,
     LobbyComponent,
-    EnterNameDialogComponent
+    EnterNameDialogComponent,
+    MinusPointsComponent
   ],
   imports: [
     AppRoutingModule,

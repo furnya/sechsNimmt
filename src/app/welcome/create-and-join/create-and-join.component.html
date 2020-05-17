@@ -1,6 +1,6 @@
 <div class="joinAndCreateContainer">
   <div class="joinGameContainer">
-    <form #joinGameForm="ngForm" (ngSubmit)="onJoinGame(joinGameForm)">
+    <form #joinGameForm="ngForm" (ngSubmit)="onJoinRoom(joinGameForm)">
       <mat-form-field appearance="fill">
         <mat-label>Dein Name</mat-label>
         <input
@@ -51,7 +51,7 @@
     </form>
   </div>
   <div class="createGameContainer">
-    <form #createGameForm="ngForm" (ngSubmit)="onCreateGame(createGameForm)">
+    <form #createGameForm="ngForm" (ngSubmit)="onCreateRoom(createGameForm)">
       <mat-form-field appearance="fill">
         <mat-label>Dein Name</mat-label>
         <input

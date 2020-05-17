@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../game.service';
+import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 
 @Component({
   selector: 'app-hand',

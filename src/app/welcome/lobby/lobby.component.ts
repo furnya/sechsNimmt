@@ -4,9 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { GLOBAL_CONFIG, ENVIRONMENT } from 'src/app/config/global-config';
-import { JoinedGame, Player } from 'src/app/models/game.model';
+import { JoinedRoom, Player, GameOptions } from 'src/app/models/game.model';
 import { EnterNameDialogComponent } from '../enter-name-dialog/enter-name-dialog.component';
-import { GameCreationService } from '../game-creation.service';
+import { RoomCreationService } from '../room-creation.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -17,15 +17,16 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class LobbyComponent implements OnInit, OnDestroy {
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
-  queuedGameIds: string[] = [];
+  queuedRoomIds: string[] = [];
   filteredOptions: Observable<string[]>;
-  queuedGamesSubscription: Subscription;
-  joinedGameSubscription: Subscription;
-  joinedGame: JoinedGame = null;
+  queuedRoomsSubscription: Subscription;
+  joinedRoomSubscription: Subscription;
+  joinedRoom: JoinedRoom = null;
   inviteLink = '';
+  options: GameOptions;
 
   constructor(
-    private gameCreationService: GameCreationService,
+    private roomCreationService: RoomCreationService,
     private router: Router,
     private route: ActivatedRoute,
     private enterNameDialog: MatDialog,
@@ -41,38 +42,40 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const gameId: string = this.route.snapshot.params?.gameId;
-    const player: Player = JSON.parse(localStorage.getItem('player_' + gameId));
+    this.options = JSON.parse(JSON.stringify(GLOBAL_CONFIG.defaultOptions));
+    const roomId: string = this.route.snapshot.params?.gameId;
+    const player: Player = JSON.parse(localStorage.getItem('player_' + roomId));
     if (player?.name) {
-      if (!this.gameCreationService.joinedGame) {
-        this.gameCreationService.joinGameIfAlreadyIn(gameId, player.name);
+      if (!this.roomCreationService.joinedRoom) {
+        this.roomCreationService.joinRoomIfAlreadyIn(roomId, player.name);
       } else {
-        this.joinedGame = this.gameCreationService.joinedGame;
+        this.joinedRoom = this.roomCreationService.joinedRoom;
       }
     }
-    this.joinedGameSubscription = this.gameCreationService.joinedGameChanged.subscribe(
-      (joinedGame: JoinedGame) => {
-        this.joinedGame = joinedGame;
-        if (this.joinedGame && this.joinedGame.game.started) {
-          this.navigateToGame(this.joinedGame.game.id);
+    this.joinedRoomSubscription = this.roomCreationService.joinedRoomChanged.subscribe(
+      (joinedRoom: JoinedRoom) => {
+        this.joinedRoom = joinedRoom;
+        this.options = this.joinedRoom ? this.joinedRoom.room.options : this.options;
+        if (this.joinedRoom && this.joinedRoom.room.started) {
+          this.navigateToRoom(this.joinedRoom.room.id);
         }
       }
     );
-    this.gameCreationService.gameExists(gameId).subscribe((game) => {
-      if (!game.exists || game.started) {
-        this.gameCreationService.joinedGame = null;
+    this.roomCreationService.roomExists(roomId).subscribe((room) => {
+      if (!room.exists || room.started) {
+        this.roomCreationService.joinedRoom = null;
         this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
         return;
       }
       if (!player) {
         const dialogRef = this.enterNameDialog.open(EnterNameDialogComponent, {
-          data: { gameId },
+          data: { roomId },
           closeOnNavigation: true,
           disableClose: true
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result){
-            this.gameCreationService.joinGameFromForm(gameId, result, false);
+            this.roomCreationService.joinRoomFromForm(roomId, result, false);
           } else {
             this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
           }
@@ -83,29 +86,33 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.joinedGameSubscription.unsubscribe();
+    this.joinedRoomSubscription.unsubscribe();
   }
 
   isCurrentPlayer(player: Player): boolean {
-    return player === this.joinedGame.player;
+    return player === this.joinedRoom.player;
   }
 
   isCurrentPlayerName(playerName: string): boolean {
-    return playerName === this.joinedGame.player.name;
+    return playerName === this.joinedRoom.player.name;
   }
 
-  navigateToGame(gameId: string) {
+  navigateToRoom(gameId: string) {
     this.router.navigate([GLOBAL_CONFIG.urlGamePath, gameId]);
   }
 
+  onChangeOptions() {
+    this.roomCreationService.changeOptions(this.options);
+  }
+
   onStartGame() {
-    if (this.joinedGame.player.isHost) {
-      this.gameCreationService.startGame();
+    if (this.joinedRoom.player.isHost) {
+      this.roomCreationService.startGame();
     }
   }
 
-  onLeaveGame() {
-    this.gameCreationService.leaveGame();
+  onLeaveRoom() {
+    this.roomCreationService.leaveRoom();
     this.router.navigate([GLOBAL_CONFIG.urlWelcomePath]);
   }
 }

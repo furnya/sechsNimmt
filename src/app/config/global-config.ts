@@ -33,5 +33,12 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   rows: 5,
   maxCardsInRow: 5,
   urlNotFoundPath: 'not-found',
-  maxLobbyAgeInMilliseconds: 3600000
+  dbOptionsPath: 'options',
+  maxLobbyAgeInMilliseconds: 3600000,
+  defaultOptions: {
+    hideMinusPoints: {
+      value: false,
+      text: 'Minuspunkte anderer Spieler ausblenden'
+    }
+  },
 };

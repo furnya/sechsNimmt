@@ -15,7 +15,7 @@ export class EnterNameDialogComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<EnterNameDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {gameId: string},
+    @Inject(MAT_DIALOG_DATA) public data: {roomId: string},
     private router: Router
   ) {}
 

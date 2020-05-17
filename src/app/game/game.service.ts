@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Player, GameState, PlayerState } from '../models/game.model';
+import { Player, GameState, PlayerState, Game, GameOptions } from '../models/game.model';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { GLOBAL_CONFIG } from '../config/global-config';
-import { take, map } from 'rxjs/operators';
+import { take, map, tap } from 'rxjs/operators';
 import { Subscription, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -18,6 +18,7 @@ export class GameService {
   gameKey: string = null;
   gameKeySub: Subscription;
   playerIndex = -1;
+  options: GameOptions;
 
   get player() {
     return this._player;
@@ -43,17 +44,22 @@ export class GameService {
     this.player = JSON.parse(localStorage.getItem('player_' + this.gameId));
     this.db
       .object(
-        GLOBAL_CONFIG.dbGamePath +
-          '/' +
-          this.gameKey +
-          '/' +
-          GLOBAL_CONFIG.dbGameStatePath
+        GLOBAL_CONFIG.dbGamePath + '/' + this.gameKey
+        // +
+        // '/' +
+        // GLOBAL_CONFIG.dbGameStatePath
       )
       .valueChanges()
+      .pipe(
+        tap((game: Game) => {
+          this.options = game?.options;
+        }),
+        map((game: Game) => game?.gameState)
+      )
       .subscribe((gameState: GameState) => {
         this.gameState = gameState;
         if (this.setPlayerIndex()) {
-          this.gameStateChanged.next(this.gameState);
+          this.gameStateChanged.next(JSON.parse(JSON.stringify(this.gameState)));
           this.checkDisableSelecting();
         }
       });
@@ -141,7 +147,7 @@ export class GameService {
     this.setGameKey();
   }
 
-  createGameState(gameId: string) {
+  createGameState(gameId: string, options: GameOptions) {
     this.startGame(gameId);
     if (!this.gameState && this.player && this.player.isHost) {
       this.db
@@ -164,11 +170,13 @@ export class GameService {
             playerArray.push(players[key]);
           });
           const gameState = this.distributeCards(playerArray);
-          this.db.list(GLOBAL_CONFIG.dbGamePath).push({
+          const game: Game = {
             id: gameId,
             players,
             gameState,
-          });
+            options,
+          };
+          this.db.list(GLOBAL_CONFIG.dbGamePath).push(game);
         });
     }
   }

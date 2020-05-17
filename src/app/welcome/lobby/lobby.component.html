@@ -1,37 +1,57 @@
 <div class="lobbyContainer">
-  <mat-toolbar>Dein Spiel {{ joinedGame?.game.id }}</mat-toolbar>
-  <mat-list role="list">
-    <mat-list-item
-      role="listitem"
-      *ngFor="let player of joinedGame?.game.players"
-      [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }"
-      >{{
-        player.name +
-          (isCurrentPlayer(player) ? " (Du)" : "") +
-          (player.isHost ? " [Host]" : "")
-      }}</mat-list-item
-    >
-  </mat-list>
+  <mat-toolbar>Dein Spiel {{ joinedRoom?.room.id }}</mat-toolbar>
+  <div class="lobbyContainer__main">
+    <mat-card class="lobbyContainer__main__list">
+      <mat-toolbar color="primary">Spieler</mat-toolbar>
+      <mat-list role="list">
+        <mat-list-item
+          role="listitem"
+          *ngFor="let player of joinedRoom?.room.players"
+          [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }"
+          >{{
+            player.name +
+              (isCurrentPlayer(player) ? " (Du)" : "") +
+              (player.isHost ? " [Host]" : "")
+          }}</mat-list-item
+        >
+      </mat-list>
+    </mat-card>
+    <mat-card class="lobbyContainer__main__options">
+      <mat-card-content>
+        <mat-toolbar color="accent">Optionen</mat-toolbar>
+        <section class="lobbyContainer__main__options__content">
+          <mat-slide-toggle
+            color="accent"
+            (change)="onChangeOptions()"
+            [(ngModel)]="options.hideMinusPoints.value"
+            [disabled]="!joinedRoom?.player.isHost"
+          >
+            <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
+          </mat-slide-toggle>
+        </section>
+      </mat-card-content>
+    </mat-card>
+  </div>
   <button
     mat-raised-button
     color="primary"
     (click)="onStartGame()"
-    [disabled]="!joinedGame?.player.isHost"
+    [disabled]="!joinedRoom?.player.isHost"
   >
     Spiel starten
   </button>
   <button
     mat-raised-button
     color="warn"
-    (click)="onLeaveGame()"
-    [disabled]="!joinedGame"
+    (click)="onLeaveRoom()"
+    [disabled]="!joinedRoom"
   >
     Spiel verlassen
   </button>
   <mat-toolbar>
     Spieler einladen:
     <mat-form-field class="inviteLinkField">
-      <input matInput onClick="this.select();" [value]="inviteLink" readonly>
+      <input matInput onClick="this.select();" [value]="inviteLink" readonly />
     </mat-form-field>
     <button mat-fab color="primary" [cdkCopyToClipboard]="inviteLink">
       <mat-icon svgIcon="copy-to-clipboard"></mat-icon>

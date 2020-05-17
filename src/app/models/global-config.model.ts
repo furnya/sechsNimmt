@@ -1,3 +1,5 @@
+import { GameOptions } from './game.model';
+
 export interface GlobalConfig {
     baseUrl: string;
     dbQueuePath: string;
@@ -18,4 +20,6 @@ export interface GlobalConfig {
     maxCardsInRow: number;
     urlNotFoundPath: string;
     maxLobbyAgeInMilliseconds: number;
+    defaultOptions: GameOptions;
+    dbOptionsPath: string;
 }

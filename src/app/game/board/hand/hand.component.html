@@ -7,6 +7,5 @@
         <div class="cardRow">
             <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" (cardSelected)="onCardSelected($event)"></app-card>
         </div>
-        <p>Minuspunkte: {{ minusPoints }}</p>
     </div>
 </div>
