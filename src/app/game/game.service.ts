@@ -296,7 +296,7 @@ export class GameService {
   isYourTurn(): boolean {
     return (
       this.gameState?.playerStates[this.playerIndex]?.selectedCard ===
-      this.getSmallestSelectedCard()
+        this.getSmallestSelectedCard() && !this.gameState?.choosingCards
     );
   }
 
