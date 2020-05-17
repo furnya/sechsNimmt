@@ -32,6 +32,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameStateSub = this.gameService.gameStateChanged.subscribe(
       (gameState) => {
         if (this.gameService.playerIndex !== -1 && gameState?.finished) {
+          this.finishedGameDialog.closeAll();
           const dialogRef = this.finishedGameDialog.open(
             FinishedDialogComponent,
             {
