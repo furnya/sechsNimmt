@@ -32,5 +32,6 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   rounds: 10,
   rows: 5,
   maxCardsInRow: 5,
-  urlNotFoundPath: 'not-found'
+  urlNotFoundPath: 'not-found',
+  maxLobbyAgeInMilliseconds: 3600000
 };

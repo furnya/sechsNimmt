@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Player, GameState, PlayerState } from '../models/game';
+import { Player, GameState, PlayerState } from '../models/game.model';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { take, map } from 'rxjs/operators';
@@ -241,9 +241,9 @@ export class GameService {
     this.pushGameStateToDB();
   }
 
-  putCardInRow(card: number, rowIndex: number) {
+  putCardInRow(rowIndex: number) {
+    this.gameState.boardRows[rowIndex].push(this.getSmallestSelectedCard());
     this.gameState.playerStates[this.playerIndex].selectedCard = 0;
-    this.gameState.boardRows[rowIndex].push(card);
     this.pushGameStateToDB();
   }
 

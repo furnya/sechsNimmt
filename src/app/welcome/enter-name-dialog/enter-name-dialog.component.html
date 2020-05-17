@@ -1,4 +1,6 @@
-<h1 mat-dialog-title>Spiel {{ data.gameId }} beitreten?</h1>
+<div matDialogTitle>
+  <h1 mat-dialog-title>Spiel {{ data.gameId }} beitreten?</h1>
+</div>
 <form #enterNameForm="ngForm" (ngSubmit)="confirm()">
   <div mat-dialog-content>
     <p>Gib deinen Namen ein:</p>

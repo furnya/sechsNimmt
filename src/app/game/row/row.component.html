@@ -17,7 +17,7 @@
     #rowDropSpot="cdkDropList"
     [id]="'rowDropSpot_' + rowIndex"
     [cdkDropListData]="dropList"
-    cdkDropListConnectedTo="selectedCardDropList"
+    [cdkDropListConnectedTo]="selectedCardDragLists"
     (cdkDropListDropped)="drop($event)"
     cdkDropListOrientation="horizontal"
     class="dropList"

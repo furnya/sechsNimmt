@@ -17,4 +17,5 @@ export interface GlobalConfig {
     rows: number;
     maxCardsInRow: number;
     urlNotFoundPath: string;
+    maxLobbyAgeInMilliseconds: number;
 }

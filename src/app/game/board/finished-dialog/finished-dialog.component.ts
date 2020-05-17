@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
-import { GameState, PlayerState } from 'src/app/models/game';
+import { GameState, PlayerState } from 'src/app/models/game.model';
 
 @Component({
   selector: 'app-finished-dialog',

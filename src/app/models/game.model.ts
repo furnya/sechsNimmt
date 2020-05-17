@@ -3,6 +3,7 @@ export interface Game {
   id: string;
   players: Player[];
   started: boolean;
+  created: number;
 }
 
 export interface JoinedGame {

@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
-import { Game, JoinedGame, Player } from '../models/game';
+import { Game, JoinedGame, Player } from '../models/game.model';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class GameCreationService {
   queuedGames: Game[] = [];
+  queuedGameIds: string[] = [];
   queuedGamesChanged: Subject<string[]> = new Subject<string[]>();
   joinedGame: JoinedGame = null;
   joinedGameChanged: Subject<JoinedGame> = new Subject<JoinedGame>();
@@ -43,9 +44,11 @@ export class GameCreationService {
           id: games[key].id,
           started: games[key].started,
           players,
+          created: games[key].created
         });
       });
-      this.queuedGamesChanged.next(this.getGameIds(this.queuedGames));
+      this.queuedGameIds = this.filterGames(this.queuedGames);
+      this.queuedGamesChanged.next(this.queuedGameIds);
       if (this.joinedGame) {
         const game = this.getGame(this.joinedGame.game.id);
         this.joinedGame = {
@@ -61,10 +64,10 @@ export class GameCreationService {
     });
   }
 
-  private getGameIds(games: Game[]) {
+  private filterGames(games: Game[]): string[] {
     const gameIds: string[] = [];
     games.forEach((game: Game) => {
-      if (!game.started) {
+      if (!game.started && (new Date().getTime() - game.created) < GLOBAL_CONFIG.maxLobbyAgeInMilliseconds) {
         gameIds.push(game.id);
       }
     });
@@ -123,11 +126,14 @@ export class GameCreationService {
   }
 
   createGame(gameId: string, hostPlayerName: string) {
-    this.db.list(GLOBAL_CONFIG.dbQueuePath).push({
+    const newGame: Game = {
       id: gameId,
       players: [],
       started: false,
-    });
+      created: new Date().getTime(),
+      dbKey: null
+    };
+    this.db.list(GLOBAL_CONFIG.dbQueuePath).push(newGame);
     this.db
       .list(GLOBAL_CONFIG.dbQueuePath)
       .snapshotChanges()
@@ -186,6 +192,7 @@ export class GameCreationService {
         dbKey: null,
         players: [],
         started: false,
+        created: 0
       },
       player: {
         name: playerName,

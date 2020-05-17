@@ -13,8 +13,8 @@
         />
       </mat-form-field>
       <br />
-      <mat-form-field class="example-full-width">
-        <input
+      <mat-form-field>
+        <!-- <input
           type="text"
           placeholder="Spiel-ID"
           matInput
@@ -32,7 +32,12 @@
           >
             {{ option }}
           </mat-option>
-        </mat-autocomplete>
+        </mat-autocomplete> -->
+        <mat-label>Spiel-ID</mat-label>
+        <mat-select ngModel name="joinGameId" matInput id="joinGameId" required #joinGameIdFormControl="ngModel">
+          <mat-option *ngFor="let option of filteredOptions"
+          [value]="option">{{ option }}</mat-option>
+        </mat-select>
       </mat-form-field>
       <br />
       <button

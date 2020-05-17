@@ -6,6 +6,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { GameService } from '../game.service';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { GameState } from 'src/app/models/game.model';
 
 @Component({
   selector: 'app-row',
@@ -16,17 +17,24 @@ export class RowComponent implements OnInit {
   @Input() rowIndex: number;
   cards: number[] = [];
   dropList: number[] = [];
+  selectedCardDragLists: string[] = [];
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.gameStateChanged.subscribe(() => {
+    this.gameService.gameStateChanged.subscribe((gamestate: GameState) => {
       this.cards = this.gameService.getRowCards(this.rowIndex);
+      this.selectedCardDragLists = gamestate.playerStates
+        .filter((ps) => ps.selectedCard !== 0)
+        .map((ps) => 'selectedCardDropList_' + ps.player.name);
     });
   }
 
   canBeSelected(): boolean {
-    return this.gameService.getHightlightedRowIndex() === -1 && !this.gameService.isChoosingCards();
+    return (
+      this.gameService.getHightlightedRowIndex() === -1 &&
+      !this.gameService.isChoosingCards()
+    );
   }
 
   isYourTurn(): boolean {
@@ -34,30 +42,20 @@ export class RowComponent implements OnInit {
   }
 
   canDrop(): boolean {
-    return this.gameService.getHightlightedRowIndex() === this.rowIndex && !this.gameService.isChoosingCards();
+    return (
+      this.gameService.getHightlightedRowIndex() === this.rowIndex &&
+      !this.gameService.isChoosingCards()
+    );
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
+    if (event.previousContainer !== event.container) {
       if (this.cards.length >= GLOBAL_CONFIG.maxCardsInRow) {
         this.onTakeRow();
         return;
       }
-      const card = +event.previousContainer.data[event.previousIndex];
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
       this.dropList = [];
-      this.gameService.putCardInRow(card, this.rowIndex);
+      this.gameService.putCardInRow(this.rowIndex);
     }
   }
 

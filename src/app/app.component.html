@@ -1,8 +1,12 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button>
-        <mat-icon svgIcon="sechsnimmt_logo" class="sechsNimmtIcon"></mat-icon>
-    </button>
-  <span>Sechs Nimmt</span>
+  <!-- <div routerLink="/welcome" matTooltip="Zurück zur Startseite"> -->
+    <mat-icon svgIcon="sechsnimmt_logo" class="sechsNimmtIcon homeLink" routerLink="/welcome" matTooltip="Zurück zur Startseite"></mat-icon>
+    <span matTooltip="Zurück zur Startseite" routerLink="/welcome" class="homeLink">
+      Sechs Nimmt
+    </span>
+  <!-- </div> -->
+  <!-- <button mat-icon-button> -->
+  <!-- </button> -->
   <span class="fill-remaining-space"></span>
 </mat-toolbar>
 <router-outlet></router-outlet>

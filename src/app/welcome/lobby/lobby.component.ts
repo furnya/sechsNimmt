@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { GLOBAL_CONFIG, ENVIRONMENT } from 'src/app/config/global-config';
-import { JoinedGame, Player } from 'src/app/models/game';
+import { JoinedGame, Player } from 'src/app/models/game.model';
 import { EnterNameDialogComponent } from '../enter-name-dialog/enter-name-dialog.component';
 import { GameCreationService } from '../game-creation.service';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -67,6 +67,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
       if (!player) {
         const dialogRef = this.enterNameDialog.open(EnterNameDialogComponent, {
           data: { gameId },
+          closeOnNavigation: true,
+          disableClose: true
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (result){
@@ -84,11 +86,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.joinedGameSubscription.unsubscribe();
   }
 
-  isCurrentPlayer(player): boolean {
+  isCurrentPlayer(player: Player): boolean {
     return player === this.joinedGame.player;
   }
 
-  isCurrentPlayerName(playerName): boolean {
+  isCurrentPlayerName(playerName: string): boolean {
     return playerName === this.joinedGame.player.name;
   }
 
@@ -104,5 +106,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   onLeaveGame() {
     this.gameCreationService.leaveGame();
+    this.router.navigate([GLOBAL_CONFIG.urlWelcomePath]);
   }
 }

@@ -16,7 +16,10 @@ export class CardComponent implements OnInit {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.bullAmount = this.gameService.calculateMinusPoints(this.id);
+  }
+
+  getBullAmount(): number {
+    return this.gameService.calculateMinusPoints(this.id);
   }
 
   onCardSelected() {

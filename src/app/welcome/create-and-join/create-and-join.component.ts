@@ -16,7 +16,8 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
 
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
   queuedGameIds: string[] = [];
-  filteredOptions: Observable<string[]>;
+  // filteredOptions: Observable<string[]>;
+  filteredOptions: string[];
   queuedGamesSubscription: Subscription;
 
   constructor(
@@ -28,7 +29,7 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit(): void {
     this.gameCreationService.leaveGame();
-    this.setGameIds(this.gameCreationService.queuedGames?.map(game => game.id));
+    this.setGameIds(this.gameCreationService.queuedGameIds);
     this.queuedGamesSubscription = this.gameCreationService.queuedGamesChanged.subscribe(
       (gameIds) => {
         this.setGameIds(gameIds);
@@ -46,19 +47,22 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
     this.queuedGamesSubscription.unsubscribe();
   }
 
-  private getFilteredOptions(): Observable<string[]> {
-    return this.joinGameIdFormControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(this.queuedGameIds, value))
-    );
+  private getFilteredOptions(): string[] {
+    return this.queuedGameIds;
   }
+  // private getFilteredOptions(): Observable<string[]> {
+  //   return this.joinGameIdFormControl.valueChanges.pipe(
+  //     startWith(''),
+  //     map((value) => this._filter(this.queuedGameIds, value))
+  //   );
+  // }
 
-  private _filter(options, value: string): string[] {
-    const filterValue = value?.toLowerCase();
-    return options.filter((option) => {
-      return option.toLowerCase().includes(filterValue);
-    });
-  }
+  // private _filter(options, value: string): string[] {
+  //   const filterValue = value?.toLowerCase();
+  //   return options.filter((option) => {
+  //     return option.toLowerCase().includes(filterValue);
+  //   });
+  // }
 
   setGameIds(gameIds: string[]) {
     this.queuedGameIds = [];
