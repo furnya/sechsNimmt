@@ -39,4 +39,7 @@ export class HandComponent implements OnInit {
     return this.gameService.getMinusPoints();
   }
 
+  yourTurn() {
+    return this.gameService.isYourTurn();
+  }
 }

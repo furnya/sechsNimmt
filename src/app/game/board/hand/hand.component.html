@@ -1,7 +1,12 @@
 <div class="hand">
-    <button mat-stroked-button class="confirmButton" color="primary" (click)="onConfirmSelection()" [disabled]="selectedCard === 0 || !canSelect()">Auswahl bestätigen</button>
-    <div class="cardRow">
-        <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" (cardSelected)="onCardSelected($event)"></app-card>
+    <mat-label *ngIf="yourTurn()">
+        Du bist dran. Lege deine Karte an
+    </mat-label>
+    <div class="rowAndButtons">
+        <button mat-stroked-button class="confirmButton" color="primary" (click)="onConfirmSelection()" [disabled]="selectedCard === 0 || !canSelect()">Auswahl bestätigen</button>
+        <div class="cardRow">
+            <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" (cardSelected)="onCardSelected($event)"></app-card>
+        </div>
+        <p>Minuspunkte: {{ minusPoints }}</p>
     </div>
-    <p>Minuspunkte: {{ minusPoints }}</p>
 </div>
