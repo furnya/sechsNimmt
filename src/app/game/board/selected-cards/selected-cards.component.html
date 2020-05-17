@@ -2,14 +2,14 @@
     <div
     cdkDropList
     #selectedCardDropList="cdkDropList"
-    [id]="'selectedCardDropList_' + playerNames[i]"
-    [cdkDropListData]="selectedCards"
+    [id]="'selectedCardDropList_' + playerStates[i].player.name"
+    [cdkDropListData]="[playerStates[i].selectedCard]"
     [cdkDropListConnectedTo]="['rowDropSpot_0','rowDropSpot_1','rowDropSpot_2','rowDropSpot_3','rowDropSpot_4']"
     (cdkDropListDropped)="drop($event)"
-    *ngFor="let card of selectedCards; index as i">
+    *ngFor="let ps of playerStates; index as i">
     <div>
-      <app-card cdkDrag [id]="canPlay() || isCurrentPlayer(playerNames[i]) ? card : -1" [cdkDragDisabled]="!(isCurrentPlayer(playerNames[i]) && isSmallestCard(card) && canPlay())" [isSmallestCard]="isSmallestCard(card) && canPlay()"></app-card>
-      <p>{{ playerNames[i] }}</p>
+      <app-card cdkDrag [id]="canPlay() || isCurrentPlayer(ps.player.name) ? ps.selectedCard : -1" [cdkDragDisabled]="!(isCurrentPlayer(ps.player.name) && isSmallestCard(ps.selectedCard) && canPlay())" [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"></app-card>
+      <p>{{ ps.player.name }}</p>
     </div>
   </div>
 </div>

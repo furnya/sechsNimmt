@@ -15,7 +15,7 @@ export class HandComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameService.gameStateChanged.subscribe(() => {
-      this.cards = this.gameService.getHandCards();
+      this.cards = this.gameService.getHandCards().slice().sort((a, b) => a - b);
     });
   }
 
