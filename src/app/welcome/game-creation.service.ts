@@ -255,6 +255,7 @@ export class GameCreationService {
     this.db
       .object(GLOBAL_CONFIG.dbQueuePath + '/' + this.joinedGame.game.dbKey)
       .update({ started: true });
+    this.gameService.createGameState(this.joinedGame.game.id);
   }
 
   gameExists(gameId: string): Observable<{

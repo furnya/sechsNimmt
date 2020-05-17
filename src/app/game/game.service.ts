@@ -139,6 +139,10 @@ export class GameService {
   startGame(gameId: string) {
     this.gameId = gameId;
     this.setGameKey();
+  }
+
+  createGameState(gameId: string) {
+    this.startGame(gameId);
     if (!this.gameState && this.player && this.player.isHost) {
       this.db
         .object(GLOBAL_CONFIG.dbQueuePath)
