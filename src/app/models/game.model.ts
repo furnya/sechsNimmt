@@ -24,11 +24,12 @@ export interface Player {
     name: string;
     isHost: boolean;
     dbKey: string;
+    isActive: number;
 }
 
 export interface Game {
   id: string;
-  players: Player[];
+  players: any;
   gameState: GameState;
   options: GameOptions;
 }

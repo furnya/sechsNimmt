@@ -26,7 +26,7 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
   ) { }
 
   ngOnInit(): void {
-    this.roomCreationService.leaveRoom();
+    this.roomCreationService.clearRoom();
     this.setRoomIds(this.roomCreationService.queuedRoomIds);
     this.queuedRoomsSubscription = this.roomCreationService.queuedRoomsChanged.subscribe(
       (roomIds) => {

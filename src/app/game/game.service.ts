@@ -5,6 +5,7 @@ import { GLOBAL_CONFIG } from '../config/global-config';
 import { take, map, tap } from 'rxjs/operators';
 import { Subscription, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { FilterIsActivePipe, filterActivePlayers, playerIsActive } from '../welcome/filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -165,14 +166,19 @@ export class GameService {
               players = games[key]?.players;
             }
           });
-          const playerArray: Player[] = [];
+          let playersClone = JSON.parse(JSON.stringify(players));
+          let playerArray: Player[] = [];
           Object.keys(players).forEach((key) => {
-            playerArray.push(players[key]);
+            if (playerIsActive(players[key])) {
+              playerArray.push(players[key]);
+            } else {
+              delete playersClone[key];
+            }
           });
           const gameState = this.distributeCards(playerArray);
           const game: Game = {
             id: gameId,
-            players,
+            players: playersClone,
             gameState,
             options,
           };

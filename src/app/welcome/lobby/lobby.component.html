@@ -10,7 +10,7 @@
       <mat-list role="list">
         <mat-list-item
           role="listitem"
-          *ngFor="let player of joinedRoom?.room.players"
+          *ngFor="let player of joinedRoom?.room.players | filterIsActive"
           [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }"
           >{{
             player.name +

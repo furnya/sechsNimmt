@@ -6,6 +6,7 @@ import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
 import { Room, JoinedRoom, Player, GameOptions } from '../models/game.model';
 import { Router } from '@angular/router';
+import { FilterIsActivePipe, filterActivePlayers } from './filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,7 @@ export class RoomCreationService {
               name: rooms[key].players[playerKey].name,
               isHost: rooms[key].players[playerKey].isHost,
               dbKey: playerKey,
+              isActive: rooms[key].players[playerKey].isActive,
             });
           });
         }
@@ -172,6 +174,7 @@ export class RoomCreationService {
             .push({
               name: hostPlayerName,
               isHost: true,
+              isActive: new Date().getTime(),
             })
             .then(() => {
               const room = this.getRoom(roomId);
@@ -205,6 +208,7 @@ export class RoomCreationService {
         name: playerName,
         dbKey: null,
         isHost: false,
+        isActive: 0,
       },
     };
   }
@@ -229,6 +233,7 @@ export class RoomCreationService {
       .push({
         name: playerName,
         isHost: false,
+        isActive: new Date().getTime(),
       })
       .then(() => {
         const room = this.getRoom(roomId);
@@ -248,11 +253,15 @@ export class RoomCreationService {
     return null;
   }
 
-  leaveRoom() {
-    this.gameService.deletePlayerLocalStorage(this.joinedRoom?.room.id);
+  clearRoom() {
     this.gameService.gameState = null;
     this.joinedRoom = null;
     this.joinedRoomChanged.next(null);
+  }
+
+  leaveRoom() {
+    this.gameService.deletePlayerLocalStorage(this.joinedRoom?.room.id);
+    this.clearRoom();
   }
 
   startGame() {
@@ -301,5 +310,27 @@ export class RoomCreationService {
         };
       })
     );
+  }
+
+  keepPlayerActive() {
+    if (
+      this.joinedRoom &&
+      this.joinedRoom.room.dbKey &&
+      this.joinedRoom.player.dbKey
+    ) {
+      this.db
+        .object(
+          GLOBAL_CONFIG.dbQueuePath +
+            '/' +
+            this.joinedRoom.room.dbKey +
+            '/' +
+            GLOBAL_CONFIG.dbPlayerPath +
+            '/' +
+            this.joinedRoom.player.dbKey
+        )
+        .update({
+          isActive: new Date().getTime(),
+        });
+    }
   }
 }

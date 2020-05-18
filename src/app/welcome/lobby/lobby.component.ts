@@ -25,6 +25,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   joinedRoom: JoinedRoom = null;
   inviteLink = '';
   options: GameOptions;
+  isActiveInterval;
 
   constructor(
     private roomCreationService: RoomCreationService,
@@ -44,6 +45,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isActiveInterval = setInterval(() => this.roomCreationService.keepPlayerActive(), 1000);
     this.options = JSON.parse(JSON.stringify(GLOBAL_CONFIG.defaultOptions));
     const roomId: string = this.route.snapshot.params?.gameId;
     const player: Player = JSON.parse(localStorage.getItem('player_' + roomId));
@@ -91,6 +93,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.joinedRoomSubscription.unsubscribe();
+    clearInterval(this.isActiveInterval);
   }
 
   isCurrentPlayer(player: Player): boolean {
@@ -116,7 +119,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   onLeaveRoom() {
-    this.roomCreationService.leaveRoom();
     this.router.navigate([GLOBAL_CONFIG.urlWelcomePath]);
   }
 

@@ -59,6 +59,7 @@ import { EnterNameDialogComponent } from './welcome/enter-name-dialog/enter-name
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { MinusPointsComponent } from './game/board/minus-points/minus-points.component';
 import {AutoSizeInputModule} from 'ngx-autosize-input';
+import { FilterIsActivePipe } from './welcome/filter-is-active.pipe';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import {AutoSizeInputModule} from 'ngx-autosize-input';
     CreateAndJoinComponent,
     LobbyComponent,
     EnterNameDialogComponent,
-    MinusPointsComponent
+    MinusPointsComponent,
+    FilterIsActivePipe
   ],
   imports: [
     AppRoutingModule,
