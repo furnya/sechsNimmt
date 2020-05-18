@@ -9,3 +9,12 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     background-color: #eeeeff;
 }
+
+.toolbar-justify-content-center {
+    justify-content: center;
+    white-space: pre-wrap;
+}
+
+.snackbar-center-text > simple-snack-bar {
+    justify-content: center;
+}

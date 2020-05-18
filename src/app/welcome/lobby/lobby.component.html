@@ -1,8 +1,12 @@
 <div class="lobbyContainer">
-  <mat-toolbar>Dein Spiel {{ joinedRoom?.room.id }}</mat-toolbar>
+  <mat-toolbar class="toolbar-justify-content-center"
+    >Dein Spiel {{ joinedRoom?.room.id }}</mat-toolbar
+  >
   <div class="lobbyContainer__main">
     <mat-card class="lobbyContainer__main__list">
-      <mat-toolbar color="primary">Spieler</mat-toolbar>
+      <mat-toolbar color="primary" class="toolbar-justify-content-center"
+        >Spieler</mat-toolbar
+      >
       <mat-list role="list">
         <mat-list-item
           role="listitem"
@@ -18,7 +22,9 @@
     </mat-card>
     <mat-card class="lobbyContainer__main__options">
       <mat-card-content>
-        <mat-toolbar color="accent">Optionen</mat-toolbar>
+        <mat-toolbar color="accent" class="toolbar-justify-content-center"
+          >Optionen</mat-toolbar
+        >
         <section class="lobbyContainer__main__options__content">
           <mat-slide-toggle
             color="accent"
@@ -32,29 +38,50 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onStartGame()"
-    [disabled]="!joinedRoom?.player.isHost"
-  >
-    Spiel starten
-  </button>
-  <button
-    mat-raised-button
-    color="warn"
-    (click)="onLeaveRoom()"
-    [disabled]="!joinedRoom"
-  >
-    Spiel verlassen
-  </button>
-  <mat-toolbar>
-    Spieler einladen:
-    <mat-form-field class="inviteLinkField">
-      <input matInput onClick="this.select();" [value]="inviteLink" readonly />
-    </mat-form-field>
-    <button mat-fab color="primary" [cdkCopyToClipboard]="inviteLink">
-      <mat-icon svgIcon="copy-to-clipboard"></mat-icon>
-    </button>
+  <mat-toolbar class="footer">
+    <mat-toolbar-row class="footer__row-1">
+      <span>
+        Spieler einladen:
+      </span>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        class="start-game-button"
+        (click)="onStartGame()"
+        [disabled]="!joinedRoom?.player.isHost"
+      >
+        Spiel starten
+      </button>
+    </mat-toolbar-row>
+    <mat-toolbar-row class="footer__row-2">
+      <button
+        mat-raised-button
+        color="primary"
+        class="copy-button"
+        [cdkCopyToClipboard]="inviteLink"
+        (click)="selectElementContents(true)"
+        matTooltip="Kopieren"
+      >
+        <mat-icon svgIcon="copy-to-clipboard"></mat-icon>
+      </button>
+      <div class="invite-link-field">
+        <span
+          class="invite-link-field__span"
+          id="inviteLinkInput"
+          (click)="selectElementContents(false)"
+          >{{ inviteLink }}</span
+        >
+        <div class="invite-link-field__underline"></div>
+      </div>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="onLeaveRoom()"
+        [disabled]="!joinedRoom"
+      >
+        Spiel verlassen
+      </button>
+    </mat-toolbar-row>
   </mat-toolbar>
 </div>

@@ -58,6 +58,7 @@ import { LobbyComponent } from './welcome/lobby/lobby.component';
 import { EnterNameDialogComponent } from './welcome/enter-name-dialog/enter-name-dialog.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { MinusPointsComponent } from './game/board/minus-points/minus-points.component';
+import {AutoSizeInputModule} from 'ngx-autosize-input';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { MinusPointsComponent } from './game/board/minus-points/minus-points.com
     DragDropModule,
     AngularFireModule.initializeApp(ENVIRONMENT.firebase),
     AngularFireDatabaseModule,
-    ClipboardModule
+    ClipboardModule,
+    AutoSizeInputModule
   ],
   providers: [],
   bootstrap: [AppComponent],

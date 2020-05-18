@@ -9,6 +9,7 @@ import { EnterNameDialogComponent } from '../enter-name-dialog/enter-name-dialog
 import { RoomCreationService } from '../room-creation.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-lobby',
@@ -31,7 +32,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private enterNameDialog: MatDialog,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar
   ) {
     this.iconRegistry.addSvgIcon(
       'copy-to-clipboard',
@@ -55,7 +57,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.joinedRoomSubscription = this.roomCreationService.joinedRoomChanged.subscribe(
       (joinedRoom: JoinedRoom) => {
         this.joinedRoom = joinedRoom;
-        this.options = this.joinedRoom ? this.joinedRoom.room.options : this.options;
+        this.options = this.joinedRoom
+          ? this.joinedRoom.room.options
+          : this.options;
         if (this.joinedRoom && this.joinedRoom.room.started) {
           this.navigateToRoom(this.joinedRoom.room.id);
         }
@@ -71,10 +75,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
         const dialogRef = this.enterNameDialog.open(EnterNameDialogComponent, {
           data: { roomId },
           closeOnNavigation: true,
-          disableClose: true
+          disableClose: true,
         });
         dialogRef.afterClosed().subscribe((result) => {
-          if (result){
+          if (result) {
             this.roomCreationService.joinRoomFromForm(roomId, result, false);
           } else {
             this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
@@ -114,5 +118,24 @@ export class LobbyComponent implements OnInit, OnDestroy {
   onLeaveRoom() {
     this.roomCreationService.leaveRoom();
     this.router.navigate([GLOBAL_CONFIG.urlWelcomePath]);
+  }
+
+  selectElementContents(showSnackbar: boolean) {
+    if (showSnackbar) {
+      this.snackBar.open(
+        'In die Zwischenablage kopiert!',
+        null,
+        {
+          duration: 1000,
+          panelClass: 'snackbar-center-text'
+        }
+      );
+    }
+    var el = document.getElementById('inviteLinkInput');
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
   }
 }
