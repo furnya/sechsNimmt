@@ -1,13 +1,17 @@
 .lobbyContainer {
   width: 100%;
   height: 100%;
-
+  display: flex;
+  flex-direction: column;
+  
   &__main {
     display: flex;
-    margin-bottom: 10px;
+    height: calc(100% - 176px);
 
     &__list {
       width: 60%;
+      max-height: 100%;
+      overflow: hidden;
       padding: 0;
     }
 
@@ -26,10 +30,6 @@
   white-space: pre-wrap !important;
 }
 
-.isCurrentPlayer {
-  background-color: grey;
-}
-
 .invite-link-field {
   &__span {
     font-weight: 400;
@@ -42,8 +42,8 @@
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
+  // position: absolute;
+  // bottom: 0;
 
   &__row-1,
   &__row-2 {
@@ -72,4 +72,21 @@
 
 .start-game-button {
   background-color: #00ff00;
+}
+
+.player-list {
+  max-height: 100%;
+  overflow: auto;
+
+  &__item:nth-child(even) {
+    background-color: #CCC;
+  }
+
+  &__item:nth-child(odd) {
+    background-color: #FFF;
+  }
+}
+
+.isCurrentPlayer {
+  background-color: grey;
 }
