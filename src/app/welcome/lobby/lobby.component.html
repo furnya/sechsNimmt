@@ -1,7 +1,9 @@
 <div class="lobbyContainer">
   <mat-toolbar class="toolbar-justify-content-center"
-    >Dein Spiel {{ joinedRoom?.room.id }}</mat-toolbar
-  >
+    ><span>
+      Dein Spiel <strong>{{ joinedRoom?.room.id }}</strong>
+    </span>
+  </mat-toolbar>
   <div class="lobbyContainer__main">
     <mat-card class="lobbyContainer__main__list">
       <mat-toolbar color="primary" class="toolbar-justify-content-center"
@@ -12,11 +14,17 @@
           role="listitem"
           *ngFor="let player of joinedRoom?.room.players | filterIsActive"
           [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }"
-          >{{
-            player.name +
-              (isCurrentPlayer(player) ? " (Du)" : "") +
-              (player.isHost ? " [Host]" : "")
-          }}</mat-list-item
+          >
+          <span>
+            {{
+              player.name +
+                (isCurrentPlayer(player) ? " (Du)" : "") +
+                (player.isHost ? " [Host]" : "")
+            }}
+          </span>
+          <span class="spacer"></span>
+          <mat-icon *ngIf="player.isHost">star</mat-icon>
+          </mat-list-item
         >
       </mat-list>
     </mat-card>

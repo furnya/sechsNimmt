@@ -80,9 +80,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
           disableClose: true,
         });
         dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.roomCreationService.joinRoomFromForm(roomId, result, false);
-          } else {
+          if (!result) {
             this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
           }
         });

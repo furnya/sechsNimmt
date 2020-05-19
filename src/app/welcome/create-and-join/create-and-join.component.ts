@@ -73,16 +73,16 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
 
   onJoinRoom(joinRoomForm: NgForm) {
     const roomId = joinRoomForm.value.joinGameId;
-    if (!this.queuedRoomIds.includes(roomId)) {
-      this.errorSnackBar.open(
-        'Ein Spiel mit dieser ID existiert nicht!',
-        null,
-        {
-          duration: 3000,
-        }
-      );
-      return;
-    }
+    // if (!this.queuedRoomIds.includes(roomId)) {
+    //   this.errorSnackBar.open(
+    //     'Ein Spiel mit dieser ID existiert nicht!',
+    //     null,
+    //     {
+    //       duration: 3000,
+    //     }
+    //   );
+    //   return;
+    // }
     const error = this.roomCreationService.joinRoomFromForm(
       roomId,
       joinRoomForm.value.playerName,

@@ -6,7 +6,10 @@ import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
 import { Room, JoinedRoom, Player, GameOptions } from '../models/game.model';
 import { Router } from '@angular/router';
-import { FilterIsActivePipe, filterActivePlayers } from './filter-is-active.pipe';
+import {
+  FilterIsActivePipe,
+  filterActivePlayers,
+} from './filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -108,20 +111,14 @@ export class RoomCreationService {
     return this.getPlayerFromRoom(playerName, this.joinedRoom?.room);
   }
 
-  private getRoomPlayers(gameId: string): Player[] {
-    let players: Player[] = [];
-    this.queuedRooms.forEach((room) => {
-      if (room.id === gameId) {
-        players = room.players;
-      }
-    });
-    return players;
+  private getRoomPlayers(roomId: string): Player[] {
+    return this.queuedRooms.find(r => r.id === roomId)?.players;
   }
 
-  private getRoomKey(gameId: string): string {
+  private getRoomKey(roomId: string): string {
     let roomKey: string;
     this.queuedRooms.forEach((room) => {
-      if (room.id === gameId) {
+      if (room.id === roomId) {
         roomKey = room.dbKey;
       }
     });
@@ -221,6 +218,9 @@ export class RoomCreationService {
     const roomKey = this.getRoomKey(roomId);
     if (!roomKey) {
       return 'Ein Spiel mit dieser ID existiert nicht!';
+    }
+    if (this.getRoomPlayers(roomId)?.find((p) => p.name === playerName)) {
+      return 'Ein Spieler mit diesem Namen existiert schon!';
     }
     this.db
       .list(

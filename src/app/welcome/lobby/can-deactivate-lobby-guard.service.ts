@@ -12,7 +12,7 @@ export class CanDeactivateLobbyGuard implements CanDeactivate<LobbyComponent> {
   constructor(private roomCreationService: RoomCreationService) {}
 
   canDeactivate(component: LobbyComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): boolean {
-    if (nextState.url.includes(GLOBAL_CONFIG.urlGamePath)) {
+    if (nextState.url.includes(GLOBAL_CONFIG.urlGamePath) || !component.joinedRoom) {
       return true;
     }
     if (

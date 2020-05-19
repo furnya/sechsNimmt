@@ -2,6 +2,8 @@ import { Component, OnInit, Inject, ViewChild, ElementRef, AfterViewInit } from 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { RoomCreationService } from '../room-creation.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-enter-name-dialog',
@@ -16,15 +18,28 @@ export class EnterNameDialogComponent implements OnInit, AfterViewInit {
   constructor(
     public dialogRef: MatDialogRef<EnterNameDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {roomId: string},
-    private router: Router
+    private router: Router,
+    private roomCreationService: RoomCreationService,
+    private errorSnackBar: MatSnackBar
   ) {}
 
   confirm() {
-    this.dialogRef.close(this.playerName);
+    const error = this.roomCreationService.joinRoomFromForm(
+      this.data.roomId,
+      this.playerName,
+      false
+    );
+    if (error) {
+      this.errorSnackBar.open(error, null, {
+        duration: 3000,
+      });
+      return;
+    }
+    this.dialogRef.close(true);
   }
 
   onReturnToHome(): void {
-    this.dialogRef.close(null);
+    this.dialogRef.close(false);
   }
 
   ngOnInit() {

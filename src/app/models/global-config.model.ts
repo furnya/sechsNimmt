@@ -22,4 +22,5 @@ export interface GlobalConfig {
     maxLobbyAgeInMilliseconds: number;
     defaultOptions: GameOptions;
     dbOptionsPath: string;
+    activeTimeoutInMillisecnds: number;
 }
