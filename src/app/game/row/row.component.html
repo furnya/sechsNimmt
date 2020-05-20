@@ -1,17 +1,17 @@
 <div class="cardRow">
   <div class="selectContainer">
+    <!-- *ngIf="canBeSelected()" -->
     <button
       mat-stroked-button
       class="selectButton"
       color="primary"
-      *ngIf="canBeSelected()"
       (click)="onTakeRow()"
       [disabled]="!isYourTurn()"
     >
       Reihe wählen
     </button>
   </div>
-  <app-card *ngFor="let i of cards" [id]="i"></app-card>
+  <app-card *ngFor="let i of cards" [id]="i" [type]="'row'"></app-card>
   <div
     cdkDropList
     #rowDropSpot="cdkDropList"

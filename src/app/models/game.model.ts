@@ -48,3 +48,9 @@ export interface PlayerState {
   selectedCard: number;
   minusPoints: number;
 }
+
+export const enum CARD_TYPE {
+  handCard = 'hand',
+  rowCard = 'row',
+  selectedCard = 'selected',
+}

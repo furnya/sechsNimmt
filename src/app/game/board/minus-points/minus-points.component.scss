@@ -1,41 +1,43 @@
 .minusPointsContainer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    padding: 0;
-    margin: 0 5px 5px 0;
-}
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0 5px 5px 0;
+  border-radius: 4px;
 
-[mat-table] {
-    
+  > [mat-table] {
+      background-color: transparent;
+  }
 }
 
 [mat-cell],
 [mat-header-cell] {
-    border-left: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
 }
 
 [mat-cell]:first-child,
 [mat-header-cell]:first-child {
-    border-left: 0;
+  border-left: 0;
 }
 
 [mat-cell]:last-child,
 [mat-header-cell]:last-child {
-    border-right: 0;
+  border-right: 0;
 }
 
 [mat-header-cell] {
-    text-align: left;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+  text-align: left;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
 }
 
-[mat-cell] {
-    text-align: left;
+.mat-cell {
+  text-align: left;
+  padding-left: 12px !important;
 }
 
 .alignRight {
-    text-align: right;
+  text-align: right;
 }

@@ -1,8 +1,8 @@
-<mat-card class="outline" [ngClass]="{selected: isSelected, smallestCard: isSmallestCard && id !== -1}" (click)="onCardSelected()">
+<mat-card [class]="'outline'+' '+type" [ngClass]="{selected: isSelected, smallestCard: isSmallestCard && id !== -1}" (click)="onCardSelected()">
     <mat-card-header>
-        <mat-card-title>
+        <p>
             {{ getBullAmount() === -1 ? '?' : getBullAmount() }}
-        </mat-card-title>
+        </p>
     </mat-card-header>
     <mat-card-content class="digits">
         <p>

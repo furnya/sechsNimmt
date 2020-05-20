@@ -1,14 +1,33 @@
 <div class="selectedCardsContainer">
-    <div
+  <div
     cdkDropList
     #selectedCardDropList="cdkDropList"
     [id]="'selectedCardDropList_' + playerStates[i].player.name"
     [cdkDropListData]="[playerStates[i].selectedCard]"
-    [cdkDropListConnectedTo]="['rowDropSpot_0','rowDropSpot_1','rowDropSpot_2','rowDropSpot_3','rowDropSpot_4']"
+    [cdkDropListConnectedTo]="[
+      'rowDropSpot_0',
+      'rowDropSpot_1',
+      'rowDropSpot_2',
+      'rowDropSpot_3',
+      'rowDropSpot_4'
+    ]"
     (cdkDropListDropped)="drop($event)"
-    *ngFor="let ps of playerStates; index as i">
+    *ngFor="let ps of playerStates; index as i"
+  >
     <div>
-      <app-card cdkDrag [id]="canPlay() || isCurrentPlayer(ps.player.name) ? ps.selectedCard : -1" [cdkDragDisabled]="!(isCurrentPlayer(ps.player.name) && isSmallestCard(ps.selectedCard) && canPlay())" [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"></app-card>
+      <app-card
+        cdkDrag
+        [id]="canPlay() || isCurrentPlayer(ps.player.name) ? ps.selectedCard : -1"
+        [cdkDragDisabled]="
+          !(
+            isCurrentPlayer(ps.player.name) &&
+            isSmallestCard(ps.selectedCard) &&
+            canPlay()
+          )
+        "
+        [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"
+        [type]="'selected'"
+      ></app-card>
       <p>{{ ps.player.name }}</p>
     </div>
   </div>

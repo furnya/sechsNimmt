@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../game.service';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FinishedDialogComponent } from 'src/app/game/board/finished-dialog/finished-dialog.component';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 
@@ -13,6 +13,8 @@ import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   gameStateSub: Subscription;
+  dialogRef: MatDialogRef<FinishedDialogComponent, any> = null;
+  dialogOpen = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,14 +34,22 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameStateSub = this.gameService.gameStateChanged.subscribe(
       (gameState) => {
         if (this.gameService.playerIndex !== -1 && gameState?.finished) {
-          this.finishedGameDialog.closeAll();
-          const dialogRef = this.finishedGameDialog.open(
-            FinishedDialogComponent,
-            {
-              data: gameState,
-            }
-          );
-          dialogRef.afterClosed().subscribe((result) => {});
+          if (this.dialogOpen) {
+            this.dialogRef.componentInstance.data = gameState;
+          } else {
+            this.dialogOpen = true;
+            this.dialogRef = this.finishedGameDialog.open(
+              FinishedDialogComponent,
+              {
+                data: gameState,
+                disableClose: true,
+              }
+            );
+            this.dialogRef.afterClosed().subscribe((result) => {
+              this.dialogOpen = false;
+              this.dialogRef = null;
+            });
+          }
         }
       }
     );

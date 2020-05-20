@@ -1,5 +1,5 @@
-<mat-toolbar>Spiel beendet. {{ winnerMessage }}</mat-toolbar>
-<table mat-table [dataSource]="playerStates">
+<mat-toolbar>Spiel beendet. {{ getWinnerMessage() }}</mat-toolbar>
+<table mat-table [dataSource]="getSortedPlayerStates()">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Spieler</th>
     <td mat-cell *matCellDef="let element">{{ element.player.name }}</td>

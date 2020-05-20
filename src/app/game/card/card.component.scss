@@ -1,17 +1,27 @@
 .outline {
-    width: 70px;
-    height: 100px;
-    margin: 5px 10px;
+    width: 9vh;
+    height: 12vh;
     cursor: pointer;
+    padding: 0;
+}
+
+.hand {
+    margin: 0 0.5vw;
+}
+
+.row {
+    margin: 1vh 0.5vw;
+}
+
+.selected {
+    margin: 0;
 }
 
 .digits {
-    height: 90px;
-    padding: 45px 0; 
 }
 
 .digits > p {
-    font-size: xx-large;
+    font-size: 200%;
     text-align: center;
 }
 
