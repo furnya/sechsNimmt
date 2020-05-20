@@ -1,12 +1,16 @@
-<mat-card [class]="'outline'+' '+type" [ngClass]="{selected: isSelected, smallestCard: isSmallestCard && id !== -1}" (click)="onCardSelected()">
-    <mat-card-header>
-        <p>
+<mat-card [class]="'card'+' '+type" [ngClass]="{selectedInHand: isSelected, smallestCard: isSmallestCard && id !== -1}" [style.backgroundColor]="backgroundColorBull(getBullAmount().length)" (click)="onCardSelected()">
+    <div class="card__header">
+        <!-- <p>
             {{ getBullAmount() === -1 ? '?' : getBullAmount() }}
-        </p>
-    </mat-card-header>
-    <mat-card-content class="digits">
+        </p> -->
+        <div class="card__header__bullContainer">
+            <mat-icon *ngFor="let i of getBullAmount()" svgIcon="bull" [style.flex-basis]="flexBasisBull(getBullAmount().length, i)"></mat-icon>
+        </div>
+    </div>
+    <mat-card-content class="card__digits">
         <p>
             {{ id === -1 ? '?' : id }}
         </p>
     </mat-card-content>
+    <mat-icon svgIcon="bull_background" class="bull-background"></mat-icon>
 </mat-card>

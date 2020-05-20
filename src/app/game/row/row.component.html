@@ -1,11 +1,11 @@
 <div class="cardRow">
   <div class="selectContainer">
-    <!-- *ngIf="canBeSelected()" -->
     <button
       mat-stroked-button
       class="selectButton"
       color="primary"
       (click)="onTakeRow()"
+      *ngIf="canBeSelected()"
       [disabled]="!isYourTurn()"
     >
       Reihe wählen

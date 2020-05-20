@@ -21,7 +21,11 @@ export class HandComponent implements OnInit {
   }
 
   onCardSelected(id: number) {
-    this.selectedCard = id;
+    if (this.selectedCard === id) {
+      this.selectedCard = 0;
+    } else {
+      this.selectedCard = id;
+    }
   }
 
   onConfirmSelection() {

@@ -1,33 +1,37 @@
 <mat-card class="lobbyContainer">
-  <mat-toolbar class="toolbar-justify-content-center"
+  <mat-toolbar class="toolbar-justify-content-center lobbyContainer__title"
     ><span>
       Dein Spiel <strong>{{ joinedRoom?.room.id }}</strong>
     </span>
   </mat-toolbar>
   <div class="lobbyContainer__main">
     <mat-card class="lobbyContainer__main__list">
-      <mat-toolbar color="primary" class="toolbar-justify-content-center"
-        >Spieler</mat-toolbar
-      >
-      <mat-list role="list" class="player-list">
-        <mat-list-item
-          role="listitem"
-          *ngFor="let player of joinedRoom?.room.players | filterIsActive"
-          [ngStyle]="{backgroundColor: isCurrentPlayer(player) ? '#a284d8' : 'auto'}"
-          class="player-list__item"
+      <mat-card-content>
+        <mat-toolbar color="primary" class="toolbar-justify-content-center"
+          >Spieler</mat-toolbar
+        >
+        <mat-list role="list" class="player-list">
+          <mat-list-item
+            role="listitem"
+            *ngFor="let player of joinedRoom?.room.players | filterIsActive"
+            [ngStyle]="{
+              backgroundColor: isCurrentPlayer(player) ? '#a284d8' : 'auto'
+            }"
+            class="player-list__item"
           >
-          <!-- [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }" -->
-          <span>
-            {{
-              player.name +
-                (isCurrentPlayer(player) ? " (Du)" : "") +
-                (player.isHost ? " [Host]" : "")
-            }}
-          </span>
-          <span class="spacer"></span>
-          <mat-icon *ngIf="player.isHost">star</mat-icon>
-        </mat-list-item>
-      </mat-list>
+            <!-- [ngClass]="{ isCurrentPlayer: isCurrentPlayer(player) }" -->
+            <span>
+              {{
+                player.name +
+                  (isCurrentPlayer(player) ? " (Du)" : "") +
+                  (player.isHost ? " [Host]" : "")
+              }}
+            </span>
+            <span class="spacer"></span>
+            <mat-icon *ngIf="player.isHost">star</mat-icon>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
     </mat-card>
     <mat-card class="lobbyContainer__main__options">
       <mat-card-content>

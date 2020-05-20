@@ -6,8 +6,15 @@
   left: 10vw;
   text-align: center;
   padding: 0;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
+
+  &__title {
+    border-radius: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
   &__main {
     display: flex;
@@ -18,6 +25,7 @@
       max-height: 100%;
       overflow: hidden;
       padding: 0;
+      border-radius: unset;
     }
 
     &__options {
@@ -47,8 +55,13 @@
 }
 
 .footer {
-  // position: absolute;
-  // bottom: 0;
+
+  border-radius: inherit;
+  
+  &__row-2 {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
 
   &__row-1,
   &__row-2 {

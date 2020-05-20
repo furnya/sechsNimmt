@@ -1,34 +1,77 @@
-.outline {
-    width: 9vh;
-    height: 12vh;
-    cursor: pointer;
-    padding: 0;
+// @font-face {
+//   font-family: "bad-mofo";
+//   src: url("../../../assets/fonts/BadMofo.ttf") format("opentype");
+// }
+
+.card {
+  width: 9vh;
+  height: 12vh;
+  cursor: pointer;
+  padding: 0;
+
+  &__header {
+    padding-top: 5%;
+    height: 30%;
+    max-height: 40%;
+
+    &__bullContainer {
+      margin: 0 auto;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .mat-icon {
+        // width: min(4vw, 2vh);
+        height: 50%;
+        width: 25%;
+      }
+    }
+  }
+
+  &__digits {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    > p {
+    //   font-family: "orc-horde";
+      font-size: min(9vw, 4.5vh);
+      text-align: center;
+    }
+  }
 }
 
 .hand {
-    margin: 0 0.5vw;
+  margin: 0 0.5vw;
 }
 
 .row {
-    margin: 1vh 0.5vw;
+  margin: 1vh 0.5vw;
 }
 
 .selected {
-    margin: 0;
+  margin: 0;
 }
 
-.digits {
-}
-
-.digits > p {
-    font-size: 200%;
-    text-align: center;
-}
-
-.selected {
-    background-color: red;
+.selectedInHand {
+  border: 5px solid red;
+  box-sizing: border-box;
 }
 
 .smallestCard {
-    background-color: yellow;
+    border: 5px solid yellow;
+    box-sizing: border-box;
+}
+
+.bull-background {
+  position: absolute;
+  bottom: 5%;
+  left: 10%;
+  width: 80%;
+  height: 90%;
 }
