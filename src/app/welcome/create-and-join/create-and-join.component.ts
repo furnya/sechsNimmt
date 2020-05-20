@@ -99,9 +99,14 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
 
   onCreateRoom(createRoomForm: NgForm) {
     const roomId = createRoomForm.value.createGameId;
-    if (this.queuedRoomIds.includes(roomId)) {
+    const error = this.roomCreationService
+    .createRoom(
+      roomId,
+      createRoomForm.value.playerName
+    );
+    if (error) {
       this.errorSnackBar.open(
-        'Ein Spiel mit dieser ID existiert schon!',
+        error,
         null,
         {
           duration: 3000,
@@ -109,11 +114,6 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
       );
       return;
     }
-    this.roomCreationService
-      .createRoom(
-        roomId,
-        createRoomForm.value.playerName
-      );
     createRoomForm.reset();
   }
 

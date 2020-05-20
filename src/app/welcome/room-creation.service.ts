@@ -84,7 +84,7 @@ export class RoomCreationService {
     return roomIds;
   }
 
-  private getRoom(roomId: string) {
+  getRoom(roomId: string): Room {
     let room: Room = null;
     this.queuedRooms.forEach((g) => {
       if (g.id === roomId) {
@@ -112,7 +112,7 @@ export class RoomCreationService {
   }
 
   private getRoomPlayers(roomId: string): Player[] {
-    return this.queuedRooms.find(r => r.id === roomId)?.players;
+    return this.queuedRooms.find((r) => r.id === roomId)?.players;
   }
 
   private getRoomKey(roomId: string): string {
@@ -129,7 +129,25 @@ export class RoomCreationService {
     return this.db.object(GLOBAL_CONFIG.dbQueuePath).valueChanges();
   }
 
-  createRoom(roomId: string, hostPlayerName: string) {
+  createRoom(roomId: string, hostPlayerName: string): string {
+    if (this.queuedRoomIds.includes(roomId)) {
+      return 'Ein Spiel mit dieser ID existiert schon!';
+    }
+    const oldRoom = this.queuedRooms.find((r) => r.id === roomId);
+    if (oldRoom) {
+      this.db
+        .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
+        .remove()
+        .then(() => {
+          this.pushNewRoom(roomId, hostPlayerName);
+        });
+    } else {
+      this.pushNewRoom(roomId, hostPlayerName);
+    }
+    return null;
+  }
+
+  private pushNewRoom(roomId: string, hostPlayerName: string) {
     const newRoom: Room = {
       id: roomId,
       players: [],
@@ -193,20 +211,8 @@ export class RoomCreationService {
 
   joinRoomIfAlreadyIn(roomId: string, playerName: string) {
     this.joinedRoom = {
-      room: {
-        id: roomId,
-        dbKey: null,
-        players: [],
-        started: false,
-        created: 0,
-        options: null,
-      },
-      player: {
-        name: playerName,
-        dbKey: null,
-        isHost: false,
-        isActive: 0,
-      },
+      room: this.getRoom(roomId),
+      player: this.getPlayerFromRoom(playerName, this.getRoom(roomId))
     };
   }
 

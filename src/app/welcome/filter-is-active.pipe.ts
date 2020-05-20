@@ -3,7 +3,7 @@ import { Player } from '../models/game.model';
 import { GLOBAL_CONFIG } from '../config/global-config';
 
 export const playerIsActive = function(player: Player): boolean {
-  return (new Date().getTime() - player.isActive) < GLOBAL_CONFIG.activeTimeoutInMillisecnds;
+  return (new Date().getTime() - player.isActive) < GLOBAL_CONFIG.activeTimeoutInMilliseconds;
 }
 
 export const filterActivePlayers = function(players: Player[]): Player[] {
