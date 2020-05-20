@@ -1,0 +1,22 @@
+.minus-points-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.minus-points-card {
+  padding: 0;
+
+  &__toolbar {
+    height: 32px;
+    justify-content: center;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

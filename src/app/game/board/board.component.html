@@ -1,4 +1,18 @@
 <app-main-board></app-main-board>
 <app-selected-cards></app-selected-cards>
 <app-hand></app-hand>
-<app-minus-points></app-minus-points>
+<div class="minus-points-container">
+    <mat-card class="minus-points-card">
+        <mat-toolbar class="minus-points-card__toolbar">
+            <span>
+                Deine Minuspunkte: {{ minusPoints }}
+            </span>
+        </mat-toolbar>
+        <mat-toolbar class="minus-points-card__toolbar cursor-pointer" color="primary" (click)="openAllMinusPoints()">
+            <span>
+                Alle Minuspunkte
+            </span>
+            <mat-icon>arrow_drop_up</mat-icon>
+        </mat-toolbar>
+    </mat-card>
+</div>

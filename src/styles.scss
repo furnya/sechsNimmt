@@ -2,19 +2,25 @@
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    background-color: #eeeeff;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #ccccff;
 }
 
 .toolbar-justify-content-center {
-    justify-content: center;
-    white-space: pre-wrap;
+  justify-content: center;
+  white-space: pre-wrap;
 }
 
 .snackbar-center-text > simple-snack-bar {
-    justify-content: center;
+  justify-content: center;
+}
+
+.minus-points-sheet-container {
+  padding: 0 !important;
+  max-width: 400px;
+  min-width: unset !important;
 }

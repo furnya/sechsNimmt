@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FinishedDialogComponent } from 'src/app/game/board/finished-dialog/finished-dialog.component';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MinusPointsComponent } from './minus-points/minus-points.component';
 
 @Component({
   selector: 'app-board',
@@ -20,7 +22,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private gameService: GameService,
     public finishedGameDialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private minusPointsBottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +58,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     );
   }
 
+  get minusPoints() {
+    return this.gameService.getMinusPoints();
+  }
+
   ngOnDestroy() {
     this.gameStateSub.unsubscribe();
+  }
+
+  openAllMinusPoints() {
+    this.minusPointsBottomSheet.open(MinusPointsComponent,
+      {
+        panelClass: 'minus-points-sheet-container'
+      });
   }
 }

@@ -4,8 +4,10 @@
 // }
 
 .card {
-  width: 9vh;
-  height: 12vh;
+  width: min(9vh, 5vw);
+  min-width: 42px;
+  height: min(12vh, 8vw);
+  min-height: 67px;
   cursor: pointer;
   padding: 0;
 
@@ -40,7 +42,7 @@
 
     > p {
     //   font-family: "orc-horde";
-      font-size: min(9vw, 4.5vh);
+      font-size: min(8vw, 4vh, 43px);
       text-align: center;
     }
   }

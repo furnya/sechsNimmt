@@ -1,14 +1,14 @@
 <mat-card class="minusPointsContainer">
-  <table mat-table [dataSource]="playerStates">
+  <mat-table [dataSource]="playerStates">
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Spieler</th>
-      <td mat-cell *matCellDef="let element">{{ element.player.name }}</td>
+      <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="minusPoints">
-      <th mat-header-cell *matHeaderCellDef>Minuspunkte</th>
-      <td mat-cell *matCellDef="let element" class="alignRight">{{ element.minusPoints }}</td>
+      <mat-header-cell *matHeaderCellDef>Minuspunkte</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="alignRight">{{ element.minusPoints }}</mat-cell>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['name', 'minusPoints']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></tr>
-  </table>
+    <mat-header-row *matHeaderRowDef="['name', 'minusPoints']; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></mat-row>
+  </mat-table>
 </mat-card>
