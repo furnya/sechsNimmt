@@ -1,34 +1,41 @@
-<div class="selectedCardsContainer">
-  <div
-    cdkDropList
-    #selectedCardDropList="cdkDropList"
-    [id]="'selectedCardDropList_' + playerStates[i].player.name"
-    [cdkDropListData]="[playerStates[i].selectedCard]"
-    [cdkDropListConnectedTo]="[
-      'rowDropSpot_0',
-      'rowDropSpot_1',
-      'rowDropSpot_2',
-      'rowDropSpot_3',
-      'rowDropSpot_4'
-    ]"
-    (cdkDropListDropped)="drop($event)"
-    *ngFor="let ps of playerStates; index as i"
-  >
-    <div>
-      <app-card
-        cdkDrag
-        [id]="canPlay() || isCurrentPlayer(ps.player.name) ? ps.selectedCard : -1"
-        [cdkDragDisabled]="
-          !(
-            isCurrentPlayer(ps.player.name) &&
-            isSmallestCard(ps.selectedCard) &&
-            canPlay()
-          )
-        "
-        [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"
-        [type]="'selected'"
-      ></app-card>
-      <p>{{ ps.player.name }}</p>
+<div class="sc-wrapper">
+  <mat-toolbar color="primary" class="sc-wrapper__title">
+    Ausgewählte Karten
+  </mat-toolbar>
+  <div class="selectedCardsContainer">
+    <p *ngIf="!playerStates || playerStates.length === 0">Keine Karten ausgewählt</p>
+    <div
+      cdkDropList
+      #selectedCardDropList="cdkDropList"
+      [id]="'selectedCardDropList_' + playerStates[i].player.name"
+      [cdkDropListData]="[playerStates[i].selectedCard]"
+      [cdkDropListConnectedTo]="[
+        'rowDropSpot_0',
+        'rowDropSpot_1',
+        'rowDropSpot_2',
+        'rowDropSpot_3',
+        'rowDropSpot_4'
+      ]"
+      (cdkDropListDropped)="drop($event)"
+      *ngFor="let ps of playerStates; index as i"
+      class="drag-list-container"
+    >
+      <!-- <div> -->
+        <app-card
+          cdkDrag
+          [id]="canPlay() || isCurrentPlayer(ps.player.name) ? ps.selectedCard : -1"
+          [cdkDragDisabled]="
+            !(
+              isCurrentPlayer(ps.player.name) &&
+              isSmallestCard(ps.selectedCard) &&
+              canPlay()
+            )
+          "
+          [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"
+          [type]="'selected'"
+        ></app-card>
+        <p class="name-label">{{ ps.player.name }}</p>
+      <!-- </div> -->
     </div>
   </div>
 </div>
