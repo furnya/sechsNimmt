@@ -1,14 +1,26 @@
-<mat-card class="minusPointsContainer">
-  <mat-table [dataSource]="playerStates">
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="minusPoints">
-      <mat-header-cell *matHeaderCellDef>Minuspunkte</mat-header-cell>
-      <mat-cell *matCellDef="let element" class="alignRight">{{ element.minusPoints }}</mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="['name', 'minusPoints']; sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></mat-row>
-  </mat-table>
+<mat-card class="minusPointsContainer" (click)="onClose()">
+  <div class="mock-container">
+    <mat-toolbar color="primary" (click)="onClose()"
+      ><span>
+        Alle Minuspunkte
+      </span>
+      <mat-icon>arrow_drop_down</mat-icon></mat-toolbar
+    >
+    <mat-table [dataSource]="playerStates" (mouseenter)="canClose = false" (mouseleave)="canClose = true">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="minusPoints">
+        <mat-header-cell *matHeaderCellDef>Minuspunkte</mat-header-cell>
+        <mat-cell *matCellDef="let element" class="alignRight">{{
+          element.minusPoints
+        }}</mat-cell>
+      </ng-container>
+      <mat-header-row
+        *matHeaderRowDef="['name', 'minusPoints']; sticky: true"
+      ></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></mat-row>
+    </mat-table>
+  </div>
 </mat-card>

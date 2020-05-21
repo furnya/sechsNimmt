@@ -1,13 +1,30 @@
 .minusPointsContainer {
-  // position: fixed;
-  // bottom: 0;
-  // right: 0;
   padding: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+  border-radius: 0;
   // margin: 0 5px 5px 0;
-  // border-radius: 4px;
   // max-width: 400px;
   // max-height: 40vh;
-  overflow: auto;
+  // font-size: 40px;
+
+  > .mock-container {
+    display: flex;
+    flex-direction: column;
+
+    > mat-toolbar {
+      height: 32px;
+      cursor: pointer;
+      justify-content: flex-end;
+    }
+    
+    > mat-table {
+      box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+    }
+  }
+
 }
 
 [mat-cell],
@@ -34,14 +51,14 @@ mat-header-cell:last-child {
 
 [mat-header-cell],
 mat-header-cell {
-  // text-align: left;
+  font-size: 24px;
   justify-content: center;
   padding-left: 12px !important;
   padding-right: 12px !important;
 }
 
 .mat-cell, mat-cell {
-  // text-align: left;
+  font-size: 24px;
   justify-content: flex-start;
   padding-left: 12px !important;
   padding-right: 12px !important;
@@ -55,5 +72,5 @@ mat-header-cell {
 }
 
 .mat-column-minusPoints {
-  flex: 0 0 30%;
+  min-width: 150px;
 }

@@ -21,6 +21,10 @@ body {
 
 .minus-points-sheet-container {
   padding: 0 !important;
-  max-width: 400px;
+  width: 100vw;
   min-width: unset !important;
+  max-width: unset !important;
+  background: transparent;
+  box-shadow: unset;
+  border-radius: 0 !important;
 }

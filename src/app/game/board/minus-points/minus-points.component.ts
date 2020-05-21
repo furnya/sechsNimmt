@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { GameService } from '../../game.service';
 import { PlayerState, GameState } from 'src/app/models/game.model';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-minus-points',
@@ -11,8 +11,10 @@ import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 })
 export class MinusPointsComponent implements OnInit {
   playerStates: PlayerState[] = [];
+  canClose = true;
 
   constructor(
+    private sheetRef: MatBottomSheetRef,
     private gameService: GameService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any
   ) {}
@@ -40,5 +42,11 @@ export class MinusPointsComponent implements OnInit {
     return this.gameService.options
       ? this.gameService.options.hideMinusPoints.value
       : GLOBAL_CONFIG.defaultOptions.hideMinusPoints.value;
+  }
+
+  onClose() {
+    if (this.canClose) {
+      this.sheetRef.dismiss();
+    }
   }
 }
