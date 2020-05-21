@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
-import { Room, JoinedRoom, Player, GameOptions } from '../models/game.model';
-import { Router } from '@angular/router';
-import {
-  FilterIsActivePipe,
-  filterActivePlayers,
-} from './filter-is-active.pipe';
+import { GameOptions, JoinedRoom, Player, Room } from '../models/game.model';
 
 @Injectable({
   providedIn: 'root',
@@ -131,9 +127,11 @@ export class RoomCreationService {
 
   createRoom(roomId: string, hostPlayerName: string): Observable<string> {
     if (this.queuedRoomIds.includes(roomId)) {
-      return new Subject<string>().pipe(
-        map(() => 'Ein Spiel mit dieser ID existiert schon!')
-      );
+      return new Observable(observer => {
+        setTimeout(() => {
+          observer.next('Ein Spiel mit dieser ID existiert schon!');
+        }, 1);
+      })
     }
     const oldRoom = this.queuedRooms.find((r) => r.id === roomId);
     return this.gameService.getGamesObservable().pipe(
