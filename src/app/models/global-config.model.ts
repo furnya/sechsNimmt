@@ -20,6 +20,7 @@ export interface GlobalConfig {
     maxCardsInRow: number;
     urlNotFoundPath: string;
     maxLobbyAgeInMilliseconds: number;
+    maxGameAgeInMilliseconds: number;
     defaultOptions: GameOptions;
     dbOptionsPath: string;
     activeTimeoutInMilliseconds: number;

@@ -35,6 +35,7 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   urlNotFoundPath: 'not-found',
   dbOptionsPath: 'options',
   maxLobbyAgeInMilliseconds: 3600000,
+  maxGameAgeInMilliseconds: 3600000 * 24,
   activeTimeoutInMilliseconds: 3000,
   defaultOptions: {
     hideMinusPoints: {

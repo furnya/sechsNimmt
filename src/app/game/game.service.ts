@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Player, GameState, PlayerState, Game, GameOptions } from '../models/game.model';
-import { AngularFireDatabase } from '@angular/fire/database';
+import {
+  Player,
+  GameState,
+  PlayerState,
+  Game,
+  GameOptions,
+} from '../models/game.model';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { take, map, tap } from 'rxjs/operators';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { FilterIsActivePipe, filterActivePlayers, playerIsActive } from '../welcome/filter-is-active.pipe';
+import {
+  FilterIsActivePipe,
+  filterActivePlayers,
+  playerIsActive,
+} from '../welcome/filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +70,9 @@ export class GameService {
       .subscribe((gameState: GameState) => {
         this.gameState = gameState;
         if (this.setPlayerIndex()) {
-          this.gameStateChanged.next(JSON.parse(JSON.stringify(this.gameState)));
+          this.gameStateChanged.next(
+            JSON.parse(JSON.stringify(this.gameState))
+          );
           this.checkDisableSelecting();
         }
       });
@@ -118,6 +130,7 @@ export class GameService {
       .snapshotChanges()
       .pipe(
         map((changes) => {
+          console.log(changes);
           let key: string = null;
           changes.forEach((change) => {
             const value: {
@@ -161,13 +174,15 @@ export class GameService {
             return;
           }
           let players = null;
+          let created = 0;
           Object.keys(games).forEach((key) => {
             if (games[key]?.id === gameId && games[key]?.players) {
               players = games[key]?.players;
+              created = games[key].created;
             }
           });
-          let playersClone = JSON.parse(JSON.stringify(players));
-          let playerArray: Player[] = [];
+          const playersClone = JSON.parse(JSON.stringify(players));
+          const playerArray: Player[] = [];
           Object.keys(players).forEach((key) => {
             if (playerIsActive(players[key])) {
               playerArray.push(players[key]);
@@ -181,6 +196,7 @@ export class GameService {
             players: playersClone,
             gameState,
             options,
+            created
           };
           this.db.list(GLOBAL_CONFIG.dbGamePath).push(game);
         });
@@ -357,5 +373,12 @@ export class GameService {
       }
     });
     return index;
+  }
+
+  getGamesObservable(): Observable<SnapshotAction<unknown>[]> {
+    return this.db
+      .list(GLOBAL_CONFIG.dbGamePath)
+      .snapshotChanges()
+      .pipe(take(1));
   }
 }

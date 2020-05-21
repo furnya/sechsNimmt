@@ -129,22 +129,52 @@ export class RoomCreationService {
     return this.db.object(GLOBAL_CONFIG.dbQueuePath).valueChanges();
   }
 
-  createRoom(roomId: string, hostPlayerName: string): string {
+  createRoom(roomId: string, hostPlayerName: string): Observable<string> {
     if (this.queuedRoomIds.includes(roomId)) {
-      return 'Ein Spiel mit dieser ID existiert schon!';
+      return new Subject<string>().pipe(
+        map(() => 'Ein Spiel mit dieser ID existiert schon!')
+      );
     }
     const oldRoom = this.queuedRooms.find((r) => r.id === roomId);
-    if (oldRoom) {
-      this.db
-        .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
-        .remove()
-        .then(() => {
-          this.pushNewRoom(roomId, hostPlayerName);
+    return this.gameService.getGamesObservable().pipe(
+      map((changes) => {
+        let exists = false;
+        changes.forEach((change) => {
+          const value: {
+            id?: string;
+            created?: number;
+          } = change.payload.val();
+          if (value && value.id && value.id === roomId) {
+            if (
+              value.created &&
+              new Date().getTime() - value.created <
+                GLOBAL_CONFIG.maxGameAgeInMilliseconds
+            ) {
+              exists = true;
+            } else {
+              this.db
+                .object(GLOBAL_CONFIG.dbGamePath + '/' + change.payload.key)
+                .remove();
+            }
+          }
         });
-    } else {
-      this.pushNewRoom(roomId, hostPlayerName);
-    }
-    return null;
+        if (exists) {
+          return 'Ein Spiel mit dieser ID existiert schon!';
+        }
+        if (oldRoom) {
+          //delete old room, then push the new one
+          // this.db
+          //   .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
+          //   .remove()
+          //   .then(() => {
+          //     this.pushNewRoom(roomId, hostPlayerName);
+          //   });
+        } else {
+          // push new room
+        }
+        return '';
+      })
+    );
   }
 
   private pushNewRoom(roomId: string, hostPlayerName: string) {
@@ -212,7 +242,7 @@ export class RoomCreationService {
   joinRoomIfAlreadyIn(roomId: string, playerName: string) {
     this.joinedRoom = {
       room: this.getRoom(roomId),
-      player: this.getPlayerFromRoom(playerName, this.getRoom(roomId))
+      player: this.getPlayerFromRoom(playerName, this.getRoom(roomId)),
     };
   }
 

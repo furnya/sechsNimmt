@@ -29,6 +29,7 @@ export interface Player {
 
 export interface Game {
   id: string;
+  created: number;
   players: any;
   gameState: GameState;
   options: GameOptions;

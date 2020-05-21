@@ -104,16 +104,17 @@ export class CreateAndJoinComponent implements OnInit, AfterViewInit, OnDestroy 
       roomId,
       createRoomForm.value.playerName
     );
-    if (error) {
-      this.errorSnackBar.open(
-        error,
-        null,
-        {
-          duration: 3000,
-        }
-      );
-      return;
-    }
+    // subscribe and open snackbar with error
+    // if (error) {
+    //   this.errorSnackBar.open(
+    //     error,
+    //     null,
+    //     {
+    //       duration: 3000,
+    //     }
+    //   );
+    //   return;
+    // }
     createRoomForm.reset();
   }
 
