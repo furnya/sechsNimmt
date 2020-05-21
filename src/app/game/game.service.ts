@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import { Router } from '@angular/router';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { map, take, tap, takeUntil, takeWhile } from 'rxjs/operators';
+import { GLOBAL_CONFIG } from '../config/global-config';
 import {
-  Player,
-  GameState,
-  PlayerState,
   Game,
   GameOptions,
+  GameState,
+  Player,
+  PlayerState,
 } from '../models/game.model';
-import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
-import { GLOBAL_CONFIG } from '../config/global-config';
-import { take, map, tap } from 'rxjs/operators';
-import { Subscription, Subject, Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import {
-  FilterIsActivePipe,
-  filterActivePlayers,
-  playerIsActive,
-} from '../welcome/filter-is-active.pipe';
+import { playerIsActive } from '../welcome/filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +24,7 @@ export class GameService {
   gameId: string = null;
   gameKey: string = null;
   gameKeySub: Subscription;
+  gameStateSub: Subscription;
   playerIndex = -1;
   options: GameOptions;
 
@@ -53,7 +50,7 @@ export class GameService {
 
   subscribeToGameStateChanges() {
     this.player = JSON.parse(localStorage.getItem('player_' + this.gameId));
-    this.db
+    this.gameStateSub = this.db
       .object(
         GLOBAL_CONFIG.dbGamePath + '/' + this.gameKey
         // +
@@ -70,12 +67,23 @@ export class GameService {
       .subscribe((gameState: GameState) => {
         this.gameState = gameState;
         if (this.setPlayerIndex()) {
-          this.gameStateChanged.next(
-            JSON.parse(JSON.stringify(this.gameState))
-          );
-          this.checkDisableSelecting();
+          if (this.gameState) {
+            this.gameStateChanged.next(
+              JSON.parse(JSON.stringify(this.gameState))
+            );
+            this.checkDisableSelecting();
+          } else {
+            this.gameStateChanged.next(null);
+          }
         }
       });
+  }
+
+  unsubscribeFromGameChanges() {
+    this.gameKeySub?.unsubscribe();
+    this.gameStateSub?.unsubscribe();
+    this.player = null;
+    this.gameKey = null;
   }
 
   checkDisableSelecting() {
@@ -129,8 +137,9 @@ export class GameService {
       .list(GLOBAL_CONFIG.dbGamePath)
       .snapshotChanges()
       .pipe(
+        takeWhile(() => !this.gameKey),
         map((changes) => {
-          console.log(changes);
+          // console.log(changes);
           let key: string = null;
           changes.forEach((change) => {
             const value: {
@@ -144,15 +153,12 @@ export class GameService {
         })
       )
       .subscribe((key: string) => {
-        // console.log('Setting key to: ' + key);
         this.gameKey = key;
         if (this.gameKey) {
-          this.gameKeySub.unsubscribe();
           this.subscribeToGameStateChanges();
+        } else if (!this.player) {
+          this.router.navigate(['/' + GLOBAL_CONFIG.urlNotFoundPath]);
         }
-        // else if (!this.player) {
-        //   this.router.navigate(['/' + GLOBAL_CONFIG.urlNotFoundPath]);
-        // }
       });
   }
 
@@ -196,7 +202,7 @@ export class GameService {
             players: playersClone,
             gameState,
             options,
-            created
+            created,
           };
           this.db.list(GLOBAL_CONFIG.dbGamePath).push(game);
         });

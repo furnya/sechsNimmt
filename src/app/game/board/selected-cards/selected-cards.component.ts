@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -6,19 +6,21 @@ import {
 } from '@angular/cdk/drag-drop';
 import { GameService } from '../../game.service';
 import { PlayerState } from 'src/app/models/game.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-selected-cards',
   templateUrl: './selected-cards.component.html',
   styleUrls: ['./selected-cards.component.scss'],
 })
-export class SelectedCardsComponent implements OnInit {
+export class SelectedCardsComponent implements OnInit, OnDestroy {
   playerStates: PlayerState[] = [];
+  gameStateSub: Subscription;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.gameStateChanged.subscribe((gameState) => {
+    this.gameStateSub = this.gameService.gameStateChanged.subscribe((gameState) => {
       this.playerStates = JSON.parse(
         JSON.stringify(
           gameState.playerStates.filter((ps) => ps.selectedCard !== 0)
@@ -28,6 +30,10 @@ export class SelectedCardsComponent implements OnInit {
         this.playerStates.sort((a, b) => a.selectedCard - b.selectedCard);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.gameStateSub.unsubscribe();
   }
 
   drop(event: CdkDragDrop<string[]>) {}

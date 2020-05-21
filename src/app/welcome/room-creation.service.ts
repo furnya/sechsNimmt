@@ -162,17 +162,16 @@ export class RoomCreationService {
           return 'Ein Spiel mit dieser ID existiert schon!';
         }
         if (oldRoom) {
-          //delete old room, then push the new one
-          // this.db
-          //   .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
-          //   .remove()
-          //   .then(() => {
-          //     this.pushNewRoom(roomId, hostPlayerName);
-          //   });
+          this.db
+            .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
+            .remove()
+            .then(() => {
+              this.pushNewRoom(roomId, hostPlayerName);
+            });
         } else {
-          // push new room
+          this.pushNewRoom(roomId, hostPlayerName);
         }
-        return '';
+        return null;
       })
     );
   }
@@ -290,6 +289,7 @@ export class RoomCreationService {
   }
 
   clearRoom() {
+    this.gameService.unsubscribeFromGameChanges();
     this.gameService.gameState = null;
     this.joinedRoom = null;
     this.joinedRoomChanged.next(null);
