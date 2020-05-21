@@ -24,7 +24,9 @@ body {
   width: 100vw;
   min-width: unset !important;
   max-width: unset !important;
+  max-height: 100vh !important;
   background: transparent;
   box-shadow: unset;
   border-radius: 0 !important;
+  overflow: hidden !important;
 }
