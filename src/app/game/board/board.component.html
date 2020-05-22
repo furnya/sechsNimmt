@@ -16,3 +16,6 @@
         </mat-toolbar>
     </mat-card>
 </div>
+<mat-toolbar color="warn" class="hint-container" [@showHideHint]="hintOpen ? 'open' : 'closed'">
+    <span>{{ hint }}</span>
+</mat-toolbar>

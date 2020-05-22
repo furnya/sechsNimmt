@@ -1,12 +1,15 @@
 <div class="cardRow">
   <div class="selectContainer">
     <button
-      mat-stroked-button
+      mat-flat-button
       class="selectButton"
       color="primary"
       (click)="onTakeRow()"
       *ngIf="canBeSelected()"
       [disabled]="!isYourTurn()"
+      [style.width.px]="getChooseButtonWidth()"
+      [style.height.px]="getChooseButtonHeight()"
+      [style.fontSize.px]="getChooseButtonFontSize()"
     >
       Reihe wählen
     </button>
@@ -22,6 +25,7 @@
     cdkDropListOrientation="horizontal"
     class="dropList"
     *ngIf="canDrop()"
+    [style.width.px]="getDropListWidth()"
   >
     <app-card *ngFor="let card of dropList" cdkDrag [id]="card"></app-card>
   </div>

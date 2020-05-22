@@ -1,4 +1,4 @@
-<mat-card [class]="'card'+' '+type" [style.backgroundColor]="backgroundColorBull(getBullAmount().length)" (click)="onCardSelected()">
+<mat-card [class]="'card'+' '+type" [style.backgroundColor]="backgroundColorBull(getBullAmount().length)" [style.width.px]="getCardWidth()" [style.height.px]="getCardHeight()" (click)="onCardSelected()">
     <div class="border-container" [ngClass]="{selectedInHand: isSelected, smallestCard: isSmallestCard && id !== -1}"></div>
     <div class="card__header">
         <!-- <p>
@@ -9,7 +9,7 @@
         </div>
     </div>
     <mat-card-content class="card__digits">
-        <p>
+        <p [style.fontSize.px]="getCardFontSize()">
             {{ id === -1 ? '?' : id }}
         </p>
     </mat-card-content>

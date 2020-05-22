@@ -1,13 +1,27 @@
 <div class="hand">
-    <mat-label *ngIf="yourTurn()">
-        Du bist dran. Lege deine Karte an
-    </mat-label>
-    <div class="rowAndButtons">
-        <div class="confirmContainer">
-            <button mat-stroked-button class="confirmButton" color="primary" (click)="onConfirmSelection()" [disabled]="selectedCard === 0 || !canSelect()">Auswahl bestätigen</button>
-        </div>
-        <div class="cardRow">
-            <app-card *ngFor="let i of cards" [id]="i" [isSelected]="i === selectedCard" [type]="'hand'" (cardSelected)="onCardSelected($event)"></app-card>
-        </div>
+  <div class="rowAndButtons">
+    <div class="confirmContainer">
+      <button
+        mat-flat-button
+        class="confirmButton"
+        color="primary"
+        (click)="onConfirmSelection()"
+        [disabled]="selectedCard === 0 || !canSelect()"
+        [style.width.px]="getChooseButtonWidth()"
+        [style.height.px]="getChooseButtonHeight()"
+        [style.fontSize.px]="getChooseButtonFontSize()"
+      >
+        Auswahl bestätigen
+      </button>
     </div>
+    <div class="cardRow">
+      <app-card
+        *ngFor="let i of cards"
+        [id]="i"
+        [isSelected]="i === selectedCard"
+        [type]="'hand'"
+        (cardSelected)="onCardSelected($event)"
+      ></app-card>
+    </div>
+  </div>
 </div>

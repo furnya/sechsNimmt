@@ -21,10 +21,9 @@
 }
 
 .confirmButton {
-    margin-right: 5px;
-    padding: 10px 0;
-    max-width: 80px;
-    height: 50px;
+    padding: 5%;
     white-space: pre-wrap !important;
     line-height: 1.2em;
+    margin-right: 5px;
+    min-width: unset;
 }

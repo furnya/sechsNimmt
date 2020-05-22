@@ -8,6 +8,7 @@ import { GameService } from '../game.service';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 import { GameState } from 'src/app/models/game.model';
 import { Subscription } from 'rxjs';
+import { DocumentService } from 'src/app/utils/document.service';
 
 @Component({
   selector: 'app-row',
@@ -21,15 +22,20 @@ export class RowComponent implements OnInit, OnDestroy {
   selectedCardDragLists: string[] = [];
   gameStateSub: Subscription;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private documentService: DocumentService
+  ) {}
 
   ngOnInit(): void {
-    this.gameStateSub = this.gameService.gameStateChanged.subscribe((gamestate: GameState) => {
-      this.cards = this.gameService.getRowCards(this.rowIndex);
-      this.selectedCardDragLists = gamestate.playerStates
-        .filter((ps) => ps.selectedCard !== 0)
-        .map((ps) => 'selectedCardDropList_' + ps.player.name);
-    });
+    this.gameStateSub = this.gameService.gameStateChanged.subscribe(
+      (gamestate: GameState) => {
+        this.cards = this.gameService.getRowCards(this.rowIndex);
+        this.selectedCardDragLists = gamestate.playerStates
+          .filter((ps) => ps.selectedCard !== 0)
+          .map((ps) => 'selectedCardDropList_' + ps.player.name);
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -67,5 +73,21 @@ export class RowComponent implements OnInit, OnDestroy {
 
   onTakeRow() {
     this.gameService.takeRow(this.rowIndex);
+  }
+
+  getDropListWidth() {
+    return this.documentService.cardWidth + (document.body.getBoundingClientRect().width / 100) - 2;
+  }
+
+  getChooseButtonWidth() {
+    return this.documentService.chooseButtonWidth;
+  }
+
+  getChooseButtonHeight() {
+    return this.documentService.chooseButtonHeight;
+  }
+
+  getChooseButtonFontSize() {
+    return this.documentService.chooseButtonFontSize;
   }
 }

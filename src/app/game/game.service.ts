@@ -253,6 +253,15 @@ export class GameService {
     }).hand;
   }
 
+  getSelectedCard(): number {
+    if (!(this.gameState && this.player)) {
+      return 0;
+    }
+    return this.gameState.playerStates.find((s) => {
+      return s.player.name === this.player.name;
+    }).selectedCard;
+  }
+
   getRowCards(rowIndex: number): number[] {
     if (!this.gameState) {
       return [];

@@ -3,6 +3,7 @@ import { GameService } from '../game.service';
 import { CARD_TYPE } from 'src/app/models/game.model';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DocumentService } from 'src/app/utils/document.service';
 
 @Component({
   selector: 'app-card',
@@ -19,7 +20,8 @@ export class CardComponent implements OnInit {
   constructor(
     private gameService: GameService,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private documentService: DocumentService
   ) {
     this.iconRegistry.addSvgIcon(
       'bull',
@@ -77,5 +79,17 @@ export class CardComponent implements OnInit {
 
   onCardSelected() {
     this.cardSelected.emit(this.id);
+  }
+
+  getCardWidth() {
+    return this.documentService.cardWidth;
+  }
+
+  getCardHeight() {
+    return this.documentService.cardHeight;
+  }
+
+  getCardFontSize() {
+    return this.documentService.cardFontSize;
   }
 }

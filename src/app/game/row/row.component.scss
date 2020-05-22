@@ -3,23 +3,22 @@
 }
 
 .selectButton {
-    height: 50px;
-    padding: 10px 0;
-    width: 80px;
+    padding: 5%;
     white-space: pre-wrap !important;
     line-height: 1.2em;
     margin-right: 5px;
+    min-width: unset;
 }
 
 .selectContainer {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    min-width: 80px;
+    // min-width: 80px;
 }
 
 .dropList {
-    width: calc(9vh + 1vw - 2px);
+    // width: calc(9vh + 1vw - 2px);
     border: solid 1px black;
     border-radius: 4px;
     display: flex;

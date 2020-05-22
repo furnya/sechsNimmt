@@ -30,7 +30,7 @@ export class CreateAndJoinComponent
   constructor(
     private roomCreationService: RoomCreationService,
     private errorSnackBar: MatSnackBar,
-    private ref: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
     private router: Router,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer
@@ -56,7 +56,7 @@ export class CreateAndJoinComponent
 
   ngAfterViewInit() {
     this.filteredOptions = this.getFilteredOptions();
-    this.ref.detectChanges();
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {

@@ -20,3 +20,12 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.hint-container {
+  position: fixed;
+  justify-content: center;
+  right: 0;
+  height: 6vh;
+  max-width: 50vw;
+  width: unset;
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../game.service';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { DocumentService } from 'src/app/utils/document.service';
 
 @Component({
   selector: 'app-hand',
@@ -12,7 +13,7 @@ export class HandComponent implements OnInit {
   cards: number[] = [];
   selectedCard = 0;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private documentService: DocumentService) { }
 
   ngOnInit(): void {
     this.gameService.gameStateChanged.subscribe(() => {
@@ -40,7 +41,15 @@ export class HandComponent implements OnInit {
     return this.gameService.canSelect();
   }
 
-  yourTurn() {
-    return this.gameService.isYourTurn();
+  getChooseButtonWidth() {
+    return this.documentService.chooseButtonWidth * 1.2;
+  }
+
+  getChooseButtonHeight() {
+    return this.documentService.chooseButtonHeight;
+  }
+
+  getChooseButtonFontSize() {
+    return this.documentService.chooseButtonFontSize;
   }
 }
