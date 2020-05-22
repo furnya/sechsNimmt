@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomCreationService } from '../room-creation.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-create-and-join',
@@ -29,8 +31,17 @@ export class CreateAndJoinComponent
     private roomCreationService: RoomCreationService,
     private errorSnackBar: MatSnackBar,
     private ref: ChangeDetectorRef,
-    private router: Router
-  ) {}
+    private router: Router,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
+    this.iconRegistry.addSvgIcon(
+      'sechsnimmt_logo',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '../../../assets/icons/logo.svg'
+      )
+    );
+  }
 
   ngOnInit(): void {
     this.roomCreationService.clearRoom();

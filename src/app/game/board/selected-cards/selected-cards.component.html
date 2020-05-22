@@ -3,7 +3,7 @@
     Ausgewählte Karten
   </mat-toolbar>
   <div class="selectedCardsContainer">
-    <p *ngIf="!playerStates || playerStates.length === 0">Keine Karten ausgewählt</p>
+    <span *ngIf="!playerStates || playerStates.length === 0" class="none-selected-label">Keine Karten ausgewählt</span>
     <div
       cdkDropList
       #selectedCardDropList="cdkDropList"
