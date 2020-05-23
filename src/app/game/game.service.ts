@@ -89,25 +89,13 @@ export class GameService {
   checkDisableSelecting() {
     if (this.player?.isHost && !this.gameState?.finished) {
       if (this.gameState?.choosingCards) {
-        let t = false;
-        this.gameState.playerStates.forEach((ps) => {
-          if (ps.selectedCard === 0) {
-            t = true;
-          }
-        });
-        if (t) {
+        if (!this.allCardSelected()) {
           return;
         }
         this.gameState.choosingCards = false;
         this.pushGameStateToDB();
       } else {
-        let t = true;
-        this.gameState.playerStates.forEach((ps) => {
-          if (ps.selectedCard !== 0) {
-            t = false;
-          }
-        });
-        if (!t) {
+        if (this.anyCardSelected()) {
           return;
         }
         this.gameState.choosingCards = true;
@@ -332,6 +320,14 @@ export class GameService {
 
   isChoosingCards(): boolean {
     return this.gameState?.choosingCards;
+  }
+
+  anyCardSelected(): boolean {
+    return !!this.gameState?.playerStates.find(ps => ps.selectedCard !== 0);
+  }
+
+  allCardSelected(): boolean {
+    return !this.gameState?.playerStates.find(ps => ps.selectedCard === 0);
   }
 
   isFinished(): boolean {

@@ -45,7 +45,8 @@ export class RowComponent implements OnInit, OnDestroy {
   canBeSelected(): boolean {
     return (
       this.gameService.getHightlightedRowIndex() === -1 &&
-      !this.gameService.isChoosingCards()
+      !this.gameService.isChoosingCards() &&
+      this.gameService.anyCardSelected()
     );
   }
 
