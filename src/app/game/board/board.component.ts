@@ -78,6 +78,7 @@ export class BoardComponent implements OnInit, OnDestroy {
               {
                 data: gameState,
                 disableClose: true,
+                panelClass: 'finished-dialog'
               }
             );
             this.dialogRef.afterClosed().subscribe((result) => {

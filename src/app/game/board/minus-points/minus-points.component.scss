@@ -44,6 +44,7 @@ mat-cell:first-child,
 [mat-header-cell]:first-child,
 mat-header-cell:first-child {
   border-left: 0;
+  border-right: 0;
 }
 
 [mat-cell]:last-child,
