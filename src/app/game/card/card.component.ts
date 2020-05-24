@@ -70,7 +70,7 @@ export class CardComponent implements OnInit {
       case 3:
         return '#ffca4b';
       case 5:
-        return '#ff3f69';
+        return '#ff6e8d';
       case 7:
         return '#9229ae';
     }
