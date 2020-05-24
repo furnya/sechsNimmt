@@ -4,14 +4,34 @@
     <div class="form-container">
       <mat-form-field class="form-container__input">
         <mat-label>Name</mat-label>
-        <input matInput #nameField name="playername" [(ngModel)]="playerName" cdkFocusInitial required/>
+        <input
+          matInput
+          #nameField
+          name="playername"
+          [(ngModel)]="playerName"
+          cdkFocusInitial
+          required
+          maxlength="16"
+        />
       </mat-form-field>
     </div>
     <div class="button-container">
-      <button mat-raised-button type="submit" class="join-button" [disabled]="enterNameForm.invalid">
+      <button
+        mat-raised-button
+        type="submit"
+        class="join-button"
+        [disabled]="enterNameForm.invalid"
+      >
         Beitreten
       </button>
-      <button mat-raised-button  color="warn" type="button" (click)="onReturnToHome()">Zurück zur Startseite</button>
+      <button
+        mat-raised-button
+        color="warn"
+        type="button"
+        (click)="onReturnToHome()"
+      >
+        Zurück zur Startseite
+      </button>
     </div>
   </form>
 </div>
