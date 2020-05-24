@@ -42,7 +42,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   dialogOpen = false;
   hintOpen = false;
   hint: string = null;
-  resizeTimeout: any;
 
   toggleHint() {
     this.hintOpen = !this.hintOpen;
@@ -53,9 +52,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     public finishedGameDialog: MatDialog,
     private router: Router,
-    private minusPointsBottomSheet: MatBottomSheet,
-    private cdr: ChangeDetectorRef,
-    private documentService: DocumentService
+    private minusPointsBottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit(): void {
@@ -102,16 +99,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     );
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.cdr.detectChanges();
-    if (this.resizeTimeout) {
-      clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = null;
-    }
-    this.resizeTimeout = setTimeout(() => this.documentService.recalculateSize(), 500);
   }
 
   canTakeRow(): boolean {
