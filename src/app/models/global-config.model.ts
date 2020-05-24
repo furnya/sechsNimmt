@@ -1,10 +1,14 @@
 import { GameOptions } from './game.model';
 
+export interface DbEnvironment {
+    dbBase: string;
+}
+
 export interface GlobalConfig {
     baseUrl: string;
-    dbQueuePath: string;
+    dbQueuePath: () => string;
     dbPlayerPath: string;
-    dbGamePath: string;
+    dbGamePath: () => string;
     dbGameStatePath: string;
     suffix: string;
     cardAmount: number;

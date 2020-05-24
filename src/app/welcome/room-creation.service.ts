@@ -122,7 +122,7 @@ export class RoomCreationService {
   }
 
   getQueueObservable(): Observable<any> {
-    return this.db.object(GLOBAL_CONFIG.dbQueuePath).valueChanges();
+    return this.db.object(GLOBAL_CONFIG.dbQueuePath()).valueChanges();
   }
 
   createRoom(roomId: string, hostPlayerName: string): Observable<string> {
@@ -151,7 +151,7 @@ export class RoomCreationService {
               exists = true;
             } else {
               this.db
-                .object(GLOBAL_CONFIG.dbGamePath + '/' + change.payload.key)
+                .object(GLOBAL_CONFIG.dbGamePath() + '/' + change.payload.key)
                 .remove();
             }
           }
@@ -161,7 +161,7 @@ export class RoomCreationService {
         }
         if (oldRoom) {
           this.db
-            .object(GLOBAL_CONFIG.dbQueuePath + '/' + oldRoom.dbKey)
+            .object(GLOBAL_CONFIG.dbQueuePath() + '/' + oldRoom.dbKey)
             .remove()
             .then(() => {
               this.pushNewRoom(roomId, hostPlayerName);
@@ -183,9 +183,9 @@ export class RoomCreationService {
       dbKey: null,
       options: JSON.parse(JSON.stringify(GLOBAL_CONFIG.defaultOptions)),
     };
-    this.db.list(GLOBAL_CONFIG.dbQueuePath).push(newRoom);
+    this.db.list(GLOBAL_CONFIG.dbQueuePath()).push(newRoom);
     this.db
-      .list(GLOBAL_CONFIG.dbQueuePath)
+      .list(GLOBAL_CONFIG.dbQueuePath())
       .snapshotChanges()
       .pipe(
         take(1),
@@ -207,7 +207,7 @@ export class RoomCreationService {
           }
           this.db
             .list(
-              GLOBAL_CONFIG.dbQueuePath +
+              GLOBAL_CONFIG.dbQueuePath() +
                 '/' +
                 changeKey +
                 '/' +
@@ -257,7 +257,7 @@ export class RoomCreationService {
     }
     this.db
       .list(
-        GLOBAL_CONFIG.dbQueuePath +
+        GLOBAL_CONFIG.dbQueuePath() +
           '/' +
           roomKey +
           '/' +
@@ -303,7 +303,7 @@ export class RoomCreationService {
       return;
     }
     this.db
-      .object(GLOBAL_CONFIG.dbQueuePath + '/' + this.joinedRoom.room.dbKey)
+      .object(GLOBAL_CONFIG.dbQueuePath() + '/' + this.joinedRoom.room.dbKey)
       .update({ started: true });
     this.gameService.createGameState(
       this.joinedRoom.room.id,
@@ -316,7 +316,7 @@ export class RoomCreationService {
       this.joinedRoom.room.options = JSON.parse(JSON.stringify(options));
       this.db
         .object(
-          GLOBAL_CONFIG.dbQueuePath +
+          GLOBAL_CONFIG.dbQueuePath() +
             '/' +
             this.joinedRoom.room.dbKey +
             '/' +
@@ -354,7 +354,7 @@ export class RoomCreationService {
     ) {
       this.db
         .object(
-          GLOBAL_CONFIG.dbQueuePath +
+          GLOBAL_CONFIG.dbQueuePath() +
             '/' +
             this.joinedRoom.room.dbKey +
             '/' +

@@ -52,10 +52,7 @@ export class GameService {
     this.player = JSON.parse(localStorage.getItem('player_' + this.gameId));
     this.gameStateSub = this.db
       .object(
-        GLOBAL_CONFIG.dbGamePath + '/' + this.gameKey
-        // +
-        // '/' +
-        // GLOBAL_CONFIG.dbGameStatePath
+        GLOBAL_CONFIG.dbGamePath() + '/' + this.gameKey
       )
       .valueChanges()
       .pipe(
@@ -122,7 +119,7 @@ export class GameService {
 
   setGameKey() {
     this.gameKeySub = this.db
-      .list(GLOBAL_CONFIG.dbGamePath)
+      .list(GLOBAL_CONFIG.dbGamePath())
       .snapshotChanges()
       .pipe(
         takeWhile(() => !this.gameKey),
@@ -159,7 +156,7 @@ export class GameService {
     this.startGame(gameId);
     if (!this.gameState && this.player && this.player.isHost) {
       this.db
-        .object(GLOBAL_CONFIG.dbQueuePath)
+        .object(GLOBAL_CONFIG.dbQueuePath())
         .valueChanges()
         .pipe(take(1))
         .subscribe((games) => {
@@ -192,7 +189,7 @@ export class GameService {
             options,
             created,
           };
-          this.db.list(GLOBAL_CONFIG.dbGamePath).push(game);
+          this.db.list(GLOBAL_CONFIG.dbGamePath()).push(game);
         });
     }
   }
@@ -260,7 +257,7 @@ export class GameService {
   pushGameStateToDB() {
     this.db
       .object(
-        GLOBAL_CONFIG.dbGamePath +
+        GLOBAL_CONFIG.dbGamePath() +
           '/' +
           this.gameKey +
           '/' +
@@ -388,7 +385,7 @@ export class GameService {
 
   getGamesObservable(): Observable<SnapshotAction<unknown>[]> {
     return this.db
-      .list(GLOBAL_CONFIG.dbGamePath)
+      .list(GLOBAL_CONFIG.dbGamePath())
       .snapshotChanges()
       .pipe(take(1));
   }

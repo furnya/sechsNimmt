@@ -1,4 +1,4 @@
-import { GlobalConfig } from '../models/global-config.model';
+import { GlobalConfig, DbEnvironment } from '../models/global-config.model';
 
 export const ENVIRONMENT = {
   production: false,
@@ -14,10 +14,14 @@ export const ENVIRONMENT = {
   },
 };
 
+export var DB_ENVIRONMENT: DbEnvironment = {
+  dbBase: 'PROD'
+};
+
 export const GLOBAL_CONFIG: GlobalConfig = {
   baseUrl: 'https://www.sechsnimmt.de',
-  dbQueuePath: 'queue',
-  dbGamePath: 'games',
+  dbQueuePath: function(){return DB_ENVIRONMENT.dbBase + '/' + 'queue';},
+  dbGamePath: function(){return DB_ENVIRONMENT.dbBase + '/' + 'games';},
   dbPlayerPath: 'players',
   suffix: '.json',
   cardAmount: 104,
