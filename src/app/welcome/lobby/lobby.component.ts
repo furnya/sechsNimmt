@@ -80,6 +80,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
           data: { roomId },
           closeOnNavigation: true,
           disableClose: true,
+          panelClass: 'enter-name-dialog'
         });
         dialogRef.afterClosed().subscribe((result) => {
           if (!result) {
