@@ -24,7 +24,7 @@ export class CreateAndJoinComponent
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
   queuedRoomIds: string[] = [];
   // filteredOptions: Observable<string[]>;
-  filteredOptions: string[];
+  filteredRoomIds: string[];
   queuedRoomsSubscription: Subscription;
 
   constructor(
@@ -49,13 +49,13 @@ export class CreateAndJoinComponent
     this.queuedRoomsSubscription = this.roomCreationService.queuedRoomsChanged.subscribe(
       (roomIds) => {
         this.setRoomIds(roomIds);
-        this.filteredOptions = this.getFilteredOptions();
+        this.filteredRoomIds = this.getFilteredOptions();
       }
     );
   }
 
   ngAfterViewInit() {
-    this.filteredOptions = this.getFilteredOptions();
+    this.filteredRoomIds = this.getFilteredOptions();
     this.cdr.detectChanges();
   }
 

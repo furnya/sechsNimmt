@@ -91,7 +91,7 @@ export class GameService {
         }
         this.gameState.choosingCards = true;
         this.gameState.round++;
-        if (this.gameState.round === GLOBAL_CONFIG.rounds + 1) {
+        if (this.gameState.round === this.options?.rounds.value + 1) {
           this.gameState.finished = true;
           this.gameState.choosingCards = false;
           this.gameState.playerStates.forEach(ps => {
@@ -167,6 +167,7 @@ export class GameService {
             if (games[key]?.id === gameId && games[key]?.players) {
               players = games[key]?.players;
               created = games[key].created;
+              this.options = games[key].options;
             }
           });
           const playersClone = JSON.parse(JSON.stringify(players));
@@ -234,14 +235,14 @@ export class GameService {
     gameState.playerStates?.forEach(ps => {
       ps.hand = [];
       ps.minusPoints = 0;
-      for (let j = 0; j < GLOBAL_CONFIG.rounds; j++) {
+      for (let j = 0; j < this.options?.rounds.value; j++) {
         const index = Math.floor(Math.random() * cards.length);
         ps.hand.push(cards[index]);
         cards.splice(index, 1);
       }
     });
     gameState.boardRows = [];
-    for (let i = 0; i < GLOBAL_CONFIG.rows; i++) {
+    for (let i = 0; i < this.options?.rows.value; i++) {
       gameState.boardRows.push([]);
       const index = Math.floor(Math.random() * cards.length);
       gameState.boardRows[i].push(cards[index]);

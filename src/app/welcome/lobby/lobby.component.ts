@@ -19,13 +19,12 @@ import { RoomCreationService } from '../room-creation.service';
 export class LobbyComponent implements OnInit, OnDestroy {
   @ViewChild('joinGameIdFormControl') joinGameIdFormControl: FormControl;
   queuedRoomIds: string[] = [];
-  filteredOptions: Observable<string[]>;
   queuedRoomsSubscription: Subscription;
   joinedRoomSubscription: Subscription;
   joinedRoom: JoinedRoom = null;
   inviteLink = '';
   options: GameOptions;
-  isActiveInterval;
+  isActiveInterval: any;
 
   constructor(
     private roomCreationService: RoomCreationService,
@@ -132,10 +131,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
         panelClass: 'snackbar-center-text',
       });
     }
-    var el = document.getElementById('inviteLinkInput');
-    var range = document.createRange();
+    const el = document.getElementById('inviteLinkInput');
+    const range = document.createRange();
     range.selectNodeContents(el);
-    var sel = window.getSelection();
+    const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
   }

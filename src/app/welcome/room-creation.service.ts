@@ -131,7 +131,7 @@ export class RoomCreationService {
         setTimeout(() => {
           observer.next('Ein Spiel mit dieser ID existiert schon!');
         }, 1);
-      })
+      });
     }
     const oldRoom = this.queuedRooms.find((r) => r.id === roomId);
     return this.gameService.getGamesObservable().pipe(

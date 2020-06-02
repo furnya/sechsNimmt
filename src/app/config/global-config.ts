@@ -33,8 +33,6 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   urlGamePath: 'game',
   urlWelcomePath: 'welcome',
   urlJoinPath: 'join',
-  rounds: 10,
-  rows: 5,
   maxCardsInRow: 5,
   urlNotFoundPath: 'not-found',
   dbOptionsPath: 'options',
@@ -45,6 +43,16 @@ export const GLOBAL_CONFIG: GlobalConfig = {
     hideMinusPoints: {
       value: false,
       text: 'Minuspunkte anderer Spieler ausblenden'
+    },
+    rounds: {
+      value: 10,
+      text: 'Anzahl Runden',
+      possibleValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    rows: {
+      value: 5,
+      text: 'Anzahl Reihen',
+      possibleValues: [1, 2, 3, 4, 5]
     }
   },
 };

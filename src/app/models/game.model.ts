@@ -15,9 +15,13 @@ export interface JoinedRoom {
 export interface GameOption<T> {
   value: T;
   text: string;
+  possibleValues?: T[];
 }
+
 export interface GameOptions {
   hideMinusPoints: GameOption<boolean>;
+  rows: GameOption<number>;
+  rounds: GameOption<number>;
 }
 
 export interface Player {

@@ -6,10 +6,10 @@
   </mat-toolbar>
   <div class="lobbyContainer__main">
     <mat-card class="lobbyContainer__main__list">
+      <mat-toolbar color="primary" class="toolbar-justify-content-center"
+        >Spieler</mat-toolbar
+      >
       <mat-card-content>
-        <mat-toolbar color="primary" class="toolbar-justify-content-center"
-          >Spieler</mat-toolbar
-        >
         <mat-list role="list" class="player-list">
           <mat-list-item
             role="listitem"
@@ -34,11 +34,11 @@
       </mat-card-content>
     </mat-card>
     <mat-card class="lobbyContainer__main__options">
-      <mat-card-content>
-        <mat-toolbar color="accent" class="toolbar-justify-content-center"
-          >Optionen</mat-toolbar
-        >
-        <section class="lobbyContainer__main__options__content">
+      <mat-toolbar color="accent" class="toolbar-justify-content-center"
+        >Optionen</mat-toolbar
+      >
+      <mat-card-content class="lobbyContainer__main__options__content">
+        <!-- <section class="lobbyContainer__main__options__content"> -->
           <mat-slide-toggle
             color="accent"
             (change)="onChangeOptions()"
@@ -46,8 +46,21 @@
             [disabled]="!joinedRoom?.player.isHost"
           >
             <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
+            <!-- {{ options.hideMinusPoints.text }} -->
           </mat-slide-toggle>
-        </section>
+          <mat-form-field>
+            <mat-label>{{ options.rows.text }}</mat-label>
+            <mat-select (selectionChange)="onChangeOptions()" [(ngModel)]="options.rows.value" [disabled]="!joinedRoom?.player.isHost">
+              <mat-option *ngFor="let option of options.rows.possibleValues" [value]="option">{{ option }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{ options.rounds.text }}</mat-label>
+            <mat-select (selectionChange)="onChangeOptions()" [(ngModel)]="options.rounds.value" [disabled]="!joinedRoom?.player.isHost">
+              <mat-option *ngFor="let option of options.rounds.possibleValues" [value]="option">{{ option }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <!-- </section> -->
       </mat-card-content>
     </mat-card>
   </div>

@@ -19,21 +19,47 @@
   &__main {
     display: flex;
     height: calc(100% - 176px);
+    overflow: hidden;
 
     &__list {
-      width: 60%;
+      min-width: 60%;
+      flex: 1 1 auto;
       max-height: 100%;
       overflow: hidden;
       padding: 0;
       border-radius: unset;
+
+      > mat-card-content {
+        max-height: calc(100% - 64px);
+        overflow: auto;
+      }
     }
 
     &__options {
       width: 40%;
+      max-width: 400px;
       padding: 0;
 
       &__content {
-        margin: 10px !important;
+        max-height: calc(100% - 64px);
+        padding: 10px;
+        box-sizing: border-box;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
+        overflow: auto;
+
+        > * {
+          margin-bottom: 10px;
+        }
+
+        mat-form-field {
+          width: 100%;
+          font-size: 20px;
+          padding: 0 20px;
+          box-sizing: border-box;
+        }
       }
     }
   }
@@ -55,9 +81,8 @@
 }
 
 .footer {
-
   border-radius: inherit;
-  
+
   &__row-2 {
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
@@ -94,7 +119,8 @@
 
 .player-list {
   max-height: 100%;
-  overflow: auto;
+  box-sizing: border-box;
+  overflow: hidden;
 
   &__item:nth-child(even) {
     background-color: #ccc;

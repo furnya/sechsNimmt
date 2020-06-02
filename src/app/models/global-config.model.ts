@@ -19,8 +19,6 @@ export interface GlobalConfig {
     urlWelcomePath: string;
     urlGamePath: string;
     urlJoinPath: string;
-    rounds: number;
-    rows: number;
     maxCardsInRow: number;
     urlNotFoundPath: string;
     maxLobbyAgeInMilliseconds: number;

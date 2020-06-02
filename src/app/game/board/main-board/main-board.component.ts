@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { GameService } from '../../game.service';
 
 @Component({
   selector: 'app-main-board',
@@ -8,12 +9,16 @@ import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 })
 export class MainBoardComponent implements OnInit {
 
-  constructor() { }
-
-  rows: number[] = [];
+  constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
-    this.rows = Array.from(Array(GLOBAL_CONFIG.rows).keys());
+  }
+
+  get rows() {
+    const rowCount = this.gameService.options
+      ? this.gameService.options.rows.value
+      : GLOBAL_CONFIG.defaultOptions.rows.value;
+    return Array.from(Array(rowCount).keys());
   }
 
 }
