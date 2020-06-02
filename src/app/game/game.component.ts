@@ -8,7 +8,7 @@ import { DocumentService } from '../utils/document.service';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  
+
   resizeTimeout: any;
   loading = false;
 
@@ -17,7 +17,9 @@ export class GameComponent implements OnInit {
     private documentService: DocumentService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onResize();
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize() {

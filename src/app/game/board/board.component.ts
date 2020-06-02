@@ -12,6 +12,7 @@ import { DocumentService } from 'src/app/utils/document.service';
 
 const YOUR_TURN_PUT_HINT = 'Du bist am Zug. Lege deine Karte an!';
 const YOUR_TURN_TAKE_HINT = 'Du bist am Zug. Wähle eine Reihe aus!';
+const NOT_YOUR_TURN_HINT = ' ist am Zug.';
 const CHOOSE_HINT = 'Wähle eine Karte aus!';
 
 @Component({
@@ -96,6 +97,9 @@ export class BoardComponent implements OnInit, OnDestroy {
           } else {
             this.hint = YOUR_TURN_PUT_HINT;
           }
+        } else if (!gameState.choosingCards && this.gameService.getTurnPlayerName()) {
+          this.hintOpen = true;
+          this.hint = this.gameService.getTurnPlayerName() + NOT_YOUR_TURN_HINT;
         } else {
           this.hintOpen = false;
         }

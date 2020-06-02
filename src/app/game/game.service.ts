@@ -360,6 +360,13 @@ export class GameService {
     );
   }
 
+  getTurnPlayerName(): string {
+    const smallestCard = this.getSmallestSelectedCard();
+    return this.gameState?.playerStates.find(ps => {
+      return ps.selectedCard === smallestCard;
+    })?.player.name;
+  }
+
   canSelect(): boolean {
     return (
       this.gameState?.playerStates[this.playerIndex].selectedCard === 0 &&
