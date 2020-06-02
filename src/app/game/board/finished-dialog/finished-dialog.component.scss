@@ -18,18 +18,23 @@
 
   .button-container {
     width: 100%;
-    padding: 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
 
     // .return-home-button {
     // }
+
+    .start-new-game-button {
+      background-color: #00ff00;
+    }
   }
 }
 
 ::ng-deep.finished-dialog {
   mat-dialog-container {
-    min-width: 300px;
+    min-width: 450px;
     width: 30vw;
     max-height: 80vh;
     overflow: hidden;
@@ -67,7 +72,9 @@ mat-header-cell:last-child {
 [mat-header-cell],
 mat-header-cell {
   font-size: 24px;
+  line-height: 24px;
   justify-content: center;
+  text-align: center;
   padding-left: 12px !important;
   padding-right: 12px !important;
 }
@@ -81,6 +88,10 @@ mat-cell {
   // overflow: hidden;
   text-overflow: ellipsis;
   // white-space: nowrap;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .alignRight {

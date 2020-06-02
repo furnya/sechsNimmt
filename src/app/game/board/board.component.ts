@@ -83,6 +83,8 @@ export class BoardComponent implements OnInit, OnDestroy {
               this.dialogRef = null;
             });
           }
+        } else {
+          this.finishedGameDialog.closeAll();
         }
         if (gameState.choosingCards && this.gameService.getSelectedCard() === 0) {
           this.hintOpen = true;

@@ -6,13 +6,19 @@
       <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="minusPoints">
-      <mat-header-cell *matHeaderCellDef>Minuspunkte</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Minuspunkte diese Runde</mat-header-cell>
       <mat-cell *matCellDef="let element" class="alignRight">{{ element.minusPoints }}</mat-cell>
     </ng-container>
-    <mat-header-row *matHeaderRowDef="['name', 'minusPoints']; sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: ['name', 'minusPoints']"></mat-row>
+    <ng-container matColumnDef="totalMinusPoints">
+      <mat-header-cell *matHeaderCellDef>Minuspunkte gesamt</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="alignRight">{{ element.totalMinusPoints }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="['name', 'minusPoints', 'totalMinusPoints']; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['name', 'minusPoints', 'totalMinusPoints']"></mat-row>
     </mat-table>
   <div class="button-container">
-    <button mat-raised-button color="primary" matDialogClose (click)="onReturnToHome()" class="return-home-button">Zur Startseite zurückkehren</button>
+    <button mat-raised-button color="primary" matDialogClose (click)="onStartNewGame()" class="start-new-game-button" [disabled]="!isHost">Weiteres Spiel starten</button>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="onReturnToHome()" class="return-home-button">Zur Startseite zurückkehren</button>
   </div>
 </div>

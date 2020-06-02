@@ -14,14 +14,14 @@ export const ENVIRONMENT = {
   },
 };
 
-export var DB_ENVIRONMENT: DbEnvironment = {
+export let DB_ENVIRONMENT: DbEnvironment = {
   dbBase: 'PROD'
 };
 
 export const GLOBAL_CONFIG: GlobalConfig = {
   baseUrl: 'https://www.sechsnimmt.de',
-  dbQueuePath: function(){return DB_ENVIRONMENT.dbBase + '/' + 'queue';},
-  dbGamePath: function(){return DB_ENVIRONMENT.dbBase + '/' + 'games';},
+  dbQueuePath(){return DB_ENVIRONMENT.dbBase + '/' + 'queue'; },
+  dbGamePath(){return DB_ENVIRONMENT.dbBase + '/' + 'games'; },
   dbPlayerPath: 'players',
   suffix: '.json',
   cardAmount: 104,

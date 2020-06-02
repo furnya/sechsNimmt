@@ -305,7 +305,7 @@ export class RoomCreationService {
     this.db
       .object(GLOBAL_CONFIG.dbQueuePath() + '/' + this.joinedRoom.room.dbKey)
       .update({ started: true });
-    this.gameService.createGameState(
+    this.gameService.pushNewGameState(
       this.joinedRoom.room.id,
       this.joinedRoom.room.options
     );

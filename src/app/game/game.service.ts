@@ -2,15 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, take, tap, takeUntil, takeWhile } from 'rxjs/operators';
+import { map, take, takeWhile, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
-import {
-  Game,
-  GameOptions,
-  GameState,
-  Player,
-  PlayerState,
-} from '../models/game.model';
+import { Game, GameOptions, GameState, Player, PlayerState } from '../models/game.model';
 import { playerIsActive } from '../welcome/filter-is-active.pipe';
 
 @Injectable({
@@ -100,6 +94,9 @@ export class GameService {
         if (this.gameState.round === GLOBAL_CONFIG.rounds + 1) {
           this.gameState.finished = true;
           this.gameState.choosingCards = false;
+          this.gameState.playerStates.forEach(ps => {
+            ps.totalMinusPoints += ps.minusPoints;
+          });
         }
         this.pushGameStateToDB();
       }
@@ -152,7 +149,7 @@ export class GameService {
     this.setGameKey();
   }
 
-  createGameState(gameId: string, options: GameOptions) {
+  pushNewGameState(gameId: string, options: GameOptions) {
     this.startGame(gameId);
     if (!this.gameState && this.player && this.player.isHost) {
       this.db
@@ -181,7 +178,8 @@ export class GameService {
               delete playersClone[key];
             }
           });
-          const gameState = this.distributeCards(playerArray);
+          let gameState = this.createNewGameState(playerArray);
+          gameState = this.distributeCards(gameState);
           const game: Game = {
             id: gameId,
             players: playersClone,
@@ -194,32 +192,18 @@ export class GameService {
     }
   }
 
-  distributeCards(players: Player[]): GameState {
-    const cards = Array.from(Array(GLOBAL_CONFIG.cardAmount + 1).keys()).slice(
-      1
-    );
+  createNewGameState(players: Player[]): GameState {
     const playerStates: PlayerState[] = [];
-    for (let i = 0; i < players.length; i++) {
+    players.forEach(player => {
       playerStates.push({
         hand: [],
         minusPoints: 0,
+        totalMinusPoints: 0,
         selectedCard: 0,
-        player: null,
+        player,
       });
-      for (let j = 0; j < GLOBAL_CONFIG.rounds; j++) {
-        const index = Math.floor(Math.random() * cards.length);
-        playerStates[i].hand.push(cards[index]);
-        cards.splice(index, 1);
-      }
-      playerStates[i].player = players[i];
-    }
+    });
     const boardRows: number[][] = [];
-    for (let i = 0; i < GLOBAL_CONFIG.rows; i++) {
-      boardRows.push([]);
-      const index = Math.floor(Math.random() * cards.length);
-      boardRows[i].push(cards[index]);
-      cards.splice(index, 1);
-    }
     return {
       boardRows,
       playerStates,
@@ -227,6 +211,43 @@ export class GameService {
       round: 1,
       finished: false,
     };
+  }
+
+  startAnotherGame() {
+    if (this.player?.isHost) {
+      this.gameState = this.distributeCards(this.gameState);
+      this.gameState.finished = false;
+      this.gameState.round = 1;
+      this.gameState.choosingCards = true;
+      this.pushGameStateToDB();
+    }
+  }
+
+  distributeCards(gameState: GameState): GameState {
+    if (!gameState) {
+      return;
+    }
+    const cards = Array.from(Array(GLOBAL_CONFIG.cardAmount + 1).keys()).slice(
+      1
+    );
+    const playerStates: PlayerState[] = [];
+    gameState.playerStates?.forEach(ps => {
+      ps.hand = [];
+      ps.minusPoints = 0;
+      for (let j = 0; j < GLOBAL_CONFIG.rounds; j++) {
+        const index = Math.floor(Math.random() * cards.length);
+        ps.hand.push(cards[index]);
+        cards.splice(index, 1);
+      }
+    });
+    gameState.boardRows = [];
+    for (let i = 0; i < GLOBAL_CONFIG.rows; i++) {
+      gameState.boardRows.push([]);
+      const index = Math.floor(Math.random() * cards.length);
+      gameState.boardRows[i].push(cards[index]);
+      cards.splice(index, 1);
+    }
+    return gameState;
   }
 
   getHandCards(): number[] {
