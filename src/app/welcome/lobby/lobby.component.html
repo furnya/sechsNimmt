@@ -39,27 +39,70 @@
       >
       <mat-card-content class="lobbyContainer__main__options__content">
         <!-- <section class="lobbyContainer__main__options__content"> -->
-          <mat-slide-toggle
-            color="accent"
-            (change)="onChangeOptions()"
-            [(ngModel)]="options.hideMinusPoints.value"
+        <mat-slide-toggle
+          color="accent"
+          (change)="onChangeOptions()"
+          [(ngModel)]="options.hideMinusPoints.value"
+          [disabled]="!joinedRoom?.player.isHost"
+        >
+          <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
+          <!-- {{ options.hideMinusPoints.text }} -->
+        </mat-slide-toggle>
+        <mat-form-field>
+          <mat-label>{{ options.rows.text }}</mat-label>
+          <mat-select
+            (selectionChange)="onChangeOptions()"
+            [(ngModel)]="options.rows.value"
             [disabled]="!joinedRoom?.player.isHost"
           >
-            <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
-            <!-- {{ options.hideMinusPoints.text }} -->
-          </mat-slide-toggle>
-          <mat-form-field>
-            <mat-label>{{ options.rows.text }}</mat-label>
-            <mat-select (selectionChange)="onChangeOptions()" [(ngModel)]="options.rows.value" [disabled]="!joinedRoom?.player.isHost">
-              <mat-option *ngFor="let option of options.rows.possibleValues" [value]="option">{{ option }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>{{ options.rounds.text }}</mat-label>
-            <mat-select (selectionChange)="onChangeOptions()" [(ngModel)]="options.rounds.value" [disabled]="!joinedRoom?.player.isHost">
-              <mat-option *ngFor="let option of options.rounds.possibleValues" [value]="option">{{ option }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-option
+              *ngFor="let option of options.rows.possibleValues"
+              [value]="option"
+              >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ options.rounds.text }}</mat-label>
+          <mat-select
+            (selectionChange)="onChangeOptions()"
+            [(ngModel)]="options.rounds.value"
+            [disabled]="!joinedRoom?.player.isHost"
+          >
+            <mat-option
+              *ngFor="let option of options.rounds.possibleValues"
+              [value]="option"
+              >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ options.maxPlayers.text }}</mat-label>
+          <mat-select
+            (selectionChange)="onChangeOptions()"
+            [(ngModel)]="options.maxPlayers.value"
+            [disabled]="!joinedRoom?.player.isHost"
+          >
+            <mat-option
+              *ngFor="let option of maxPlayersPossibleValues"
+              [value]="option"
+              >{{ option }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ options.cards.text }}</mat-label>
+          <input
+            matInput
+            (change)="onCardsChanged($event)"
+            type="number"
+            name="cardsOption"
+            [disabled]="!joinedRoom?.player.isHost"
+            #cardsFormControl
+            min="1"
+            max="999"
+          />
+        </mat-form-field>
         <!-- </section> -->
       </mat-card-content>
     </mat-card>
@@ -74,7 +117,7 @@
         mat-raised-button
         class="start-game-button"
         (click)="onStartGame()"
-        [disabled]="!joinedRoom?.player.isHost"
+        [disabled]="!joinedRoom?.player.isHost || disableStart()"
       >
         Spiel starten
       </button>
@@ -111,3 +154,6 @@
     </mat-toolbar-row>
   </mat-toolbar>
 </mat-card>
+<mat-toolbar color="warn" class="hint-container" [@showHideHint]="hintOpen ? 'open' : 'closed'">
+  <span>{{ hint }}</span>
+</mat-toolbar>

@@ -228,7 +228,7 @@ export class GameService {
     if (!gameState) {
       return;
     }
-    const cards = Array.from(Array(GLOBAL_CONFIG.cardAmount + 1).keys()).slice(
+    const cards = Array.from(Array(this.options?.cards.value + 1).keys()).slice(
       1
     );
     const playerStates: PlayerState[] = [];

@@ -22,6 +22,8 @@ export interface GameOptions {
   hideMinusPoints: GameOption<boolean>;
   rows: GameOption<number>;
   rounds: GameOption<number>;
+  maxPlayers: GameOption<number>;
+  cards: GameOption<number>;
 }
 
 export interface Player {

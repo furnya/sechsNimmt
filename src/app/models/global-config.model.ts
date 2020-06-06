@@ -11,7 +11,6 @@ export interface GlobalConfig {
     dbGamePath: () => string;
     dbGameStatePath: string;
     suffix: string;
-    cardAmount: number;
     dbPlayerStatesPath: string;
     dbHandPath: string;
     dbMinusPointsPath: string;
@@ -26,4 +25,5 @@ export interface GlobalConfig {
     defaultOptions: GameOptions;
     dbOptionsPath: string;
     activeTimeoutInMilliseconds: number;
+    globalMaxPlayers: number;
 }

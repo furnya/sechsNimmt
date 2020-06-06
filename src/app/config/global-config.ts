@@ -24,7 +24,6 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   dbGamePath(){return DB_ENVIRONMENT.dbBase + '/' + 'games'; },
   dbPlayerPath: 'players',
   suffix: '.json',
-  cardAmount: 104,
   dbGameStatePath: 'gameState',
   dbPlayerStatesPath: 'playerStates',
   dbHandPath: 'hand',
@@ -39,6 +38,7 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   maxLobbyAgeInMilliseconds: 3600000,
   maxGameAgeInMilliseconds: 3600000 * 24,
   activeTimeoutInMilliseconds: 3000,
+  globalMaxPlayers: 10,
   defaultOptions: {
     hideMinusPoints: {
       value: false,
@@ -50,9 +50,17 @@ export const GLOBAL_CONFIG: GlobalConfig = {
       possibleValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
     rows: {
-      value: 5,
+      value: 4,
       text: 'Anzahl Reihen',
       possibleValues: [1, 2, 3, 4, 5]
+    },
+    maxPlayers: {
+      value: 10,
+      text: 'Maximale Spieler'
+    },
+    cards: {
+      value: 104,
+      text: 'Anzahl Karten'
     }
   },
 };

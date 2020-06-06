@@ -6,6 +6,7 @@ import { map, take, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
 import { GameService } from '../game/game.service';
 import { GameOptions, JoinedRoom, Player, Room } from '../models/game.model';
+import { filterActivePlayers } from './filter-is-active.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -254,6 +255,11 @@ export class RoomCreationService {
     }
     if (this.getRoomPlayers(roomId)?.find((p) => p.name === playerName)) {
       return 'Ein Spieler mit diesem Namen existiert schon!';
+    }
+    const players = filterActivePlayers(this.getRoomPlayers(roomId));
+    const playerCount = players ? players.length : 0;
+    if (playerCount >= this.getRoom(roomId)?.options.maxPlayers.value) {
+      return 'Dieses Spiel ist bereits voll!';
     }
     this.db
       .list(
