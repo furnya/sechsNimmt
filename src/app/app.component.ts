@@ -20,6 +20,18 @@ export class AppComponent implements OnInit {
         '../../../assets/icons/logo.svg'
       )
     );
+    this.iconRegistry.addSvgIcon(
+      'bull',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '../../../assets/icons/ochse_gerade.svg'
+      )
+    );
+    this.iconRegistry.addSvgIcon(
+      'bull_background',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '../../../assets/icons/ochse_gerade_background.svg'
+      )
+    );
   }
 
   ngOnInit() {

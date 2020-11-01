@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { GameService } from '../game.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CARD_TYPE } from 'src/app/models/game.model';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { DocumentService } from 'src/app/utils/document.service';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-card',
@@ -19,23 +17,8 @@ export class CardComponent implements OnInit {
 
   constructor(
     private gameService: GameService,
-    private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer,
     private documentService: DocumentService
-  ) {
-    this.iconRegistry.addSvgIcon(
-      'bull',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/icons/ochse_gerade.svg'
-      )
-    );
-    this.iconRegistry.addSvgIcon(
-      'bull_background',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/icons/ochse_gerade_background.svg'
-      )
-    );
-  }
+  ) {}
 
   ngOnInit(): void {
   }
