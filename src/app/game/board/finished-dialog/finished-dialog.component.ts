@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 import { GameState, PlayerState } from 'src/app/models/game.model';
@@ -16,11 +18,16 @@ export class FinishedDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: GameState,
     private router: Router,
     private gameService: GameService
-  ) {
-  }
+  ) {}
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit(): void {
+    this.sort.sort({
+      id: 'minusPoints',
+      start: 'asc',
+      disableClear: false
+    });
   }
 
   ngOnDestroy() {
@@ -30,9 +37,11 @@ export class FinishedDialogComponent implements OnInit, OnDestroy {
     return this.gameService.player?.isHost;
   }
 
-  getSortedPlayerStates(): PlayerState[] {
-    const playerStates = JSON.parse(JSON.stringify(this.data.playerStates));
-    return playerStates?.sort((a: PlayerState, b: PlayerState) => a.minusPoints - b.minusPoints);
+  getSortedPlayerStates(): MatTableDataSource<PlayerState> {
+    const playerStates: PlayerState[] = JSON.parse(JSON.stringify(this.data.playerStates));
+    const playerStatesDataSource: MatTableDataSource<PlayerState> = new MatTableDataSource(playerStates);
+    playerStatesDataSource.sort = this.sort;
+    return playerStatesDataSource;
   }
 
   getWinnerMessage() {

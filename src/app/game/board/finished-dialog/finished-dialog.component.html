@@ -1,16 +1,16 @@
 <div class="finished-game-container">
   <mat-toolbar color="primary">Spiel beendet. {{ getWinnerMessage() }}</mat-toolbar>
-  <mat-table [dataSource]="getSortedPlayerStates()">
+  <mat-table [dataSource]="getSortedPlayerStates()" matSort>
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
       <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="minusPoints">
-      <mat-header-cell *matHeaderCellDef>Minuspunkte diese Runde</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Minuspunkte diese Runde</mat-header-cell>
       <mat-cell *matCellDef="let element" class="alignRight">{{ element.minusPoints }}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="totalMinusPoints">
-      <mat-header-cell *matHeaderCellDef>Minuspunkte gesamt</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Minuspunkte gesamt</mat-header-cell>
       <mat-cell *matCellDef="let element" class="alignRight">{{ element.totalMinusPoints }}</mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="['name', 'minusPoints', 'totalMinusPoints']; sticky: true"></mat-header-row>
