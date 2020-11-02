@@ -61,6 +61,15 @@ export const GLOBAL_CONFIG: GlobalConfig = {
     cards: {
       value: 104,
       text: 'Anzahl Karten'
+    },
+    maxThinkingTime: {
+      value: 60,
+      text: 'Maximale Zeit zum Nachdenken',
+      possibleValues: [10, 20, 30, 60, 90, 120, 180]
+    },
+    thinkingTimeoutDisabled: {
+      value: true,
+      text: 'Unendlich Zeit zum Nachdenken'
     }
   },
 };

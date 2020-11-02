@@ -16,6 +16,11 @@
         </mat-toolbar>
     </mat-card>
 </div>
-<mat-toolbar color="warn" class="hint-container" [@showHideHint]="hintOpen ? 'open' : 'closed'">
-    <span>{{ hint }}</span>
-</mat-toolbar>
+<div class="hint-container" [@showHideHint]="hintOpen ? 'open' : 'closed'">
+    <mat-toolbar color="warn">
+        <span>{{ hint }}</span>
+    </mat-toolbar>
+    <mat-toolbar color="accent" *ngIf="showTimeout">
+        <span>{{ 'Zeit übrig: ' + timeLeftString }}</span>
+    </mat-toolbar>
+</div>

@@ -277,7 +277,7 @@ export class GameService {
   }
 
   pushGameStateToDB() {
-    this.db
+    return this.db
       .object(
         GLOBAL_CONFIG.dbGamePath() +
           '/' +
@@ -294,7 +294,7 @@ export class GameService {
       1
     );
     this.gameState.playerStates[this.playerIndex].selectedCard = card;
-    this.pushGameStateToDB();
+    return this.pushGameStateToDB();
   }
 
   putCardInRow(rowIndex: number) {

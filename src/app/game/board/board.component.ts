@@ -9,6 +9,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MinusPointsComponent } from './minus-points/minus-points.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DocumentService } from 'src/app/utils/document.service';
+import { timeout } from 'rxjs/operators';
 
 const YOUR_TURN_PUT_HINT = 'Du bist am Zug. Lege deine Karte an!';
 const YOUR_TURN_TAKE_HINT = 'Du bist am Zug. Wähle eine Reihe aus!';
@@ -43,6 +44,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   dialogOpen = false;
   hintOpen = false;
   hint: string = null;
+  showTimeout = false;
+  timeout;
+  timeoutInterval;
+  timeLeft = 0;
+  get timeLeftString() {
+    return Math.floor(this.timeLeft / 60) + ':' + (this.timeLeft % 60 < 10 ? '0' + this.timeLeft % 60 : this.timeLeft % 60);
+  }
+  shouldSelectRandomCard = false;
 
   toggleHint() {
     this.hintOpen = !this.hintOpen;
@@ -90,18 +99,46 @@ export class BoardComponent implements OnInit, OnDestroy {
         if (gameState.choosingCards && this.gameService.getSelectedCard() === 0) {
           this.hintOpen = true;
           this.hint = CHOOSE_HINT;
-        } else if (this.gameService.isYourTurn()) {
-          this.hintOpen = true;
-          if (this.canTakeRow()) {
-            this.hint = YOUR_TURN_TAKE_HINT;
-          } else {
-            this.hint = YOUR_TURN_PUT_HINT;
+          if (this.shouldSelectRandomCard) {
+            const cardIndex = Math.floor(Math.random() * this.gameService.getHandCards().length);
+            this.gameService.selectCard(this.gameService.getHandCards()[cardIndex]);
+          } else if (!this.timeout && !this.gameService.options.thinkingTimeoutDisabled.value) {
+            this.showTimeout = true;
+            this.timeLeft = this.gameService.options.maxThinkingTime.value;
+            this.timeoutInterval = setInterval(() => {
+              this.timeLeft--;
+            }, 1000);
+            this.timeout = setTimeout(() => {
+              this.shouldSelectRandomCard = true;
+              this.showTimeout = false;
+              clearInterval(this.timeoutInterval);
+              const cardIndex = Math.floor(Math.random() * this.gameService.getHandCards().length);
+              this.gameService.selectCard(this.gameService.getHandCards()[cardIndex]).then(() => {
+                this.shouldSelectRandomCard = true;
+              });
+            }, this.gameService.options.maxThinkingTime.value * 1000);
           }
-        } else if (!gameState.choosingCards && this.gameService.getTurnPlayerName()) {
-          this.hintOpen = true;
-          this.hint = this.gameService.getTurnPlayerName() + NOT_YOUR_TURN_HINT;
         } else {
-          this.hintOpen = false;
+          if (!this.gameService.options.thinkingTimeoutDisabled.value) {
+            this.shouldSelectRandomCard = false;
+            this.showTimeout = false;
+            clearInterval(this.timeoutInterval);
+            clearTimeout(this.timeout);
+            this.timeout = null;
+          }
+          if (this.gameService.isYourTurn()) {
+            this.hintOpen = true;
+            if (this.canTakeRow()) {
+              this.hint = YOUR_TURN_TAKE_HINT;
+            } else {
+              this.hint = YOUR_TURN_PUT_HINT;
+            }
+          } else if (!gameState.choosingCards && this.gameService.getTurnPlayerName()) {
+            this.hintOpen = true;
+            this.hint = this.gameService.getTurnPlayerName() + NOT_YOUR_TURN_HINT;
+          } else {
+            this.hintOpen = false;
+          }
         }
       }
     );

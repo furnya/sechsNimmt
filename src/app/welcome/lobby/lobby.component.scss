@@ -44,6 +44,7 @@
         max-height: calc(100% - 64px);
         padding: 10px;
         box-sizing: border-box;
+        text-align: left;
         // display: flex;
         // flex-direction: column;
         // justify-content: center;
@@ -57,7 +58,7 @@
         mat-form-field {
           width: 100%;
           font-size: 20px;
-          padding: 0 20px;
+          padding: 0;
           box-sizing: border-box;
         }
       }

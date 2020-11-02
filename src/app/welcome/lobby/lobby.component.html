@@ -48,6 +48,29 @@
           <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
           <!-- {{ options.hideMinusPoints.text }} -->
         </mat-slide-toggle>
+        <mat-slide-toggle
+          color="accent"
+          (change)="onChangeOptions()"
+          [(ngModel)]="options.thinkingTimeoutDisabled.value"
+          [disabled]="!joinedRoom?.player.isHost"
+        >
+          <span class="breakWords">{{ options.thinkingTimeoutDisabled.text }}</span>
+          <!-- {{ options.hideMinusPoints.text }} -->
+        </mat-slide-toggle>
+        <mat-form-field>
+          <mat-label>{{ options.maxThinkingTime.text }}</mat-label>
+          <mat-select
+            (selectionChange)="onChangeOptions()"
+            [(ngModel)]="options.maxThinkingTime.value"
+            [disabled]="!joinedRoom?.player.isHost || options.thinkingTimeoutDisabled.value"
+          >
+            <mat-option
+              *ngFor="let option of options.maxThinkingTime.possibleValues"
+              [value]="option"
+              >{{ option + ' Sekunden' }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>{{ options.rows.text }}</mat-label>
           <mat-select

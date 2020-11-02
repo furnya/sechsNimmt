@@ -24,6 +24,8 @@ export interface GameOptions {
   rounds: GameOption<number>;
   maxPlayers: GameOption<number>;
   cards: GameOption<number>;
+  thinkingTimeoutDisabled: GameOption<boolean>;
+  maxThinkingTime: GameOption<number>;
 }
 
 export interface Player {
