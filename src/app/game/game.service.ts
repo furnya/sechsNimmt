@@ -287,6 +287,22 @@ export class GameService {
       )
       .update(this.gameState);
   }
+  
+  pushPlayerStateToDB() {
+    return this.db
+      .object(
+        GLOBAL_CONFIG.dbGamePath() +
+          '/' +
+          this.gameKey +
+          '/' +
+          GLOBAL_CONFIG.dbGameStatePath +
+          '/' +
+          GLOBAL_CONFIG.dbPlayerStatesPath +
+          '/' +
+          this.playerIndex
+      )
+      .update(this.gameState.playerStates[this.playerIndex]);
+  }
 
   selectCard(card: number) {
     this.gameState.playerStates[this.playerIndex].hand.splice(
@@ -294,7 +310,7 @@ export class GameService {
       1
     );
     this.gameState.playerStates[this.playerIndex].selectedCard = card;
-    return this.pushGameStateToDB();
+    return this.pushPlayerStateToDB();
   }
 
   putCardInRow(rowIndex: number) {
