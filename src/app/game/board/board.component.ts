@@ -99,9 +99,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         if (gameState.choosingCards && this.gameService.getSelectedCard() === 0) {
           this.hintOpen = true;
           this.hint = CHOOSE_HINT;
-          if (this.shouldSelectRandomCard) {
-            const cardIndex = Math.floor(Math.random() * this.gameService.getHandCards().length);
-            this.gameService.selectCard(this.gameService.getHandCards()[cardIndex]);
+          if (this.gameService.selectedCardLocally !== 0) {
+            console.log("DID NOT WORK");
+            this.gameService.selectCard(this.gameService.selectedCardLocally);
           } else if (!this.timeout && !this.gameService.options.thinkingTimeoutDisabled.value) {
             this.showTimeout = true;
             this.timeLeft = this.gameService.options.maxThinkingTime.value;
@@ -119,6 +119,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             }, this.gameService.options.maxThinkingTime.value * 1000);
           }
         } else {
+          this.gameService.selectedCardLocally = 0;
           if (!this.gameService.options.thinkingTimeoutDisabled.value) {
             this.shouldSelectRandomCard = false;
             this.showTimeout = false;

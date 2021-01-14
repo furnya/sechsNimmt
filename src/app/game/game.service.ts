@@ -21,6 +21,7 @@ export class GameService {
   gameStateSub: Subscription;
   playerIndex = -1;
   options: GameOptions;
+  selectedCardLocally = 0;
 
   get player() {
     return this._player;
@@ -305,6 +306,7 @@ export class GameService {
   }
 
   selectCard(card: number) {
+    this.selectedCardLocally = card;
     this.gameState.playerStates[this.playerIndex].hand.splice(
       this.gameState.playerStates[this.playerIndex].hand.indexOf(card),
       1
