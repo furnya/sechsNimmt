@@ -100,7 +100,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.hintOpen = true;
           this.hint = CHOOSE_HINT;
           if (this.gameService.selectedCardLocally !== 0) {
-            console.log("DID NOT WORK");
             this.gameService.selectCard(this.gameService.selectedCardLocally);
           } else if (!this.timeout && !this.gameService.options.thinkingTimeoutDisabled.value) {
             this.showTimeout = true;

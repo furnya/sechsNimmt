@@ -25,5 +25,6 @@ export interface GlobalConfig {
     defaultOptions: GameOptions;
     dbOptionsPath: string;
     activeTimeoutInMilliseconds: number;
+    activePingInterval: number;
     globalMaxPlayers: number;
 }

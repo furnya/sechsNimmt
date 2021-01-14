@@ -37,7 +37,8 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   dbOptionsPath: 'options',
   maxLobbyAgeInMilliseconds: 3600000,
   maxGameAgeInMilliseconds: 3600000 * 24,
-  activeTimeoutInMilliseconds: 3000,
+  activeTimeoutInMilliseconds: 10000,
+  activePingInterval: 1000,
   globalMaxPlayers: 10,
   defaultOptions: {
     hideMinusPoints: {

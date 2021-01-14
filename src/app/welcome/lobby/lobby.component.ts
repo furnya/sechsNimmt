@@ -80,7 +80,7 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.isActiveInterval = setInterval(
       () => this.roomCreationService.keepPlayerActive(),
-      1000
+      GLOBAL_CONFIG.activePingInterval
     );
     this.options = JSON.parse(JSON.stringify(GLOBAL_CONFIG.defaultOptions));
     const roomId: string = this.route.snapshot.params?.gameId;
