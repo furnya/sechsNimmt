@@ -118,7 +118,9 @@ export class BoardComponent implements OnInit, OnDestroy {
             }, this.gameService.options.maxThinkingTime.value * 1000);
           }
         } else {
-          this.gameService.selectedCardLocally = 0;
+          if (!this.gameService.isChoosingCards()) {
+            this.gameService.selectedCardLocally = 0;
+          }
           if (!this.gameService.options.thinkingTimeoutDisabled.value) {
             this.shouldSelectRandomCard = false;
             this.showTimeout = false;
