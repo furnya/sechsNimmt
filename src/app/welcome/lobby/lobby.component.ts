@@ -78,6 +78,7 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.roomCreationService.generateRandomSequence(GLOBAL_CONFIG.defaultOptions.cards.value);
     this.isActiveInterval = setInterval(
       () => this.roomCreationService.keepPlayerActive(),
       GLOBAL_CONFIG.activePingInterval
@@ -167,6 +168,7 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
       newVal = GLOBAL_CONFIG.defaultOptions.cards.value;
     }
     this.options.cards.value = newVal;
+    this.roomCreationService.generateRandomSequence(newVal);
     this.onChangeOptions();
   }
 

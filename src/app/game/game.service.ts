@@ -4,7 +4,14 @@ import { Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, take, takeWhile, tap } from 'rxjs/operators';
 import { GLOBAL_CONFIG } from '../config/global-config';
-import { Game, GameOptions, GameState, Player, PlayerState } from '../models/game.model';
+import {
+  Game,
+  GameOptions,
+  GameState,
+  Player,
+  PlayerState,
+} from '../models/game.model';
+import { HttpService } from '../utils/http.service';
 import { playerIsActive } from '../welcome/filter-is-active.pipe';
 
 @Injectable({
@@ -22,6 +29,7 @@ export class GameService {
   playerIndex = -1;
   options: GameOptions;
   selectedCardLocally = 0;
+  randomSequence: number[] = [];
 
   get player() {
     return this._player;
@@ -45,14 +53,16 @@ export class GameService {
     localStorage.clear();
   }
 
-  constructor(private db: AngularFireDatabase, private router: Router) {}
+  constructor(
+    private db: AngularFireDatabase,
+    private router: Router,
+    private httpService: HttpService
+  ) {}
 
   subscribeToGameStateChanges() {
     this.player = JSON.parse(localStorage.getItem('player_' + this.gameId));
     this.gameStateSub = this.db
-      .object(
-        GLOBAL_CONFIG.dbGamePath() + '/' + this.gameKey
-      )
+      .object(GLOBAL_CONFIG.dbGamePath() + '/' + this.gameKey)
       .valueChanges()
       .pipe(
         tap((game: Game) => {
@@ -99,7 +109,7 @@ export class GameService {
         if (this.gameState.round === this.options?.rounds.value + 1) {
           this.gameState.finished = true;
           this.gameState.choosingCards = false;
-          this.gameState.playerStates.forEach(ps => {
+          this.gameState.playerStates.forEach((ps) => {
             ps.totalMinusPoints += ps.minusPoints;
           });
         }
@@ -200,14 +210,14 @@ export class GameService {
 
   createNewGameState(players: Player[]): GameState {
     const playerStates: PlayerState[] = [];
-    players.forEach(player => {
+    players.forEach((player) => {
       playerStates.push({
         hand: [],
         minusPoints: 0,
         totalMinusPoints: 0,
         selectedCard: 0,
         player,
-        minusCards: []
+        minusCards: [],
       });
     });
     const boardRows: number[][] = [];
@@ -234,25 +244,19 @@ export class GameService {
     if (!gameState) {
       return;
     }
-    const cards = Array.from(Array(this.options?.cards.value + 1).keys()).slice(
-      1
-    );
-    gameState.playerStates?.forEach(ps => {
+    if (this.randomSequence?.length !== this.options?.cards.value) {
+      this.randomSequence = this.generateRandomSequenceLocally(
+        this.options?.cards.value
+      );
+    }
+    gameState.playerStates?.forEach((ps) => {
       ps.minusCards = [];
-      ps.hand = [];
       ps.minusPoints = 0;
-      for (let j = 0; j < this.options?.rounds.value; j++) {
-        const index = Math.floor(Math.random() * cards.length);
-        ps.hand.push(cards[index]);
-        cards.splice(index, 1);
-      }
+      ps.hand = this.randomSequence.splice(0, this.options?.rounds.value);
     });
     gameState.boardRows = [];
     for (let i = 0; i < this.options?.rows.value; i++) {
-      gameState.boardRows.push([]);
-      const index = Math.floor(Math.random() * cards.length);
-      gameState.boardRows[i].push(cards[index]);
-      cards.splice(index, 1);
+      gameState.boardRows.push(this.randomSequence.splice(0, 1));
     }
     return gameState;
   }
@@ -293,7 +297,7 @@ export class GameService {
       )
       .update(this.gameState);
   }
-  
+
   pushPlayerStateToDB() {
     return this.db
       .object(
@@ -356,7 +360,9 @@ export class GameService {
     if (!this.gameState.playerStates[this.playerIndex].minusCards) {
       this.gameState.playerStates[this.playerIndex].minusCards = [];
     }
-    this.gameState.playerStates[this.playerIndex].minusCards.push(...this.gameState.boardRows[rowIndex]);
+    this.gameState.playerStates[this.playerIndex].minusCards.push(
+      ...this.gameState.boardRows[rowIndex]
+    );
     this.gameState.boardRows[rowIndex] = [
       this.gameState.playerStates[this.playerIndex].selectedCard,
     ];
@@ -369,11 +375,11 @@ export class GameService {
   }
 
   anyCardSelected(): boolean {
-    return !!this.gameState?.playerStates.find(ps => ps.selectedCard !== 0);
+    return !!this.gameState?.playerStates.find((ps) => ps.selectedCard !== 0);
   }
 
   allCardSelected(): boolean {
-    return !this.gameState?.playerStates.find(ps => ps.selectedCard === 0);
+    return !this.gameState?.playerStates.find((ps) => ps.selectedCard === 0);
   }
 
   isFinished(): boolean {
@@ -389,7 +395,7 @@ export class GameService {
 
   getTurnPlayerName(): string {
     const smallestCard = this.getSmallestSelectedCard();
-    return this.gameState?.playerStates.find(ps => {
+    return this.gameState?.playerStates.find((ps) => {
       return ps.selectedCard === smallestCard;
     })?.player.name;
   }
@@ -448,5 +454,22 @@ export class GameService {
 
   getMinusCards(): number[] {
     return this.gameState?.playerStates[this.playerIndex].minusCards;
+  }
+
+  generateRandomSequence(cardCount: number) {
+    this.httpService.getRandomSequence(1, cardCount).subscribe((sequence) => {
+      this.randomSequence = sequence;
+    });
+  }
+
+  generateRandomSequenceLocally(cardCount: number): number[] {
+    const sequence = Array.from(Array(cardCount + 1).keys()).slice(1);
+    for (let i = sequence.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = sequence[i];
+      sequence[i] = sequence[j];
+      sequence[j] = temp;
+    }
+    return sequence;
   }
 }

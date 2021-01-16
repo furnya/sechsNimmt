@@ -377,4 +377,8 @@ export class RoomCreationService {
   clearLocalStorage() {
     this.gameService.clearLocalStorage();
   }
+
+  generateRandomSequence(cardCount: number) {
+    this.gameService.generateRandomSequence(cardCount);
+  }
 }
