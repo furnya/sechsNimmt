@@ -129,4 +129,10 @@ export class CreateAndJoinComponent
         }
       });
   }
+
+  clearBrowserDara() {
+    if (confirm('Wirklich alle Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
+      this.roomCreationService.clearLocalStorage();
+    }
+  }
 }

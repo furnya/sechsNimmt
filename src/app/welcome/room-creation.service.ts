@@ -373,4 +373,8 @@ export class RoomCreationService {
         });
     }
   }
+
+  clearLocalStorage() {
+    this.gameService.clearLocalStorage();
+  }
 }

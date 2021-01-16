@@ -41,6 +41,10 @@ export class GameService {
     localStorage.removeItem('player_' + gameId);
   }
 
+  clearLocalStorage() {
+    localStorage.clear();
+  }
+
   constructor(private db: AngularFireDatabase, private router: Router) {}
 
   subscribeToGameStateChanges() {
