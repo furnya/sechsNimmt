@@ -71,6 +71,10 @@ export const GLOBAL_CONFIG: GlobalConfig = {
     thinkingTimeoutDisabled: {
       value: true,
       text: 'Unendlich Zeit zum Nachdenken'
+    },
+    showMinusCards: {
+      value: true,
+      text: 'Genommene Karten anzeigen'
     }
   },
 };

@@ -20,6 +20,7 @@ export interface GameOption<T> {
 
 export interface GameOptions {
   hideMinusPoints: GameOption<boolean>;
+  showMinusCards: GameOption<boolean>;
   rows: GameOption<number>;
   rounds: GameOption<number>;
   maxPlayers: GameOption<number>;

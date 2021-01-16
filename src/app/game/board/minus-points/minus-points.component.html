@@ -1,5 +1,5 @@
 <mat-card class="minus-points-container" (click)="onClose()">
-  <div class="minus-cards-wrapper" *ngIf="minusCards?.length > 0">
+  <div class="minus-cards-wrapper" *ngIf="minusCards?.length > 0 && isShowMinusCards">
     <mat-toolbar color="primary" (click)="onClose()"
       ><span> Von dir genommene Karten</span></mat-toolbar
     >

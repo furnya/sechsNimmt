@@ -51,6 +51,12 @@ export class MinusPointsComponent implements OnInit {
       : GLOBAL_CONFIG.defaultOptions.hideMinusPoints.value;
   }
 
+  get isShowMinusCards() {
+    return this.gameService.options
+      ? this.gameService.options.showMinusCards.value
+      : GLOBAL_CONFIG.defaultOptions.showMinusCards.value;
+  }
+
   onClose() {
     if (this.canClose) {
       this.sheetRef.dismiss();

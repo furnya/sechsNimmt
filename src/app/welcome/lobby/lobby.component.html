@@ -38,7 +38,6 @@
         >Optionen</mat-toolbar
       >
       <mat-card-content class="lobbyContainer__main__options__content">
-        <!-- <section class="lobbyContainer__main__options__content"> -->
         <mat-slide-toggle
           color="accent"
           (change)="onChangeOptions()"
@@ -46,7 +45,14 @@
           [disabled]="!joinedRoom?.player.isHost"
         >
           <span class="breakWords">{{ options.hideMinusPoints.text }}</span>
-          <!-- {{ options.hideMinusPoints.text }} -->
+        </mat-slide-toggle>
+        <mat-slide-toggle
+          color="accent"
+          (change)="onChangeOptions()"
+          [(ngModel)]="options.showMinusCards.value"
+          [disabled]="!joinedRoom?.player.isHost"
+        >
+          <span class="breakWords">{{ options.showMinusCards.text }}</span>
         </mat-slide-toggle>
         <mat-slide-toggle
           color="accent"
@@ -55,7 +61,6 @@
           [disabled]="!joinedRoom?.player.isHost"
         >
           <span class="breakWords">{{ options.thinkingTimeoutDisabled.text }}</span>
-          <!-- {{ options.hideMinusPoints.text }} -->
         </mat-slide-toggle>
         <mat-form-field>
           <mat-label>{{ options.maxThinkingTime.text }}</mat-label>

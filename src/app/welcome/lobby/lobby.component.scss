@@ -51,11 +51,12 @@
         // align-items: center;
         overflow: auto;
 
-        > * {
-          margin-bottom: 10px;
+        > mat-slide-toggle {
+          margin-bottom: 5px;
         }
 
         mat-form-field {
+          height: 80px;
           width: 100%;
           font-size: 20px;
           padding: 0;
