@@ -57,6 +57,7 @@ export interface PlayerState {
   selectedCard: number;
   minusPoints: number;
   totalMinusPoints: number;
+  minusCards: number[];
 }
 
 export const enum CARD_TYPE {

@@ -207,6 +207,7 @@ export class GameService {
         totalMinusPoints: 0,
         selectedCard: 0,
         player,
+        minusCards: []
       });
     });
     const boardRows: number[][] = [];
@@ -236,8 +237,8 @@ export class GameService {
     const cards = Array.from(Array(this.options?.cards.value + 1).keys()).slice(
       1
     );
-    const playerStates: PlayerState[] = [];
     gameState.playerStates?.forEach(ps => {
+      ps.minusCards = [];
       ps.hand = [];
       ps.minusPoints = 0;
       for (let j = 0; j < this.options?.rounds.value; j++) {
@@ -352,6 +353,10 @@ export class GameService {
       (pv, cv) => pv + this.calculateMinusPoints(cv),
       0
     );
+    if (!this.gameState.playerStates[this.playerIndex].minusCards) {
+      this.gameState.playerStates[this.playerIndex].minusCards = [];
+    }
+    this.gameState.playerStates[this.playerIndex].minusCards.push(...this.gameState.boardRows[rowIndex]);
     this.gameState.boardRows[rowIndex] = [
       this.gameState.playerStates[this.playerIndex].selectedCard,
     ];
@@ -439,5 +444,9 @@ export class GameService {
       .list(GLOBAL_CONFIG.dbGamePath())
       .snapshotChanges()
       .pipe(take(1));
+  }
+
+  getMinusCards(): number[] {
+    return this.gameState?.playerStates[this.playerIndex].minusCards;
   }
 }

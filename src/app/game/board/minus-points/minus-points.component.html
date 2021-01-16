@@ -1,12 +1,26 @@
-<mat-card class="minusPointsContainer" (click)="onClose()">
+<mat-card class="minus-points-container" (click)="onClose()">
+  <div class="minus-cards-wrapper" *ngIf="minusCards?.length > 0">
+    <mat-toolbar color="primary" (click)="onClose()"
+      ><span> Von dir genommene Karten</span></mat-toolbar
+    >
+    <div
+      class="minus-cards-container"
+      (mouseenter)="canClose = false"
+      (mouseleave)="canClose = true"
+    >
+      <app-card *ngFor="let i of minusCards" [id]="i" [type]="'row'"></app-card>
+    </div>
+  </div>
   <div class="mock-container">
     <mat-toolbar color="primary" (click)="onClose()"
-      ><span>
-        Alle Minuspunkte
-      </span>
+      ><span> Alle Minuspunkte </span>
       <mat-icon>arrow_drop_down</mat-icon></mat-toolbar
     >
-    <mat-table [dataSource]="playerStates" (mouseenter)="canClose = false" (mouseleave)="canClose = true">
+    <mat-table
+      [dataSource]="playerStates"
+      (mouseenter)="canClose = false"
+      (mouseleave)="canClose = true"
+    >
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.player.name }}</mat-cell>
