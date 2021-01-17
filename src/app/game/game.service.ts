@@ -408,19 +408,14 @@ export class GameService {
   }
 
   getSmallestSelectedCard(): number {
-    let card = 105;
-    this.gameState?.playerStates.forEach((ps) => {
-      if (ps.selectedCard !== 0 && ps.selectedCard < card) {
-        card = ps.selectedCard;
-      }
-    });
-    return card;
+    const selectedCards = this.gameState?.playerStates.map(ps => ps.selectedCard);
+    return selectedCards?.length > 0 ? Math.min(...selectedCards) : -1;
   }
 
   getHightlightedRowIndex() {
     const smallestCard = this.getSmallestSelectedCard();
     let index = -1;
-    if (smallestCard === 105) {
+    if (smallestCard === -1) {
       return index;
     }
     this.gameState?.boardRows.forEach((row, i) => {
