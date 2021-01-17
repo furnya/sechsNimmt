@@ -1,6 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { DocumentService } from '../utils/document.service';
+
+const RESIZE_TIMEOUT_MS = 500
 
 @Component({
   selector: 'app-game',
@@ -34,7 +35,7 @@ export class GameComponent implements OnInit {
         this.documentService.recalculateSize();
         this.loading = false;
       },
-      500
+      RESIZE_TIMEOUT_MS
     );
   }
 }

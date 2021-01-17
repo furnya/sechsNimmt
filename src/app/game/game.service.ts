@@ -14,6 +14,10 @@ import {
 import { HttpService } from '../utils/http.service';
 import { playerIsActive } from '../welcome/filter-is-active.pipe';
 
+export const NO_PLAYER_INDEX = -1;
+export const NO_CARD_SELECTED = 0;
+export const NO_HIGHLIGHTED_ROW = -1;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,9 +30,9 @@ export class GameService {
   gameKey: string = null;
   gameKeySub: Subscription;
   gameStateSub: Subscription;
-  playerIndex = -1;
+  playerIndex = NO_PLAYER_INDEX;
   options: GameOptions;
-  selectedCardLocally = 0;
+  selectedCardLocally = NO_CARD_SELECTED;
   randomSequence: number[] = [];
 
   get player() {
@@ -122,7 +126,7 @@ export class GameService {
     this.playerIndex = this.gameState?.playerStates.findIndex((ps) => {
       return ps.player.name === this.player?.name;
     });
-    if (this.playerIndex === -1) {
+    if (this.playerIndex === NO_PLAYER_INDEX) {
       this.router.navigate(['/' + GLOBAL_CONFIG.urlWelcomePath]);
       return false;
     }
@@ -215,7 +219,7 @@ export class GameService {
         hand: [],
         minusPoints: 0,
         totalMinusPoints: 0,
-        selectedCard: 0,
+        selectedCard: NO_CARD_SELECTED,
         player,
         minusCards: [],
       });
@@ -272,7 +276,7 @@ export class GameService {
 
   getSelectedCard(): number {
     if (!(this.gameState && this.player)) {
-      return 0;
+      return NO_CARD_SELECTED;
     }
     return this.gameState.playerStates.find((s) => {
       return s.player.name === this.player.name;
@@ -326,7 +330,7 @@ export class GameService {
 
   putCardInRow(rowIndex: number) {
     this.gameState.boardRows[rowIndex].push(this.getSmallestSelectedCard());
-    this.gameState.playerStates[this.playerIndex].selectedCard = 0;
+    this.gameState.playerStates[this.playerIndex].selectedCard = NO_CARD_SELECTED;
     this.pushGameStateToDB();
   }
 
@@ -366,7 +370,7 @@ export class GameService {
     this.gameState.boardRows[rowIndex] = [
       this.gameState.playerStates[this.playerIndex].selectedCard,
     ];
-    this.gameState.playerStates[this.playerIndex].selectedCard = 0;
+    this.gameState.playerStates[this.playerIndex].selectedCard = NO_CARD_SELECTED;
     this.pushGameStateToDB();
   }
 
@@ -375,11 +379,11 @@ export class GameService {
   }
 
   anyCardSelected(): boolean {
-    return !!this.gameState?.playerStates.find((ps) => ps.selectedCard !== 0);
+    return !!this.gameState?.playerStates.find((ps) => ps.selectedCard !== NO_CARD_SELECTED);
   }
 
   allCardSelected(): boolean {
-    return !this.gameState?.playerStates.find((ps) => ps.selectedCard === 0);
+    return !this.gameState?.playerStates.find((ps) => ps.selectedCard === NO_CARD_SELECTED);
   }
 
   isFinished(): boolean {
@@ -402,7 +406,7 @@ export class GameService {
 
   canSelect(): boolean {
     return (
-      this.gameState?.playerStates[this.playerIndex].selectedCard === 0 &&
+      this.gameState?.playerStates[this.playerIndex].selectedCard === NO_CARD_SELECTED &&
       this.gameState.choosingCards === true
     );
   }
@@ -414,12 +418,12 @@ export class GameService {
 
   getHightlightedRowIndex() {
     const smallestCard = this.getSmallestSelectedCard();
-    let index = -1;
+    let index = NO_HIGHLIGHTED_ROW;
     if (smallestCard === -1) {
       return index;
     }
     this.gameState?.boardRows.forEach((row, i) => {
-      if (index === -1) {
+      if (index === NO_HIGHLIGHTED_ROW) {
         if (row[row.length - 1] < smallestCard) {
           index = i;
         }

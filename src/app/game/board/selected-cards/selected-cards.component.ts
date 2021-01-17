@@ -4,7 +4,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { GameService } from '../../game.service';
+import { GameService, NO_CARD_SELECTED } from '../../game.service';
 import { PlayerState } from 'src/app/models/game.model';
 import { Subscription } from 'rxjs';
 
@@ -23,7 +23,7 @@ export class SelectedCardsComponent implements OnInit, OnDestroy {
     this.gameStateSub = this.gameService.gameStateChanged.subscribe((gameState) => {
       this.playerStates = JSON.parse(
         JSON.stringify(
-          gameState.playerStates.filter((ps) => ps.selectedCard !== 0)
+          gameState.playerStates.filter((ps) => ps.selectedCard !== NO_CARD_SELECTED)
         )
       );
       if (this.canPlay()) {

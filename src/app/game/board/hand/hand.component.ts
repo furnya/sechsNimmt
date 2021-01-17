@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GameService } from '../../game.service';
+import { GameService, NO_CARD_SELECTED } from '../../game.service';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 import { DocumentService } from 'src/app/utils/document.service';
 
@@ -11,7 +11,7 @@ import { DocumentService } from 'src/app/utils/document.service';
 export class HandComponent implements OnInit {
 
   cards: number[] = [];
-  selectedCard = 0;
+  selectedCard = NO_CARD_SELECTED;
 
   constructor(private gameService: GameService, private documentService: DocumentService) { }
 
@@ -23,18 +23,18 @@ export class HandComponent implements OnInit {
 
   onCardSelected(id: number) {
     if (this.selectedCard === id) {
-      this.selectedCard = 0;
+      this.selectedCard = NO_CARD_SELECTED;
     } else {
       this.selectedCard = id;
     }
   }
 
   onConfirmSelection() {
-    if (this.selectedCard === 0) {
+    if (this.selectedCard === NO_CARD_SELECTED) {
       return;
     }
     this.gameService.selectCard(this.selectedCard);
-    this.selectedCard = 0;
+    this.selectedCard = NO_CARD_SELECTED;
   }
 
   canSelect() {

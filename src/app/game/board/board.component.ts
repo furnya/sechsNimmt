@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GameService } from '../game.service';
+import { GameService, NO_CARD_SELECTED } from '../game.service';
 import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FinishedDialogComponent } from 'src/app/game/board/finished-dialog/finished-dialog.component';
@@ -119,7 +119,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           }
         } else {
           if (!this.gameService.isChoosingCards()) {
-            this.gameService.selectedCardLocally = 0;
+            this.gameService.selectedCardLocally = NO_CARD_SELECTED;
           }
           if (!this.gameService.options.thinkingTimeoutDisabled.value) {
             this.shouldSelectRandomCard = false;
