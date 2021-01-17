@@ -330,7 +330,9 @@ export class GameService {
 
   putCardInRow(rowIndex: number) {
     this.gameState.boardRows[rowIndex].push(this.getSmallestSelectedCard());
-    this.gameState.playerStates[this.playerIndex].selectedCard = NO_CARD_SELECTED;
+    this.gameState.playerStates[
+      this.playerIndex
+    ].selectedCard = NO_CARD_SELECTED;
     this.pushGameStateToDB();
   }
 
@@ -370,7 +372,9 @@ export class GameService {
     this.gameState.boardRows[rowIndex] = [
       this.gameState.playerStates[this.playerIndex].selectedCard,
     ];
-    this.gameState.playerStates[this.playerIndex].selectedCard = NO_CARD_SELECTED;
+    this.gameState.playerStates[
+      this.playerIndex
+    ].selectedCard = NO_CARD_SELECTED;
     this.pushGameStateToDB();
   }
 
@@ -379,11 +383,15 @@ export class GameService {
   }
 
   anyCardSelected(): boolean {
-    return !!this.gameState?.playerStates.find((ps) => ps.selectedCard !== NO_CARD_SELECTED);
+    return !!this.gameState?.playerStates.find(
+      (ps) => ps.selectedCard !== NO_CARD_SELECTED
+    );
   }
 
   allCardSelected(): boolean {
-    return !this.gameState?.playerStates.find((ps) => ps.selectedCard === NO_CARD_SELECTED);
+    return !this.gameState?.playerStates.find(
+      (ps) => ps.selectedCard === NO_CARD_SELECTED
+    );
   }
 
   isFinished(): boolean {
@@ -406,13 +414,15 @@ export class GameService {
 
   canSelect(): boolean {
     return (
-      this.gameState?.playerStates[this.playerIndex].selectedCard === NO_CARD_SELECTED &&
-      this.gameState.choosingCards === true
+      this.gameState?.playerStates[this.playerIndex].selectedCard ===
+        NO_CARD_SELECTED && this.gameState.choosingCards === true
     );
   }
 
   getSmallestSelectedCard(): number {
-    const selectedCards = this.gameState?.playerStates.map(ps => ps.selectedCard);
+    const selectedCards = this.gameState?.playerStates
+      .map((ps) => ps.selectedCard)
+      .filter((c) => c !== NO_CARD_SELECTED);
     return selectedCards?.length > 0 ? Math.min(...selectedCards) : -1;
   }
 
