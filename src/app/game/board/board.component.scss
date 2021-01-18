@@ -21,6 +21,11 @@
   cursor: pointer;
 }
 
+@keyframes blink {
+  from {background-color: white;}
+  to {background-color: red;}
+}
+
 .hint-container {
   display: flex;
   position: fixed;
@@ -32,5 +37,9 @@
 
   > mat-toolbar {
     height: inherit;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-delay: 0;
   }
 }

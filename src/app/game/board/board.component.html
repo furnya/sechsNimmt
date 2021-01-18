@@ -17,7 +17,7 @@
     </mat-card>
 </div>
 <div class="hint-container" [@showHideHint]="hintOpen ? 'open' : 'closed'">
-    <mat-toolbar color="warn">
+    <mat-toolbar [color]="youMustAct() ? 'warn' : 'accent'" [ngStyle]="{animationName: youMustAct() ? 'blink': ''}">
         <span>{{ hint }}</span>
     </mat-toolbar>
     <mat-toolbar color="accent" *ngIf="showTimeout">

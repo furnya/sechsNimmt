@@ -139,8 +139,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.gameService.getTurnPlayerName()
     ) {
       this.hintOpen = true;
-      this.hint =
-        this.gameService.getTurnPlayerName() + NOT_YOUR_TURN_HINT;
+      this.hint = this.gameService.getTurnPlayerName() + NOT_YOUR_TURN_HINT;
     } else {
       this.hintOpen = false;
     }
@@ -224,5 +223,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.minusPointsBottomSheet.open(MinusPointsComponent, {
       panelClass: 'minus-points-sheet-container',
     });
+  }
+
+  youMustAct() {
+    return (
+      this.gameService.isYourTurn() ||
+      (this.gameService.gameState?.choosingCards &&
+        this.gameService.getSelectedCard() === NO_CARD_SELECTED)
+    );
   }
 }
