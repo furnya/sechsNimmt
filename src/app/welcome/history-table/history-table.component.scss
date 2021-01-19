@@ -1,0 +1,87 @@
+mat-table {
+    width: 600px;
+    max-height: 90vh;
+    overflow: auto;
+    flex: 1 1 auto;
+    cursor: pointer;
+}
+
+[mat-cell],
+mat-cell,
+[mat-header-cell],
+mat-header-cell {
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+}
+
+[mat-cell]:first-child,
+mat-cell:first-child,
+[mat-header-cell]:first-child,
+mat-header-cell:first-child {
+    border-left: 0;
+    border-right: 0;
+}
+
+[mat-cell]:last-child,
+mat-cell:last-child,
+[mat-header-cell]:last-child,
+mat-header-cell:last-child {
+    border-right: 0;
+}
+
+[mat-row]:last-child,
+mat-row:last-child,
+.mat-row:last-child {
+    border-bottom: 0;
+}
+
+[mat-header-cell],
+mat-header-cell {
+    font-size: 24px;
+    line-height: 24px;
+    justify-content: center;
+    text-align: center;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.mat-cell,
+mat-cell {
+    font-size: 24px;
+    justify-content: flex-start;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    text-overflow: ellipsis;
+}
+
+.mat-column-id {
+    width: 280px;
+    white-space: nowrap;
+    span {
+        text-overflow: ellipsis;
+        max-width: 100%;
+        overflow: hidden;
+        line-height: 30px;
+    }
+}
+.mat-column-created {
+    width: 200px;
+    justify-content: flex-end;
+}
+
+.mat-column-players, .mat-column-playedRounds {
+    width: 140px;
+    justify-content: center;
+}
+
+mat-header-cell, mat-cell {
+    flex: unset;
+}
+
+mat-header-row {
+    min-height: 32px;
+}
+
+::ng-deep.id-tooltip {
+    font-size: 20px;
+}

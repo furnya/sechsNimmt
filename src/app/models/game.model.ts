@@ -42,6 +42,7 @@ export interface Game {
   players: any;
   gameState: GameState;
   options: GameOptions;
+  playedRounds: number;
 }
 
 export interface GameState {

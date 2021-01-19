@@ -7,6 +7,8 @@ import { AppMaterialModule } from '../modules/app-material.module';
 import { CreateAndJoinComponent } from './create-and-join/create-and-join.component';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { FilterIsActivePipe } from './filter-is-active.pipe';
+import { GameInfoDialogComponent } from './finished-dialog/game-info-dialog.component';
+import { HistoryTableComponent } from './history-table/history-table.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { WelcomeComponent } from './welcome.component';
 
@@ -16,7 +18,9 @@ import { WelcomeComponent } from './welcome.component';
         LobbyComponent,
         WelcomeComponent,
         EnterNameDialogComponent,
-        FilterIsActivePipe
+        FilterIsActivePipe,
+        HistoryTableComponent,
+        GameInfoDialogComponent
     ],
     imports: [
         AppMaterialModule,

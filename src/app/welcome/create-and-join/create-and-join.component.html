@@ -2,13 +2,10 @@
   <mat-toolbar
     class="joinAndCreateTitle toolbar-justify-content-center"
     color="primary"
-    >
-    <span>
-      Willkommen zu Sechs Nimmt Online
-    </span>
-    <mat-icon svgIcon="sechsnimmt_logo" class="sechsNimmtIcon"></mat-icon>
-    </mat-toolbar
   >
+    <span> Willkommen zu Sechs Nimmt Online </span>
+    <mat-icon svgIcon="sechsnimmt_logo" class="sechsNimmtIcon"></mat-icon>
+  </mat-toolbar>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Spiel erstellen">
       <div class="formContainer">
@@ -96,7 +93,24 @@
     </mat-tab>
   </mat-tab-group>
 </mat-card>
-<button mat-raised-button class="clear-data-button" (click)="clearBrowserDara()">
+<button
+  mat-raised-button
+  class="clear-data-button"
+  (click)="clearBrowserData()"
+>
   <mat-icon>delete</mat-icon>
-  Clear all browser data
+  Lokale Browserdaten löschen
 </button>
+<button
+  mat-raised-button
+  class="history-button"
+  [matMenuTriggerFor]="historyMenu"
+  #HistoryMenuTrigger="matMenuTrigger"
+  (menuOpened)="getGameHistory()"
+>
+  Spielhistorie
+  <mat-icon>history</mat-icon>
+</button>
+<mat-menu #historyMenu="matMenu" yPosition="above" xPosition="before" class="history-menu">
+  <app-history-table [games]="gameHistory" (click)="$event.stopPropagation()"></app-history-table>
+</mat-menu>

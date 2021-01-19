@@ -1,0 +1,37 @@
+<mat-table [dataSource]="games" matSort [matSortDisableClear]="true">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+    <mat-cell
+      *matCellDef="let element"
+      matTooltipClass="id-tooltip"
+      matTooltipPosition="left"
+      [matTooltip]="idSpan.scrollWidth > idSpan.clientWidth ? element.id : ''"
+      (click)="openInfoDialog(element)"
+    >
+      <span #idSpan>{{ element.id }}</span>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="created">
+    <mat-header-cell *matHeaderCellDef mat-sort-header
+      >Erstellt</mat-header-cell
+    >
+    <mat-cell *matCellDef="let element" (click)="openInfoDialog(element)">{{ element.created | date }}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="players">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Spieler</mat-header-cell>
+    <mat-cell *matCellDef="let element" (click)="openInfoDialog(element)">{{ element.players?.length }}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="playedRounds">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Runden</mat-header-cell>
+    <mat-cell *matCellDef="let element" (click)="openInfoDialog(element)">{{ element.playedRounds }}</mat-cell>
+  </ng-container>
+  <mat-header-row
+    *matHeaderRowDef="
+      ['id', 'created', 'players', 'playedRounds'];
+      sticky: true
+    "
+  ></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: ['id', 'created', 'players', 'playedRounds']"
+  ></mat-row>
+</mat-table>

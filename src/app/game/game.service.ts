@@ -112,6 +112,7 @@ export class GameService {
         this.gameState.round++;
         if (this.gameState.round === this.options?.rounds.value + 1) {
           this.gameState.finished = true;
+          this.increasePlayedRounds();
           this.gameState.choosingCards = false;
           this.gameState.playerStates.forEach((ps) => {
             ps.totalMinusPoints += ps.minusPoints;
@@ -206,6 +207,7 @@ export class GameService {
             gameState,
             options,
             created,
+            playedRounds: 0,
           };
           this.db.list(GLOBAL_CONFIG.dbGamePath()).push(game);
         });
@@ -454,10 +456,17 @@ export class GameService {
     return index;
   }
 
-  getGamesObservable(): Observable<SnapshotAction<unknown>[]> {
+  getGameSnapshotChanges(): Observable<SnapshotAction<unknown>[]> {
     return this.db
       .list(GLOBAL_CONFIG.dbGamePath())
       .snapshotChanges()
+      .pipe(take(1));
+  }
+
+  getGamesObservable(): Observable<unknown[]> {
+    return this.db
+      .list(GLOBAL_CONFIG.dbGamePath())
+      .valueChanges()
       .pipe(take(1));
   }
 
@@ -480,5 +489,17 @@ export class GameService {
       sequence[j] = temp;
     }
     return sequence;
+  }
+
+  increasePlayedRounds() {
+    this.db
+      .object(GLOBAL_CONFIG.dbGamePath() + '/' + this.gameKey)
+      .valueChanges()
+      .pipe(take(1))
+      .subscribe((game: Game) => {
+        this.db.object(GLOBAL_CONFIG.dbGamePath() + '/' + this.gameKey).update({
+          playedRounds: game.playedRounds + 1,
+        });
+      });
   }
 }

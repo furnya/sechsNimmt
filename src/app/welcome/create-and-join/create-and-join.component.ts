@@ -4,15 +4,17 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Game, Player } from 'src/app/models/game.model';
 import { RoomCreationService } from '../room-creation.service';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-create-and-join',
@@ -26,6 +28,7 @@ export class CreateAndJoinComponent
   // filteredOptions: Observable<string[]>;
   filteredRoomIds: string[];
   queuedRoomsSubscription: Subscription;
+  gameHistory: MatTableDataSource<Game> = new MatTableDataSource([]);
 
   constructor(
     private roomCreationService: RoomCreationService,
@@ -52,6 +55,7 @@ export class CreateAndJoinComponent
         this.filteredRoomIds = this.getFilteredOptions();
       }
     );
+    this.getGameHistory();
   }
 
   ngAfterViewInit() {
@@ -130,9 +134,26 @@ export class CreateAndJoinComponent
       });
   }
 
-  clearBrowserDara() {
+  clearBrowserData() {
     if (confirm('Wirklich alle Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
       this.roomCreationService.clearLocalStorage();
     }
+  }
+
+  getGameHistory() {
+    this.roomCreationService.getGameHistory().subscribe(h => {
+      h = h.map((g: Game) => {
+        const players: Player[] = [];
+        Object.keys(g.players).forEach(k => {
+          players.push({
+            ...g.players[k],
+            dbKey: k
+          });
+        });
+        g.players = players;
+        return g;
+      });
+      this.gameHistory.data = h;
+    });
   }
 }

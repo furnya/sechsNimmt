@@ -25,11 +25,7 @@ import { RowComponent } from './row/row.component';
     FinishedDialogComponent,
     MinusPointsComponent,
   ],
-  imports: [
-    AppMaterialModule,
-    AppRoutingModule,
-    BrowserModule,
-    DragDropModule,
-  ],
+  imports: [AppMaterialModule, AppRoutingModule, BrowserModule, DragDropModule],
+  exports: [],
 })
 export class GameModule {}
