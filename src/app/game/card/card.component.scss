@@ -1,8 +1,3 @@
-// @font-face {
-//   font-family: "bad-mofo";
-//   src: url("../../../assets/fonts/BadMofo.ttf") format("opentype");
-// }
-
 .card {
   // width: min(9vh, 5vw);
   min-width: 42px;
@@ -76,7 +71,7 @@
 }
 
 .smallestCard {
-    border: 5px solid yellow;
+    border: 5px solid #ffd740;
     box-sizing: border-box;
     // box-sizing: content-box;
 }
