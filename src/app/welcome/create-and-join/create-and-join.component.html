@@ -111,6 +111,39 @@
   Spielhistorie
   <mat-icon>history</mat-icon>
 </button>
-<mat-menu #historyMenu="matMenu" yPosition="above" xPosition="before" class="history-menu">
-  <app-history-table [games]="gameHistory" (click)="$event.stopPropagation()"></app-history-table>
+<mat-menu
+  #historyMenu="matMenu"
+  yPosition="above"
+  xPosition="before"
+  class="history-menu"
+>
+  <ng-template matMenuContent>
+    <app-history-table
+      [games]="gameHistory"
+      (click)="$event.stopPropagation()"
+    ></app-history-table>
+  </ng-template>
 </mat-menu>
+<mat-toolbar *ngIf="returnableGames?.length > 0" color="primary" class="return-to-game-toolbar">
+  <div>
+    <span>
+      Zu Spiel zurückkehren:
+    </span>
+    <mat-form-field>
+      <mat-select
+        matInput
+        id="joinGameId"
+        [formControl]="returnFC"
+      >
+        <mat-option
+          *ngFor="let option of returnableGames"
+          [value]="option"
+          >{{ option.id }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <button mat-mini-fab [routerLink]="returnToGameRoute()" class="return-to-game-button">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

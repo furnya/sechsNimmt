@@ -305,8 +305,23 @@ export class RoomCreationService {
     this.joinedRoomChanged.next(null);
   }
 
+  deletePlayerFromRoom() {
+    this.db
+      .object(
+        GLOBAL_CONFIG.dbQueuePath() +
+          '/' +
+          this.joinedRoom.room.dbKey +
+          '/' +
+          GLOBAL_CONFIG.dbPlayerPath +
+          '/' +
+          this.joinedRoom.player.dbKey
+      )
+      .remove();
+  }
+
   leaveRoom() {
     this.gameService.deletePlayerLocalStorage(this.joinedRoom?.room.id);
+    this.deletePlayerFromRoom();
     this.clearRoom();
   }
 
@@ -389,10 +404,10 @@ export class RoomCreationService {
   }
 
   getGameHistory(): Observable<Game[]> {
-    return this.gameService
-      .getGamesObservable()
-      .pipe(map((obj: unknown) => {
+    return this.gameService.getGamesObservable().pipe(
+      map((obj: unknown) => {
         return obj as Game[];
-      }));
+      })
+    );
   }
 }

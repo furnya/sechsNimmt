@@ -13,6 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 import { Game, Player } from 'src/app/models/game.model';
 import { RoomCreationService } from '../room-creation.service';
 
@@ -29,6 +30,8 @@ export class CreateAndJoinComponent
   filteredRoomIds: string[];
   queuedRoomsSubscription: Subscription;
   gameHistory: MatTableDataSource<Game> = new MatTableDataSource([]);
+  returnableGames: Game[] = [];
+  returnFC = new FormControl();
 
   constructor(
     private roomCreationService: RoomCreationService,
@@ -137,6 +140,7 @@ export class CreateAndJoinComponent
   clearBrowserData() {
     if (confirm('Wirklich alle Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
       this.roomCreationService.clearLocalStorage();
+      this.getGameHistory();
     }
   }
 
@@ -154,6 +158,16 @@ export class CreateAndJoinComponent
         return g;
       });
       this.gameHistory.data = h;
+      this.returnableGames = h.filter(g => {
+        return !!localStorage.getItem('player_' + g.id);
+      }).reverse();
+      if (this.returnableGames?.length > 0) {
+        this.returnFC.setValue(this.returnableGames[0]);
+      }
     });
+  }
+
+  returnToGameRoute() {
+    return '/' + GLOBAL_CONFIG.urlGamePath + '/' + this.returnFC.value?.id;
   }
 }

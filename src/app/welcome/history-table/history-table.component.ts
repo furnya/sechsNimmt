@@ -1,4 +1,12 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,9 +16,10 @@ import { GameInfoDialogComponent } from '../finished-dialog/game-info-dialog.com
 @Component({
   selector: 'app-history-table',
   templateUrl: './history-table.component.html',
-  styleUrls: ['./history-table.component.scss']
+  styleUrls: ['./history-table.component.scss'],
 })
-export class HistoryTableComponent implements OnInit, OnDestroy, AfterContentChecked {
+export class HistoryTableComponent
+  implements OnInit, OnDestroy, AfterContentChecked {
   @Input() games: MatTableDataSource<Game>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -21,7 +30,11 @@ export class HistoryTableComponent implements OnInit, OnDestroy, AfterContentChe
     const tempSort = this.games.sortData;
     this.games.sortData = (data, sort) => {
       if (sort.active === 'id') {
-        return data.sort((a, b) => sort.direction === 'asc' ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id));
+        return data.sort((a, b) =>
+          sort.direction === 'asc'
+            ? a.id.localeCompare(b.id)
+            : b.id.localeCompare(a.id)
+        );
       } else {
         return tempSort(data, sort);
       }
@@ -42,7 +55,7 @@ export class HistoryTableComponent implements OnInit, OnDestroy, AfterContentChe
   openInfoDialog(game: Game) {
     this.infoDialog.open(GameInfoDialogComponent, {
       data: game,
-      panelClass: 'game-info-dialog'
+      panelClass: 'game-info-dialog',
     });
   }
 }
