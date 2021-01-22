@@ -11,6 +11,7 @@ import { GameInfoDialogComponent } from './finished-dialog/game-info-dialog.comp
 import { HistoryTableComponent } from './history-table/history-table.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { WelcomeComponent } from './welcome.component';
+import { ImpressumComponent } from './impressum/impressum.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { WelcomeComponent } from './welcome.component';
         EnterNameDialogComponent,
         FilterIsActivePipe,
         HistoryTableComponent,
-        GameInfoDialogComponent
+        GameInfoDialogComponent,
+        ImpressumComponent
     ],
     imports: [
         AppMaterialModule,

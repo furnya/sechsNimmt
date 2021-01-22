@@ -111,9 +111,17 @@
   Spielhistorie
   <mat-icon>history</mat-icon>
 </button>
+<button
+  mat-raised-button
+  class="impressum-button"
+  routerLink="/impressum"
+  matTooltip="Impressum"
+>
+  <mat-icon>contact_page</mat-icon>
+</button>
 <mat-menu
   #historyMenu="matMenu"
-  yPosition="above"
+  yPosition="below"
   xPosition="before"
   class="history-menu"
 >

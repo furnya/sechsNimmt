@@ -72,10 +72,20 @@
 
 .history-button {
   position: absolute;
+  top: 6vh;
+  right: 0;
+  margin: 8px 8px 0 0;
+  padding-right: 8px;
+}
+
+.impressum-button {
+  position: absolute;
   bottom: 0;
   right: 0;
   margin: 0 8px 8px 0;
-  padding-right: 8px;
+  padding: 0;
+  width: 40px;
+  min-width: unset;
 }
 
 ::ng-deep.mat-menu-panel.history-menu {

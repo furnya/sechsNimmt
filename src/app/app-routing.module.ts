@@ -9,6 +9,7 @@ import { GLOBAL_CONFIG } from './config/global-config';
 import { CreateAndJoinComponent } from './welcome/create-and-join/create-and-join.component';
 import { LobbyComponent } from './welcome/lobby/lobby.component';
 import { CanDeactivateLobbyGuard } from './welcome/lobby/can-deactivate-lobby-guard.service';
+import { ImpressumComponent } from './welcome/impressum/impressum.component';
 
 const appRoutes: Routes = [
   {
@@ -61,6 +62,10 @@ const appRoutes: Routes = [
   {
     path: GLOBAL_CONFIG.urlNotFoundPath,
     component: NotFoundComponent
+  },
+  {
+    path: 'impressum',
+    component: ImpressumComponent
   },
   {
     path: '**',
