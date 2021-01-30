@@ -18,3 +18,7 @@
 .main-toolbar {
     height: 6vh;
 }
+
+::ng-deep.home-tooltip {
+    font-size: 16px;
+}

@@ -31,7 +31,8 @@
               canPlay()
             )
           "
-          [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay()"
+          [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay() && !isCurrentPlayer(ps.player.name)"
+          [isSelected]="canPlay() && isCurrentPlayer(ps.player.name)"
           [type]="'selected'"
         ></app-card>
         <p class="name-label">{{ ps.player.name }}</p>

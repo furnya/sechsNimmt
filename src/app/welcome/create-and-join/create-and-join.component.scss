@@ -69,3 +69,46 @@
   margin: 0 0 8px 8px;
   padding-left: 8px;
 }
+
+.history-button {
+  position: absolute;
+  top: 6vh;
+  right: 0;
+  margin: 8px 8px 0 0;
+  padding-right: 8px;
+}
+
+.impressum-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0 8px 8px 0;
+  padding: 0;
+  width: 40px;
+  min-width: unset;
+}
+
+::ng-deep.mat-menu-panel.history-menu {
+  max-width: unset;
+}
+
+.return-to-game-toolbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 6vh;
+  justify-content: flex-end;
+
+  .return-to-game-button {
+    margin-left: 5px;
+  }
+
+  ::ng-deep.mat-form-field-infix {
+    min-width: 100px;
+    width: unset;
+  }
+  ::ng-deep.mat-select-value {
+    max-width: 200px;
+  }
+}

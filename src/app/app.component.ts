@@ -1,7 +1,9 @@
+import { registerLocaleData } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DB_ENVIRONMENT } from './config/global-config';
+import localeDE from '@angular/common/locales/de';
 
 @Component({
   selector: 'app-root',
@@ -35,8 +37,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (window.location.toString().includes('localhost')) {
+    if (window.location.hostname === 'localhost') {
       DB_ENVIRONMENT.dbBase = 'DEV';
     }
+    registerLocaleData(localeDE, 'de');
   }
 }

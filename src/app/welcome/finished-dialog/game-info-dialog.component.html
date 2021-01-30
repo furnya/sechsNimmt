@@ -1,0 +1,20 @@
+<div class="game-info-container">
+  <mat-toolbar color="primary">Spiel <em>{{ data.id }}</em></mat-toolbar>
+  <p class="info-label">Gestartet: {{ data.created | date }}</p>
+  <p class="info-label">Gespielte Runden: {{ data.playedRounds }}</p>
+  <mat-table [dataSource]="getSortedPlayerStates()" matSort [matSortDisableClear]="true">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Spieler</mat-header-cell>
+      <mat-cell *matCellDef="let element"><span>{{ element.player.name }}</span></mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="totalMinusPoints">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Minuspunkte</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="alignRight">{{ element.totalMinusPoints }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="['name', 'totalMinusPoints']; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['name', 'totalMinusPoints']"></mat-row>
+    </mat-table>
+  <div class="button-container">
+    <button mat-raised-button color="primary" matDialogClose>Schließen</button>
+  </div>
+</div>

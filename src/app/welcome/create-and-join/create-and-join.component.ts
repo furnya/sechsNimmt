@@ -9,8 +9,11 @@ import {
 import { FormControl, NgForm, NgModel } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { GLOBAL_CONFIG } from 'src/app/config/global-config';
+import { Game, Player } from 'src/app/models/game.model';
 import { RoomCreationService } from '../room-creation.service';
 
 @Component({
@@ -23,6 +26,9 @@ export class CreateAndJoinComponent
   @ViewChild('joinGameIdFormControl') joinGameIdModel: NgModel;
   queuedRoomIds: string[] = [];
   queuedRoomsSubscription: Subscription;
+  gameHistory: MatTableDataSource<Game> = new MatTableDataSource([]);
+  returnableGames: Game[] = [];
+  returnFC = new FormControl();
 
   constructor(
     private roomCreationService: RoomCreationService,
@@ -46,6 +52,7 @@ export class CreateAndJoinComponent
         this.setRoomIds(roomIds);
       }
     );
+    this.getGameHistory();
   }
 
   ngAfterViewInit() {
@@ -100,9 +107,37 @@ export class CreateAndJoinComponent
       });
   }
 
-  clearBrowserDara() {
+  clearBrowserData() {
     if (confirm('Wirklich alle Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
       this.roomCreationService.clearLocalStorage();
+      this.getGameHistory();
     }
+  }
+
+  getGameHistory() {
+    this.roomCreationService.getGameHistory().subscribe(h => {
+      h = h.map((g: Game) => {
+        const players: Player[] = [];
+        Object.keys(g.players).forEach(k => {
+          players.push({
+            ...g.players[k],
+            dbKey: k
+          });
+        });
+        g.players = players;
+        return g;
+      });
+      this.gameHistory.data = h;
+      this.returnableGames = h.filter(g => {
+        return !!localStorage.getItem('player_' + g.id);
+      }).reverse();
+      if (this.returnableGames?.length > 0) {
+        this.returnFC.setValue(this.returnableGames[0]);
+      }
+    });
+  }
+
+  returnToGameRoute() {
+    return '/' + GLOBAL_CONFIG.urlGamePath + '/' + this.returnFC.value?.id;
   }
 }
