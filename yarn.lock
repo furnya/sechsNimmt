@@ -7460,13 +7460,6 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-ngx-autosize-input@^2.3.7:
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/ngx-autosize-input/-/ngx-autosize-input-2.3.7.tgz#8a16611f93ed454878ac79548a79c8bb6268f545"
-  integrity sha512-fB4ZCLuSq0lUVIYozna7VfWCi+ctetUwJsSJnoL9lTzkZFCjslkJxGi1DWn3qxS7p7Ghaa9M/swt1fJ3sCllgw==
-  dependencies:
-    tslib "^1.9.0"
-
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
