@@ -456,6 +456,10 @@ export class GameService {
     return index;
   }
 
+  canDropCard(): boolean {
+    return this.getHightlightedRowIndex() !== NO_HIGHLIGHTED_ROW;
+  }
+
   getGameSnapshotChanges(): Observable<SnapshotAction<unknown>[]> {
     return this.db
       .list(GLOBAL_CONFIG.dbGamePath())

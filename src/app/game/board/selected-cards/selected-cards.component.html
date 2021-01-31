@@ -28,7 +28,8 @@
             !(
               isCurrentPlayer(ps.player.name) &&
               isSmallestCard(ps.selectedCard) &&
-              canPlay()
+              canPlay() &&
+              canDrop()
             )
           "
           [isSmallestCard]="isSmallestCard(ps.selectedCard) && canPlay() && !isCurrentPlayer(ps.player.name)"

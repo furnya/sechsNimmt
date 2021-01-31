@@ -49,4 +49,8 @@ export class SelectedCardsComponent implements OnInit, OnDestroy {
   canPlay(): boolean {
     return !this.gameService.isChoosingCards();
   }
+
+  canDrop(): boolean {
+    return this.gameService.canDropCard();
+  }
 }
