@@ -1,10 +1,10 @@
 .card {
-  // width: min(9vh, 5vw);
   min-width: 42px;
-  // height: min(12vh, 8vw);
   min-height: 67px;
   cursor: pointer;
   padding: 0;
+
+  user-select: none;
 
   &__header {
     padding-top: 10%;
@@ -22,7 +22,6 @@
       justify-content: center;
 
       .mat-icon {
-        // width: min(4vw, 2vh);
         height: 50%;
         width: 25%;
       }
@@ -36,8 +35,6 @@
     justify-content: flex-end;
 
     > p {
-    //   font-family: "orc-horde";
-      // font-size: min(8vw, 4vh, 43px);
       text-align: center;
     }
   }
@@ -67,13 +64,11 @@
 .selectedInHand {
   border: 5px solid red;
   box-sizing: border-box;
-  // box-sizing: content-box;
 }
 
 .smallestCard {
-    border: 5px solid #ffd740;
-    box-sizing: border-box;
-    // box-sizing: content-box;
+  border: 5px solid #ffd740;
+  box-sizing: border-box;
 }
 
 .bull-background {
