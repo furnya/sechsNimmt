@@ -35,7 +35,6 @@ import { WelcomeModule } from './welcome/welcome.module';
     GameModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
-  bootstrap: [AppComponent],
-  entryComponents: [FinishedDialogComponent, EnterNameDialogComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
