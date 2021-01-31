@@ -9,13 +9,7 @@
       #selectedCardDropList="cdkDropList"
       [id]="'selectedCardDropList_' + playerStates[i].player.name"
       [cdkDropListData]="[playerStates[i].selectedCard]"
-      [cdkDropListConnectedTo]="[
-        'rowDropSpot_0',
-        'rowDropSpot_1',
-        'rowDropSpot_2',
-        'rowDropSpot_3',
-        'rowDropSpot_4'
-      ]"
+      [cdkDropListConnectedTo]="dropLists"
       (cdkDropListDropped)="drop($event)"
       *ngFor="let ps of playerStates; index as i"
       class="drag-list-container"

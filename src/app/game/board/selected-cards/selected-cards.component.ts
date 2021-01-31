@@ -4,7 +4,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { GameService, NO_CARD_SELECTED } from '../../game.service';
+import { GameService, NO_CARD_SELECTED, NO_HIGHLIGHTED_ROW } from '../../game.service';
 import { PlayerState } from 'src/app/models/game.model';
 import { Subscription } from 'rxjs';
 
@@ -16,6 +16,15 @@ import { Subscription } from 'rxjs';
 export class SelectedCardsComponent implements OnInit, OnDestroy {
   playerStates: PlayerState[] = [];
   gameStateSub: Subscription;
+
+  get dropLists() {
+    const dropRow = this.gameService.getHightlightedRowIndex();
+    if (dropRow !== NO_HIGHLIGHTED_ROW) {
+      return ['rowDropSpot_' + dropRow];
+    } else {
+      return [];
+    }
+  }
 
   constructor(private gameService: GameService) {}
 
