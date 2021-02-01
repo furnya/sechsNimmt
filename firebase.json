@@ -16,7 +16,7 @@
     },
     {
       "target": "testing",
-      "public": "dist/sechsNimmt-testing",
+      "public": "dist/sechsNimmt",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
