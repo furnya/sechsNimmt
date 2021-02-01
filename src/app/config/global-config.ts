@@ -15,7 +15,7 @@ export const ENVIRONMENT = {
 };
 
 export let DB_ENVIRONMENT: DbEnvironment = {
-  dbBase: 'PROD'
+  dbBase: 'PROD2'
 };
 
 export const GLOBAL_CONFIG: GlobalConfig = {
