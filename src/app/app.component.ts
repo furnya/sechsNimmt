@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (!environment.production) {
-      DB_ENVIRONMENT.dbBase = 'DEV';
+      DB_ENVIRONMENT.dbBase = 'DEV2';
     }
     registerLocaleData(localeDE, 'de');
   }
