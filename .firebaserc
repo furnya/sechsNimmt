@@ -7,6 +7,9 @@
       "hosting": {
         "sechsNimmt": [
           "sechsnimmt-33e6e"
+        ],
+        "testing": [
+          "sechsnimmt-testing"
         ]
       }
     }
