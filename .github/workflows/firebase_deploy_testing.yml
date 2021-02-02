@@ -44,4 +44,4 @@ jobs:
 
     - name: Deploy to App Engine
       working-directory: ./backend
-      run: gcloud app deploy app.yaml --quiet --no-promote --version v1
+      run: gcloud app deploy app.yaml --quiet
