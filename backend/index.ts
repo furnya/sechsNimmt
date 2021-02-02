@@ -1,3 +1,5 @@
+// [START sechsnimmt_backend_app]
+
 import * as express from 'express';
 import * as http from 'http';
 import * as WebSocket from 'ws';
@@ -14,11 +16,7 @@ const fbApp = firebase.initializeApp({
 });
 
 
-interface ExtWebSocket extends WebSocket {
-  isAlive: boolean;
-}
-
-interface DbUpdate {
+export interface DbUpdate {
   path: string;
   data: any;
 }
@@ -28,18 +26,20 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const aliveMap = new Map<WebSocket, boolean>();
+
 fbApp.database().ref('DEV2').on('value', (v) => {
   wss.clients.forEach(client => {
     client.send(JSON.stringify(v.val()));
   })
 });
 
-wss.on('connection', (ws: ExtWebSocket) => {
+wss.on('connection', (ws: WebSocket) => {
 
-  ws.isAlive = true;
+  aliveMap.set(ws, true);
 
   ws.on('pong', () => {
-    ws.isAlive = true;
+    aliveMap.set(ws, true);
   });
 
   ws.on('message', (message: string) => {
@@ -65,9 +65,9 @@ wss.on('connection', (ws: ExtWebSocket) => {
 });
 
 setInterval(() => {
-  wss.clients.forEach((ws: ExtWebSocket) => {
-      if (!ws.isAlive) return ws.terminate();
-      ws.isAlive = false;
+  wss.clients.forEach((ws: WebSocket) => {
+      if (!aliveMap.get(ws)) return ws.terminate();
+      aliveMap.set(ws, false);
       ws.ping(null, false);
   });
 }, 10000);
@@ -79,5 +79,7 @@ server.listen(process.env.PORT || 8080, () => {
     } :)`
   );
 });
+
+// [END sechsnimmt_backend_app]
 
 module.exports = server;
