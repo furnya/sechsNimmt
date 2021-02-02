@@ -1,10 +1,11 @@
 import { registerLocaleData } from '@angular/common';
+import localeDE from '@angular/common/locales/de';
 import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { DB_ENVIRONMENT } from './config/global-config';
-import localeDE from '@angular/common/locales/de';
 import { environment } from 'src/environments/environment';
+import { DB_ENVIRONMENT } from './config/global-config';
+import { WebSocketService } from './utils/web-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private wsService: WebSocketService
   ) {
     this.iconRegistry.addSvgIcon(
       'sechsnimmt_logo',
@@ -42,5 +44,6 @@ export class AppComponent implements OnInit {
       DB_ENVIRONMENT.dbBase = 'DEV2';
     }
     registerLocaleData(localeDE, 'de');
+    this.wsService.connect(environment.webSocketUrl);
   }
 }

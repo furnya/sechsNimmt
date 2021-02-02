@@ -12,6 +12,8 @@ import {
   Player,
   Room,
 } from '../models/game.model';
+import { join } from '../utils/methods';
+import { WebSocketService } from '../utils/web-socket.service';
 import { filterActivePlayers } from './filter-is-active.pipe';
 
 @Injectable({
@@ -27,7 +29,8 @@ export class RoomCreationService {
   constructor(
     private db: AngularFireDatabase,
     private gameService: GameService,
-    private router: Router
+    private router: Router,
+    private wsService: WebSocketService
   ) {
     this.getQueueObservable().subscribe((rooms) => {
       this.queuedRooms = [];
@@ -379,19 +382,13 @@ export class RoomCreationService {
       this.joinedRoom.room.dbKey &&
       this.joinedRoom.player.dbKey
     ) {
-      this.db
-        .object(
-          GLOBAL_CONFIG.dbQueuePath() +
-            '/' +
-            this.joinedRoom.room.dbKey +
-            '/' +
-            GLOBAL_CONFIG.dbPlayerPath +
-            '/' +
-            this.joinedRoom.player.dbKey
-        )
-        .update({
-          isActive: new Date().getTime(),
-        });
+      const path = join(
+        GLOBAL_CONFIG.dbQueuePath(),
+        this.joinedRoom.room.dbKey,
+        GLOBAL_CONFIG.dbPlayerPath,
+        this.joinedRoom.player.dbKey
+      );
+      this.wsService.updateDBObject(path, { isActive: new Date().getTime() });
     }
   }
 

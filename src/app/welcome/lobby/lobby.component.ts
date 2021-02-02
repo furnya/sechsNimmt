@@ -1,13 +1,19 @@
 import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  ChangeDetectorRef,
+  ViewChild
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,9 +23,8 @@ import { Subscription } from 'rxjs';
 import { GLOBAL_CONFIG } from 'src/app/config/global-config';
 import { GameOptions, JoinedRoom, Player } from 'src/app/models/game.model';
 import { EnterNameDialogComponent } from '../enter-name-dialog/enter-name-dialog.component';
-import { RoomCreationService } from '../room-creation.service';
 import { filterActivePlayers } from '../filter-is-active.pipe';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { RoomCreationService } from '../room-creation.service';
 
 @Component({
   selector: 'app-lobby',
@@ -28,18 +33,20 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('showHideHint', [
       // ...
-      state('open', style({
-        top: '0'
-      })),
-      state('closed', style({
-        top: '-10vh'
-      })),
-      transition('open => closed', [
-        animate('0.5s')
-      ]),
-      transition('closed => open', [
-        animate('0.5s')
-      ]),
+      state(
+        'open',
+        style({
+          top: '0',
+        })
+      ),
+      state(
+        'closed',
+        style({
+          top: '-10vh',
+        })
+      ),
+      transition('open => closed', [animate('0.5s')]),
+      transition('closed => open', [animate('0.5s')]),
     ]),
   ],
 })
@@ -78,7 +85,9 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.roomCreationService.generateRandomSequence(GLOBAL_CONFIG.defaultOptions.cards.value);
+    this.roomCreationService.generateRandomSequence(
+      GLOBAL_CONFIG.defaultOptions.cards.value
+    );
     this.isActiveInterval = setInterval(
       () => this.roomCreationService.keepPlayerActive(),
       GLOBAL_CONFIG.activePingInterval
@@ -163,7 +172,7 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
     let newVal = +event.target.value;
     if (newVal < 1 || newVal > 999) {
       this.cardsFormControl.nativeElement.value =
-      GLOBAL_CONFIG.defaultOptions.cards.value;
+        GLOBAL_CONFIG.defaultOptions.cards.value;
       this.cdr.detectChanges();
       newVal = GLOBAL_CONFIG.defaultOptions.cards.value;
     }
@@ -186,7 +195,11 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onChangeOptions() {
     this.roomCreationService.changeOptions(this.options);
-    if (this.options.rows.value + this.options.rounds.value * this.options.maxPlayers.value > this.options.cards.value) {
+    if (
+      this.options.rows.value +
+        this.options.rounds.value * this.options.maxPlayers.value >
+      this.options.cards.value
+    ) {
       this.hintOpen = true;
       this.hint = 'Ungültige Optionen!';
       return;
@@ -207,7 +220,11 @@ export class LobbyComponent implements OnInit, OnDestroy, AfterViewInit {
     if (playerCount > this.options.maxPlayers.value) {
       return true;
     }
-    if (this.options.rows.value + this.options.rounds.value * this.options.maxPlayers.value > this.options.cards.value) {
+    if (
+      this.options.rows.value +
+        this.options.rounds.value * this.options.maxPlayers.value >
+      this.options.cards.value
+    ) {
       return true;
     }
     return false;
