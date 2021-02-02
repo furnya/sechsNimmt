@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer, Subject } from 'rxjs';
 
+enum DbAction {
+  Update = 'UPDATE',
+  Delete = 'DELETE',
+  Set = 'SET'
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -47,8 +53,32 @@ export class WebSocketService {
     if (this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(
         JSON.stringify({
+          action: DbAction.Update,
           path,
           data,
+        })
+      );
+    }
+  }
+
+  setDBObject(path: string, data: any) {
+    if (this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(
+        JSON.stringify({
+          action: DbAction.Set,
+          path,
+          data,
+        })
+      );
+    }
+  }
+
+  deleteDBObject(path: string) {
+    if (this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(
+        JSON.stringify({
+          action: DbAction.Delete,
+          path
         })
       );
     }

@@ -160,9 +160,9 @@ export class RoomCreationService {
             ) {
               exists = true;
             } else {
-              this.db
-                .object(GLOBAL_CONFIG.dbGamePath() + '/' + change.payload.key)
-                .remove();
+              this.wsService.deleteDBObject(
+                join(GLOBAL_CONFIG.dbGamePath(), change.payload.key)
+              );
             }
           }
         });
@@ -170,12 +170,10 @@ export class RoomCreationService {
           return 'Ein Spiel mit dieser ID existiert schon!';
         }
         if (oldRoom) {
-          this.db
-            .object(GLOBAL_CONFIG.dbQueuePath() + '/' + oldRoom.dbKey)
-            .remove()
-            .then(() => {
-              this.pushNewRoom(roomId, hostPlayerName);
-            });
+          this.wsService.deleteDBObject(
+            join(GLOBAL_CONFIG.dbQueuePath(), oldRoom.dbKey)
+          );
+          this.pushNewRoom(roomId, hostPlayerName);
         } else {
           this.pushNewRoom(roomId, hostPlayerName);
         }
@@ -309,17 +307,14 @@ export class RoomCreationService {
   }
 
   deletePlayerFromRoom() {
-    this.db
-      .object(
-        GLOBAL_CONFIG.dbQueuePath() +
-          '/' +
-          this.joinedRoom.room.dbKey +
-          '/' +
-          GLOBAL_CONFIG.dbPlayerPath +
-          '/' +
-          this.joinedRoom.player.dbKey
+    this.wsService.deleteDBObject(
+      join(
+        GLOBAL_CONFIG.dbQueuePath(),
+        this.joinedRoom.room.dbKey,
+        GLOBAL_CONFIG.dbPlayerPath,
+        this.joinedRoom.player.dbKey
       )
-      .remove();
+    );
   }
 
   leaveRoom() {
@@ -332,9 +327,10 @@ export class RoomCreationService {
     if (!this.joinedRoom) {
       return;
     }
-    this.db
-      .object(GLOBAL_CONFIG.dbQueuePath() + '/' + this.joinedRoom.room.dbKey)
-      .update({ started: true });
+    this.wsService.updateDBObject(
+      join(GLOBAL_CONFIG.dbQueuePath(), this.joinedRoom.room.dbKey),
+      { started: true }
+    );
     this.gameService.pushNewGameState(
       this.joinedRoom.room.id,
       this.joinedRoom.room.options
@@ -344,15 +340,14 @@ export class RoomCreationService {
   changeOptions(options: GameOptions) {
     if (this.joinedRoom) {
       this.joinedRoom.room.options = JSON.parse(JSON.stringify(options));
-      this.db
-        .object(
-          GLOBAL_CONFIG.dbQueuePath() +
-            '/' +
-            this.joinedRoom.room.dbKey +
-            '/' +
-            GLOBAL_CONFIG.dbOptionsPath
-        )
-        .update(this.joinedRoom.room.options);
+      this.wsService.updateDBObject(
+        join(
+          GLOBAL_CONFIG.dbQueuePath(),
+          this.joinedRoom.room.dbKey,
+          GLOBAL_CONFIG.dbOptionsPath
+        ),
+        this.joinedRoom.room.options
+      );
     }
   }
 
