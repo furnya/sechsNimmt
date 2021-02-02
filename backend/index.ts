@@ -15,10 +15,16 @@ const fbApp = firebase.initializeApp({
   measurementId: 'G-T7LG2CN370',
 });
 
+enum DbAction {
+  Update = 'UPDATE',
+  Delete = 'DELETE',
+  Set = 'SET'
+}
 
-export interface DbUpdate {
+export interface DbRequest {
+  action: DbAction;
   path: string;
-  data: any;
+  data?: any;
 }
 
 
@@ -46,16 +52,31 @@ wss.on('connection', (ws: WebSocket) => {
     console.log('received: %s', message);
     let messageObj = null;
     try {
-      messageObj = JSON.parse(message) as DbUpdate;
+      messageObj = JSON.parse(message) as DbRequest;
     } catch (error) {
       console.error('Message is not object');
     }
-    console.log(messageObj);
 
     if (messageObj && messageObj instanceof Object && 'path' in messageObj) {
-      fbApp.database().ref(messageObj.path).update(messageObj.data).then(() => {
-        ws.send('changed!');
-      })
+      switch(messageObj.action) {
+        case DbAction.Update:
+          fbApp.database().ref(messageObj.path).update(messageObj.data).then(() => {
+            ws.send('updated!');
+          });
+          break;
+        case DbAction.Delete:
+          fbApp.database().ref(messageObj.path).remove().then(() => {
+            ws.send('deleted!');
+          });
+          break;
+        case DbAction.Set:
+          fbApp.database().ref(messageObj.path).set(messageObj.data).then(() => {
+            ws.send('set!');
+          });
+          break;
+        default:
+          ws.send('action not supported!');
+      }
     } else {
       ws.send(`Hello, you sent -> ${message}`);
     }
