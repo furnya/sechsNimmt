@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer, Subject } from 'rxjs';
+import { io } from 'socket.io-client';
 
 enum DbAction {
   Update = 'UPDATE',
   Delete = 'DELETE',
-  Set = 'SET'
+  Set = 'SET',
 }
 
 @Injectable({
@@ -13,9 +14,7 @@ enum DbAction {
 export class WebSocketService {
   wsIncoming: Observable<MessageEvent>;
   onOpen = new Subject();
-  ws: WebSocket;
-
-  constructor() {}
+  socket;
 
   connect(url): Observable<MessageEvent> {
     if (!this.wsIncoming) {
@@ -25,33 +24,36 @@ export class WebSocketService {
     return this.wsIncoming;
   }
 
-  private create(url): Observable<MessageEvent> {
-    const ws = new WebSocket(url);
-    this.ws = ws;
+  private create(url) {
+    const socket = io(url);
+    this.socket = socket;
 
     const observable = new Observable((obs: Observer<MessageEvent>) => {
-      ws.onmessage = obs.next.bind(obs);
-      ws.onerror = (e) => {
+      socket.on('message', obs.next.bind(obs));
+      socket.on('error', (e) => {
         obs.error(e);
         obs.complete();
-        ws.close();
+        socket.close();
         setTimeout(() => this.connect(url), 1000);
-      };
-      ws.onclose = () => {
+      });
+      socket.on('close', () => {
         obs.complete();
         setTimeout(() => this.connect(url), 1000);
-      };
-      ws.onopen = () => {
+      });
+      socket.on('open', () => {
         this.onOpen.next(true);
-      };
-      return ws.close.bind(ws);
+      });
+      socket.on('ping', () => {
+        socket.emit('pong');
+      });
+      return socket.close.bind(socket);
     });
     return observable;
   }
 
   updateDBObject(path: string, data: any) {
-    if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(
+    if (this.socket.connected) {
+      this.socket.send(
         JSON.stringify({
           action: DbAction.Update,
           path,
@@ -62,8 +64,8 @@ export class WebSocketService {
   }
 
   setDBObject(path: string, data: any) {
-    if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(
+    if (this.socket.connected) {
+      this.socket.send(
         JSON.stringify({
           action: DbAction.Set,
           path,
@@ -74,8 +76,8 @@ export class WebSocketService {
   }
 
   deleteDBObject(path: string) {
-    if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(
+    if (this.socket.connected) {
+      this.socket.send(
         JSON.stringify({
           action: DbAction.Delete,
           path

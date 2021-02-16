@@ -2,8 +2,11 @@
 
 import * as express from 'express';
 import * as http from 'http';
-import * as WebSocket from 'ws';
+// import * as WebSocket from 'ws';
 import firebase from 'firebase';
+import * as socketio from 'socket.io';
+import * as path from 'path';
+
 const fbApp = firebase.initializeApp({
   apiKey: 'AIzaSyARqnZKlZDaCzq6FPfbCclP-apHswTl4hI',
   authDomain: 'sechsnimmt-33e6e.firebaseapp.com',
@@ -30,25 +33,27 @@ export interface DbRequest {
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
-const aliveMap = new Map<WebSocket, boolean>();
-
-fbApp.database().ref('DEV2').on('value', (v) => {
-  wss.clients.forEach(client => {
-    client.send(JSON.stringify(v.val()));
-  })
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*'
+  }
 });
 
-wss.on('connection', (ws: WebSocket) => {
+const aliveMap = new Map<any, boolean>();
 
-  aliveMap.set(ws, true);
+fbApp.database().ref('DEV2').on('value', (v) => {
+  io.emit('message', JSON.stringify(v.val()));
+});
 
-  ws.on('pong', () => {
-    aliveMap.set(ws, true);
+io.on('connection', (socket) => {
+
+  aliveMap.set(socket, true);
+
+  socket.on('pong', () => {
+    aliveMap.set(socket, true);
   });
 
-  ws.on('message', (message: string) => {
+  socket.on('message', (message: string) => {
     console.log('received: %s', message);
     let messageObj = null;
     try {
@@ -61,43 +66,48 @@ wss.on('connection', (ws: WebSocket) => {
       switch(messageObj.action) {
         case DbAction.Update:
           fbApp.database().ref(messageObj.path).update(messageObj.data).then(() => {
-            ws.send('updated!');
+            socket.send('updated!');
           });
           break;
         case DbAction.Delete:
           fbApp.database().ref(messageObj.path).remove().then(() => {
-            ws.send('deleted!');
+            socket.send('deleted!');
           });
           break;
         case DbAction.Set:
           fbApp.database().ref(messageObj.path).set(messageObj.data).then(() => {
-            ws.send('set!');
+            socket.send('set!');
           });
           break;
         default:
-          ws.send('action not supported!');
+          socket.send('action not supported!');
       }
     } else {
-      ws.send(`Hello, you sent -> ${message}`);
+      socket.send(`Hello, you sent -> ${message}`);
     }
   });
 
-  ws.send('Hi there, I am a WebSocket server');
+  socket.send('Hi there, I am a WebSocket server');
 });
 
 setInterval(() => {
-  wss.clients.forEach((ws: WebSocket) => {
-      if (!aliveMap.get(ws)) return ws.terminate();
-      aliveMap.set(ws, false);
-      ws.ping(null, false);
+  io.sockets.sockets.forEach((socket) => {
+      if (!aliveMap.get(socket)) {
+        socket.disconnect(true);
+        return;
+      }
+      aliveMap.set(socket, false);
+      socket.emit('ping');
   });
 }, 10000);
 
+app.get("/", (req: any, res: any) => {
+  res.send("http works");
+});
+
 server.listen(process.env.PORT || 8080, () => {
   console.log(
-    `Server started on port ${
-      (server.address() as WebSocket.AddressInfo).port
-    } :)`
+    `Server started on port ${process.env.PORT || 8080} :)`
   );
 });
 

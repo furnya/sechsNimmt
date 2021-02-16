@@ -44,6 +44,6 @@ export class AppComponent implements OnInit {
       DB_ENVIRONMENT.dbBase = 'DEV2';
     }
     registerLocaleData(localeDE, 'de');
-    this.wsService.connect(environment.webSocketUrl);
+    this.wsService.connect(environment.webSocketUrl).subscribe(m => {});
   }
 }

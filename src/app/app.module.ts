@@ -30,7 +30,7 @@ import { WelcomeModule } from './welcome/welcome.module';
     AngularFireModule.initializeApp(ENVIRONMENT.firebase),
     AngularFireDatabaseModule,
     WelcomeModule,
-    GameModule
+    GameModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de' }],
   bootstrap: [AppComponent]
