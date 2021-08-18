@@ -3,7 +3,6 @@ import { GlobalConfig, DbEnvironment } from '../models/global-config.model';
 export const ENVIRONMENT = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyARqnZKlZDaCzq6FPfbCclP-apHswTl4hI',
     authDomain: 'sechsnimmt-33e6e.firebaseapp.com',
     databaseURL: 'https://sechsnimmt-33e6e.firebaseio.com',
     projectId: 'sechsnimmt-33e6e',
