@@ -8,7 +8,6 @@ import * as socketio from 'socket.io';
 import * as path from 'path';
 
 const fbApp = firebase.initializeApp({
-  apiKey: 'AIzaSyARqnZKlZDaCzq6FPfbCclP-apHswTl4hI',
   authDomain: 'sechsnimmt-33e6e.firebaseapp.com',
   databaseURL: 'https://sechsnimmt-33e6e.firebaseio.com',
   projectId: 'sechsnimmt-33e6e',
